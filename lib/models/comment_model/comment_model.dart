@@ -1,0 +1,33 @@
+class CommentModel {
+  late final String userImage;
+  late final String comment;
+  late final DateTime dateTime;
+  late final String userName;
+  late final String userId;
+
+  CommentModel({
+    required this.userImage,
+    required this.comment,
+    required this.dateTime,
+    required this.userName,
+    required this.userId,
+  });
+
+  CommentModel.fromJson(Map<String, dynamic> json) {
+    userImage = json['user_image'];
+    comment = json['comment'];
+    dateTime = DateTime.fromMillisecondsSinceEpoch(json['date_time']);
+    userName = json['user_name'];
+    userId = json['user_id'];
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'comment': comment,
+      'user_image': userImage,
+      'date_time': dateTime.millisecondsSinceEpoch,
+      'user_id': userId,
+      'user_name':userName,
+    };
+  }
+}

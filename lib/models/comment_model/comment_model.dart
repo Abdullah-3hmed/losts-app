@@ -1,7 +1,7 @@
 class CommentModel {
   late final String userImage;
   late final String comment;
-  late final DateTime dateTime;
+  late final String dateTime;
   late final String userName;
   late final String userId;
 
@@ -16,7 +16,7 @@ class CommentModel {
   CommentModel.fromJson(Map<String, dynamic> json) {
     userImage = json['user_image'];
     comment = json['comment'];
-    dateTime = DateTime.fromMillisecondsSinceEpoch(json['date_time']);
+    dateTime = json['date_time'];
     userName = json['user_name'];
     userId = json['user_id'];
   }
@@ -25,7 +25,7 @@ class CommentModel {
     return {
       'comment': comment,
       'user_image': userImage,
-      'date_time': dateTime.millisecondsSinceEpoch,
+      'date_time': dateTime,
       'user_id': userId,
       'user_name':userName,
     };

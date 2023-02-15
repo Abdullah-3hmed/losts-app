@@ -106,14 +106,11 @@ class HomeScreen extends StatelessWidget {
                 height: 10.0,
               ),
               // post text
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: Text(
-                  '${postModel.postText}',
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        fontSize: 18.0,
-                      ),
-                ),
+              Text(
+                '${postModel.postText}',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      fontSize: 18.0,
+                    ),
               ),
 
               // post image

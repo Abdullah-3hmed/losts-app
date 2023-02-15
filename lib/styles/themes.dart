@@ -16,7 +16,7 @@ ThemeData lightTheme = ThemeData(
       statusBarIconBrightness: Brightness.light,
     ),
     titleTextStyle: TextStyle(
-      fontFamily: 'Jannah',
+      fontFamily: 'Tajawal',
       color: Colors.black,
       fontSize: 20.0,
       fontWeight: FontWeight.bold,
@@ -44,7 +44,7 @@ ThemeData lightTheme = ThemeData(
         color: Colors.black,
         height: 1.3),
   ),
-  fontFamily: 'Jannah',
+  fontFamily: 'Tajawal',
 );
 ThemeData darkTheme = ThemeData(
   scaffoldBackgroundColor: HexColor('333739'),
@@ -60,7 +60,7 @@ ThemeData darkTheme = ThemeData(
       statusBarIconBrightness: Brightness.light,
     ),
     titleTextStyle: const TextStyle(
-      fontFamily: 'Jannah',
+      fontFamily: 'Tajawal',
       color: Colors.white,
       fontSize: 20.0,
       fontWeight: FontWeight.bold,
@@ -87,5 +87,5 @@ ThemeData darkTheme = ThemeData(
         color: Colors.white,
         height: 1.3),
   ),
-  fontFamily: 'Jannah',
+  fontFamily: 'Tajawal',
 );

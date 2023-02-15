@@ -367,12 +367,13 @@ class AppCubit extends Cubit<AppStates> {
 
   Future<void> commentOnPost({
     required String comment,
+    required String dateTime,
     required Post post,
   }) async {
     var commentModel = CommentModel(
       comment: comment,
       userImage: userModel!.image!,
-      dateTime: DateTime.now(),
+      dateTime: dateTime,
       userId: userModel!.uId,
       userName: userModel!.name,
     );

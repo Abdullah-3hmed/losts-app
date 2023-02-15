@@ -1,6 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:social_app/cubit/app_cubit/app_states.dart';
 import 'package:social_app/models/comment_model/comment_model.dart';
 import 'package:social_app/models/post_model/post.dart';
@@ -38,17 +39,17 @@ class CommentsScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ConditionalBuilder(
-                      condition: postModel.comments?.isNotEmpty??false,
+                      condition: postModel.comments?.isNotEmpty ?? false,
                       builder: (context) => ListView.separated(
                         physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
                           final comment = postModel.comments![index];
-                          return buildCommentItem(comment);
+                          return buildCommentItem(comment, context);
                         },
                         separatorBuilder: (context, index) => const SizedBox(
                           height: 20.0,
                         ),
-                        itemCount: postModel.comments?.length??0,
+                        itemCount: postModel.comments?.length ?? 0,
                       ),
                       fallback: (context) => const Center(
                         child: Text('Not Comments Yet'),
@@ -76,9 +77,13 @@ class CommentsScreen extends StatelessWidget {
                         ),
                         IconButton(
                           onPressed: () {
+                            DateTime now = DateTime.now();
+                            String formattedDate =
+                                DateFormat('yyyy-MM-dd – kk:mm').format(now);
                             AppCubit.get(context).commentOnPost(
                               comment: commentController.text,
                               post: postModel,
+                              dateTime: formattedDate,
                             );
                             commentController.clear();
                           },
@@ -99,13 +104,14 @@ class CommentsScreen extends StatelessWidget {
     });
   }
 
-  Widget buildCommentItem(CommentModel comment) => Row(
+  Widget buildCommentItem(CommentModel comment, context) => Row(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Flexible(
             fit: FlexFit.loose,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(
@@ -125,20 +131,24 @@ class CommentsScreen extends StatelessWidget {
                     children: [
                       Text(
                         '${comment.userName} ',
-                        style: const TextStyle(
-                          fontSize: 16.0,
-                        ),
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                              fontSize: 14.0,
+                            ),
                       ),
                       Text(
                         '${comment.comment} ',
-                        style: const TextStyle(
-                          fontSize: 20.0,
-                        ),
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                              fontSize: 16.0,
+                            ),
                       ),
                     ],
                   ),
                 ),
-              //  Text('${comment.dateTime}'),
+                const SizedBox(height: 5.0,),
+                Text(
+                  comment.dateTime,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
               ],
             ),
           ),

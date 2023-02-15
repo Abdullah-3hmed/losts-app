@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:social_app/shared/components/components.dart';
 
 import '../../cubit/app_cubit/app_cubit.dart';
@@ -22,20 +23,20 @@ class NewPostScreen extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () {
-                  //DateTime now = ;
-                   //String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
+                  DateTime now = DateTime.now();
+                  String formattedDate =
+                      DateFormat('yyyy-MM-dd – kk:mm').format(now);
                   if (AppCubit.get(context).postImage == null) {
                     AppCubit.get(context).createPost(
                       postText: textController.text,
-                      dateTime: DateTime.now().toString(),
+                      dateTime: formattedDate,
                     );
                   } else {
                     AppCubit.get(context).uploadPostImage(
                       postText: textController.text,
-                      postDateTime: DateTime.now().toString(),
+                      postDateTime:formattedDate,
                     );
                   }
-                 //AppCubit.get(context).getPosts();
                 },
                 child: Text(
                   'POST',
@@ -58,7 +59,7 @@ class NewPostScreen extends StatelessWidget {
                   ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children:  [
+                  children: [
                     Text(
                       model!.name,
                       style: const TextStyle(
@@ -69,9 +70,7 @@ class NewPostScreen extends StatelessWidget {
                       width: 15.0,
                     ),
                     CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        '${model.image}'
-                      ),
+                      backgroundImage: NetworkImage('${model.image}'),
                       radius: 25.0,
                     ),
                   ],

@@ -258,7 +258,8 @@ class AppCubit extends Cubit<AppStates> {
         .add(model.toMap())
         .then((value) {
       // add post to posts
-      posts.add(
+      posts.insert(
+        0,
         Post.fromJson(json: model.toMap(), id: value.id, likes: []),
       );
       emit(AppCreatePostSuccessState());

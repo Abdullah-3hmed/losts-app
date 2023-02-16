@@ -260,7 +260,11 @@ class AppCubit extends Cubit<AppStates> {
       // add post to posts
       posts.insert(
         0,
-        Post.fromJson(json: model.toMap(), id: value.id, likes: []),
+        Post.fromJson(
+          json: model.toMap(),
+          id: value.id,
+          likes: [],
+        ),
       );
       emit(AppCreatePostSuccessState());
     }).catchError((error) {
@@ -282,7 +286,7 @@ class AppCubit extends Cubit<AppStates> {
         .collection('posts')
         .orderBy(
           'dateTime',
-      descending: true,
+          descending: true,
         ) // todo: change postDateTime to date_time
         .get()
         .then((postDocs) async {
@@ -324,20 +328,75 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  // void getLikes({
-  //   required String postId,
-  //   required int index,
-  // }) {
-  //   likes = [];
-  //   FirebaseFirestore.instance
-  //       .collection('posts')
-  //       .doc(postId)
-  //       .get()
-  //       .then((value) {
-  //     //likes.add(posts[index].likes);
-  //     emit(AppGetLikesSuccessState());
-  //   });
-  // }
+  Future<void> editPost({
+    required String text,
+    String? postImage,
+    required String postId,
+    required Post postModel,
+  }) async {
+    emit(AppEditPostLoadingState());
+
+    await FirebaseFirestore.instance.collection('posts').doc(postId).update({
+      'postText': text,
+      'postImage': postImage ?? '',
+    }).then((value) {
+      // update changes on post model (copy by reference)
+      postModel.postText = text;
+      postModel.postImage = postImage;
+
+      emit(AppEditPostSuccessState());
+    }).catchError((error) {
+      emit(AppEditPostErrorState(error.toString()));
+    });
+  }
+
+  Future<void> editPostWithImage({
+    required String text,
+    required String postId,
+    required Post postModel,
+  }) async {
+    emit(AppEditPostLoadingState());
+    firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('posts/${Uri.file(postImage!.path).pathSegments.last}')
+        .putFile(postImage!)
+        .then(((value) {
+      value.ref.getDownloadURL().then((value) {
+        //emit(AppUploadCoverImageSuccessState());
+        if (kDebugMode) {
+          print(value);
+        }
+        editPost(
+          postModel: postModel,
+          postId: postId,
+          text: text,
+          postImage: value,
+        );
+      }).catchError((error) {
+        emit(AppEditPostErrorState(error.toString()));
+      });
+    })).catchError((error) {
+      emit(AppEditPostErrorState(error.toString()));
+    });
+  }
+
+  Future<void> deletePost({
+    required Post postModel,
+  }) async {
+    emit(AppDeletePostLoadingState());
+
+    FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postModel.id)
+        .delete()
+        .then((value) {
+      posts.remove(postModel);
+
+      emit(AppDeletePostSuccessState());
+    }).catchError((error) {
+      emit(AppDeletePostErrorState(error.toString()));
+    });
+  }
 
   Future<void> likePost({
     required Post post,
@@ -396,47 +455,6 @@ class AppCubit extends Cubit<AppStates> {
       emit(AppCommentOnPostErrorState(error.toString()));
     });
   }
-
-  // Future<void> commentOnPost({
-  //   required CommentModel commentModel,
-  //   required String postId,
-  // }) async {
-  //   FirebaseFirestore.instance
-  //       .collection('posts')
-  //       .doc(postId)
-  //       .collection('comments')
-  //       .add(
-  //         commentModel.toMap(),
-  //       )
-  //       .then((value) async {
-  //     await FirebaseFirestore.instance.collection('posts').doc(postId).update({
-  //       'commentsNumber': posts[index].commentsNumber,
-  //     });
-  //     getComments(postId: postId);
-  //   }).catchError((error) {
-  //     emit(AppCommentOnPostErrorState());
-  //   });
-  // }
-
-  // void getComments({
-  //   required String postId,
-  // }) {
-  //   comments = [];
-  //   FirebaseFirestore.instance
-  //       .collection('posts')
-  //       .doc(postId)
-  //       .collection('comments')
-  //       .orderBy('dateTime')
-  //       .get()
-  //       .then((value) {
-  //     for (var element in value.docs) {
-  //       comments.add(CommentModel.fromJson(element.data()));
-  //     }
-  //     emit(AppGetCommentSuccessState());
-  //   }).catchError((error) {
-  //     emit(AppGetCommentErrorState());
-  //   });
-  // }
 
   List<AppUserModel> users = [];
 

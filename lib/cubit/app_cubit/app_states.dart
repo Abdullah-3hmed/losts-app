@@ -64,6 +64,26 @@ class AppGetPostsSuccessState extends AppStates {}
 
 class AppGetPostsErrorState extends AppStates {}
 
+class AppEditPostLoadingState extends AppStates {}
+
+class AppEditPostSuccessState extends AppStates {}
+
+class AppEditPostErrorState extends AppStates {
+  final String error;
+
+  AppEditPostErrorState(this.error);
+}
+
+class AppDeletePostLoadingState extends AppStates {}
+
+class AppDeletePostSuccessState extends AppStates {}
+
+class AppDeletePostErrorState extends AppStates {
+  final String error;
+
+  AppDeletePostErrorState(this.error);
+}
+
 class AppLikePostSuccessState extends AppStates {}
 
 class AppLikePostErrorState extends AppStates {

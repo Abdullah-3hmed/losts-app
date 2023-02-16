@@ -34,7 +34,7 @@ class NewPostScreen extends StatelessWidget {
                   } else {
                     AppCubit.get(context).uploadPostImage(
                       postText: textController.text,
-                      postDateTime:formattedDate,
+                      postDateTime: formattedDate,
                     );
                   }
                 },

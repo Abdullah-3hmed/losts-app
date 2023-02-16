@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/cubit/app_cubit/app_cubit.dart';
 import 'package:social_app/models/post_model/post.dart';
 import 'package:social_app/modules/comments/comments_screen.dart';
+import 'package:social_app/modules/edit_post/edit_post_screen.dart';
 import 'package:social_app/modules/user_profile/user_profile.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
@@ -51,9 +52,32 @@ class HomeScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.more_horiz_outlined),
+                  PopupMenuButton(
+                    icon: const Icon(Icons.more_horiz_rounded),
+                    onSelected: (String value) {
+                      if (value == 'Edit') {
+                        navigateTo(
+                          context: context,
+                          screen: EditPost(
+                            postModel: postModel,
+                          ),
+                        );
+                      } else if (value == 'Delete') {
+                        AppCubit.get(context).deletePost(
+                          postModel: postModel,
+                        );
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        value: 'Edit',
+                        child: Text('Edit'),
+                      ),
+                      const PopupMenuItem(
+                        value: 'Delete',
+                        child: Text('Delete'),
+                      ),
+                    ],
                   ),
                   const Spacer(),
                   Column(
@@ -114,11 +138,10 @@ class HomeScreen extends StatelessWidget {
               ),
 
               // post image
-              if (AppCubit.get(context).postImage == null)
                 const SizedBox(
                   height: 10.0,
                 ),
-              if (AppCubit.get(context).postImage != null)
+              if (postModel.postImage != '' && AppCubit.get(context).postImage != null)
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Container(

@@ -52,33 +52,34 @@ class HomeScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  PopupMenuButton(
-                    icon: const Icon(Icons.more_horiz_rounded),
-                    onSelected: (String value) {
-                      if (value == 'Edit') {
-                        navigateTo(
-                          context: context,
-                          screen: EditPost(
+                  if (postModel.uId == AppCubit.get(context).userModel!.uId)
+                    PopupMenuButton(
+                      icon: const Icon(Icons.more_horiz_rounded),
+                      onSelected: (String value) {
+                        if (value == 'Edit') {
+                          navigateTo(
+                            context: context,
+                            screen: EditPost(
+                              postModel: postModel,
+                            ),
+                          );
+                        } else if (value == 'Delete') {
+                          AppCubit.get(context).deletePost(
                             postModel: postModel,
-                          ),
-                        );
-                      } else if (value == 'Delete') {
-                        AppCubit.get(context).deletePost(
-                          postModel: postModel,
-                        );
-                      }
-                    },
-                    itemBuilder: (context) => [
-                      const PopupMenuItem(
-                        value: 'Edit',
-                        child: Text('Edit'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'Delete',
-                        child: Text('Delete'),
-                      ),
-                    ],
-                  ),
+                          );
+                        }
+                      },
+                      itemBuilder: (context) => [
+                        const PopupMenuItem(
+                          value: 'Edit',
+                          child: Text('Edit'),
+                        ),
+                        const PopupMenuItem(
+                          value: 'Delete',
+                          child: Text('Delete'),
+                        ),
+                      ],
+                    ),
                   const Spacer(),
                   Column(
                     children: [
@@ -138,10 +139,10 @@ class HomeScreen extends StatelessWidget {
               ),
 
               // post image
-                const SizedBox(
-                  height: 10.0,
-                ),
-              if (postModel.postImage != '' && AppCubit.get(context).postImage != null)
+              const SizedBox(
+                height: 10.0,
+              ),
+              if (postModel.postImage != '' )
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Container(

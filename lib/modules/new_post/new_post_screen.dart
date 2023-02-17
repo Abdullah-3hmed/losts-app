@@ -89,6 +89,7 @@ class NewPostScreen extends StatelessWidget {
                 ),
                 if (AppCubit.get(context).postImage != null)
                   Expanded(
+                    flex: 4,
                     child: Stack(
                       alignment: AlignmentDirectional.topEnd,
                       children: [

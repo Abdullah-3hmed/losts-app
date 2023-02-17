@@ -58,6 +58,8 @@ class AppPostImagePickedErrorState extends AppStates {}
 
 class AppRemovePostImageState extends AppStates {}
 
+class AppRemoveUploadedPostImageState extends AppStates {}
+
 class AppGetPostsLoadingState extends AppStates {}
 
 class AppGetPostsSuccessState extends AppStates {}

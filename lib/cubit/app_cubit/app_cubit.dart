@@ -235,6 +235,7 @@ class AppCubit extends Cubit<AppStates> {
     })).catchError((error) {
       emit(AppCreatePostErrorState());
     });
+    postImage = null;
   }
 
   void createPost({
@@ -275,6 +276,23 @@ class AppCubit extends Cubit<AppStates> {
   void removePostImage() {
     postImage = null;
     emit(AppRemovePostImageState());
+  }
+
+  void removeUploadedPostImage({
+    required Post postModel,
+  required String text,
+  required String postId,
+
+  }) {
+    editPost(
+      text: text,
+      postId: postId,
+      postModel: postModel,
+    ).then((value){
+      postModel.postImage = '';
+      emit(AppRemoveUploadedPostImageState());
+    });
+
   }
 
   List<Post> posts = [];
@@ -378,6 +396,7 @@ class AppCubit extends Cubit<AppStates> {
     })).catchError((error) {
       emit(AppEditPostErrorState(error.toString()));
     });
+    postImage = null;
   }
 
   Future<void> deletePost({
@@ -538,13 +557,9 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   Future<void> logout(BuildContext context) async {
-    // remove uId from db
-    CacheHelper.removeData(key: 'uId');
-    // remove uId value from global var
+    await CacheHelper.removeData(key: 'uId');
     uId = null;
-    // remove userModel value
     userModel = null;
-    // navigate to Login screen
     emit(AppLogOutSuccessState());
   }
 }

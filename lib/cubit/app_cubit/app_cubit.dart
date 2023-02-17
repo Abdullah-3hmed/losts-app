@@ -130,6 +130,7 @@ class AppCubit extends Cubit<AppStates> {
         emit(AppUploadProfileImageErrorState());
       });
     })).catchError((error) {
+      debugPrint('$error');
       emit(AppUploadProfileImageErrorState());
     });
   }

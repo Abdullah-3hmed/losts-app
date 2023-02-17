@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/modules/login/login_screen.dart';
 import 'package:social_app/shared/components/components.dart';
+import 'package:social_app/shared/components/constants.dart';
 
 import '../../cubit/app_cubit/app_cubit.dart';
 import '../../cubit/app_cubit/app_states.dart';
@@ -43,6 +44,7 @@ class ProfileScreen extends StatelessWidget {
                                 image: NetworkImage(
                                   '${model!.cover}',
                                 ),
+                                onError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -55,6 +57,7 @@ class ProfileScreen extends StatelessWidget {
                             backgroundImage: NetworkImage(
                               '${model.image}',
                             ),
+                            onBackgroundImageError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
                             radius: 60.0,
                           ),
                         ),

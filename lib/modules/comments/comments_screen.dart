@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:social_app/cubit/app_cubit/app_states.dart';
 import 'package:social_app/models/comment_model/comment_model.dart';
 import 'package:social_app/models/post_model/post.dart';
+import 'package:social_app/shared/components/constants.dart';
 
 import '../../cubit/app_cubit/app_cubit.dart';
 
@@ -158,6 +159,7 @@ class CommentsScreen extends StatelessWidget {
           CircleAvatar(
             radius: 25.0,
             backgroundImage: NetworkImage(comment.userImage),
+            onBackgroundImageError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
           ),
         ],
       );

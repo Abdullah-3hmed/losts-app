@@ -21,11 +21,13 @@ class EditProfile extends StatelessWidget {
         dynamic profileImage = AppCubit.get(context).profileImage;
         dynamic coverImage = AppCubit.get(context).coverImage;
         if (profileImage == null) {
+          // todo: test this function
           profileImage = NetworkImage('${model!.image}');
         } else {
           profileImage = FileImage(profileImage);
         }
         if (coverImage == null) {
+          // todo: test this method
           coverImage = NetworkImage('${model!.cover}');
         } else {
           coverImage = FileImage(coverImage);

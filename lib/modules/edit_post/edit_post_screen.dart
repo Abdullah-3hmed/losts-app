@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/cubit/app_cubit/app_cubit.dart';
 import 'package:social_app/cubit/app_cubit/app_states.dart';
 import 'package:social_app/models/post_model/post.dart';
+import 'package:social_app/shared/components/constants.dart';
 
 class EditPost extends StatelessWidget {
   const EditPost({
@@ -80,6 +81,7 @@ class EditPost extends StatelessWidget {
                     ),
                     CircleAvatar(
                       backgroundImage: NetworkImage('${model.image}'),
+                      onBackgroundImageError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
                       radius: 25.0,
                     ),
                   ],
@@ -108,6 +110,7 @@ class EditPost extends StatelessWidget {
                             borderRadius: BorderRadius.circular(4.0),
                             image: DecorationImage(
                               image: NetworkImage('${postModel.postImage}'),
+                              onError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
                               fit: BoxFit.cover,
                             ),
                           ),

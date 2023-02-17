@@ -124,6 +124,7 @@ class HomeScreen extends StatelessWidget {
                   CircleAvatar(
                     radius: 25.0,
                     backgroundImage: NetworkImage('${postModel.image}'),
+                    onBackgroundImageError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
                   ),
                 ],
               ),
@@ -155,6 +156,7 @@ class HomeScreen extends StatelessWidget {
                         image: NetworkImage(
                           '${postModel.postImage}',
                         ),
+                        onError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
                         fit: BoxFit.contain,
                       ),
                     ),

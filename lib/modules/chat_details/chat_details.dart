@@ -2,6 +2,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/models/message_model/message_model.dart';
+import 'package:social_app/shared/components/constants.dart';
 
 import '../../cubit/app_cubit/app_cubit.dart';
 import '../../cubit/app_cubit/app_states.dart';
@@ -132,6 +133,7 @@ class ChatDetails extends StatelessWidget {
             CircleAvatar(
               radius: 20.0,
               backgroundImage: NetworkImage(userImage),
+              onBackgroundImageError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
             ),
             const SizedBox(
               width: 10.0,
@@ -196,6 +198,7 @@ class ChatDetails extends StatelessWidget {
               radius: 20.0,
               backgroundImage:
                   NetworkImage('${AppCubit.get(context).userModel!.image}'),
+              onBackgroundImageError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
             ),
           ],
         ),

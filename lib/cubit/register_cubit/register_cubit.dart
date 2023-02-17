@@ -57,10 +57,8 @@ class AppRegisterCubit extends Cubit<AppRegisterStates> {
       phone: phone,
       uId: userId,
       bio: 'write your bio ...',
-      image:
-          'https://media.istockphoto.com/id/580109176/photo/young-girl-is-standing-sad-on-the-bridge.jpg?s=612x612&w=is&k=20&c=KrvC1OGbIKi7Q1QzDBJ5Tt8qUyngTqde97rr5R9CmRY=',
-      cover:
-          'https://media.istockphoto.com/id/580109176/photo/young-girl-is-standing-sad-on-the-bridge.jpg?s=612x612&w=is&k=20&c=KrvC1OGbIKi7Q1QzDBJ5Tt8qUyngTqde97rr5R9CmRY=',
+      image: '',
+      cover: '',
     );
     FirebaseFirestore.instance
         .collection('users')

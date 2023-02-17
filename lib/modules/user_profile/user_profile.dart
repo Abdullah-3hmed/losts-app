@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_app/modules/chat_details/chat_details.dart';
 import 'package:social_app/shared/components/components.dart';
+import 'package:social_app/shared/components/constants.dart';
 
 class UserProfile extends StatelessWidget {
   const UserProfile({
@@ -54,6 +55,7 @@ class UserProfile extends StatelessWidget {
                             image: NetworkImage(
                               coverImage,
                             ),
+                            onError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -66,6 +68,7 @@ class UserProfile extends StatelessWidget {
                         backgroundImage: NetworkImage(
                           image,
                         ),
+                        onBackgroundImageError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
                         radius: 60.0,
                       ),
                     ),

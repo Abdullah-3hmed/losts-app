@@ -2,6 +2,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/shared/components/components.dart';
+import 'package:social_app/shared/components/constants.dart';
 
 import '../../cubit/app_cubit/app_cubit.dart';
 import '../../cubit/app_cubit/app_states.dart';
@@ -64,6 +65,7 @@ class ChatsScreen extends StatelessWidget {
                 backgroundImage: NetworkImage(
                   '${userModel.image}',
                 ),
+                onBackgroundImageError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
                 radius: 25.0,
               ),
             ],

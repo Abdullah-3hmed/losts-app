@@ -112,7 +112,7 @@ class AppCubit extends Cubit<AppStates> {
     emit(AppUpdateUserLoadingState());
     firebase_storage.FirebaseStorage.instance
         .ref()
-        .child('users/${Uri.file(profileImage!.path).pathSegments.last}')
+        .child('users/${userModel!.uId}/profile')
         .putFile(profileImage!)
         .then(((value) {
       value.ref.getDownloadURL().then((value) {
@@ -142,7 +142,7 @@ class AppCubit extends Cubit<AppStates> {
     emit(AppUpdateUserLoadingState());
     firebase_storage.FirebaseStorage.instance
         .ref()
-        .child('users/${Uri.file(coverImage!.path).pathSegments.last}')
+        .child('users/${userModel!.uId}/cover')
         .putFile(coverImage!)
         .then(((value) {
       value.ref.getDownloadURL().then((value) {
@@ -186,7 +186,8 @@ class AppCubit extends Cubit<AppStates> {
         .doc(userModel!.uId)
         .update(model.toMap())
         .then((value) {
-      getUserData();
+      userModel = model;
+      emit(AppGetUserSuccessState());
     }).catchError((error) {
       emit(AppUpdateUserErrorState());
     });

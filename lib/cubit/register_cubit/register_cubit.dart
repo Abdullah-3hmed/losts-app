@@ -33,7 +33,7 @@ class AppRegisterCubit extends Cubit<AppRegisterStates> {
         email: email,
         phone: phone,
         name: name,
-        userId: value.user!.uid, // todo: handle uid empty issue
+        userId: value.user!.uid,
       );
     }).catchError((error) {
       if (error == 'weak-password') {

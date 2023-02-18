@@ -124,7 +124,8 @@ class HomeScreen extends StatelessWidget {
                   CircleAvatar(
                     radius: 25.0,
                     backgroundImage: NetworkImage('${postModel.image}'),
-                    onBackgroundImageError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
+                    onBackgroundImageError: (_, __) =>
+                        const NetworkImage(AppConstants.defaultImageUrl),
                   ),
                 ],
               ),
@@ -143,7 +144,7 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(
                 height: 10.0,
               ),
-              if (postModel.postImage != '' )
+              if (postModel.postImage != '')
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Container(
@@ -156,7 +157,8 @@ class HomeScreen extends StatelessWidget {
                         image: NetworkImage(
                           '${postModel.postImage}',
                         ),
-                        onError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
+                        onError: (_, __) =>
+                            const NetworkImage(AppConstants.defaultImageUrl),
                         fit: BoxFit.contain,
                       ),
                     ),

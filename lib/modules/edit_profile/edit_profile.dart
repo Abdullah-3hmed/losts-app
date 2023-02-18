@@ -18,20 +18,6 @@ class EditProfile extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var model = AppCubit.get(context).userModel;
-        dynamic profileImage = AppCubit.get(context).profileImage;
-        dynamic coverImage = AppCubit.get(context).coverImage;
-        if (profileImage == null) {
-          // todo: test this function
-          profileImage = NetworkImage('${model!.image}');
-        } else {
-          profileImage = FileImage(profileImage);
-        }
-        if (coverImage == null) {
-          // todo: test this method
-          coverImage = NetworkImage('${model!.cover}');
-        } else {
-          coverImage = FileImage(coverImage);
-        }
         nameController.text = model!.name;
         bioController.text = model.bio!;
         phoneController.text = model.phone!;
@@ -90,7 +76,7 @@ class EditProfile extends StatelessWidget {
                                     topRight: Radius.circular(4.0),
                                   ),
                                   image: DecorationImage(
-                                    image: coverImage,
+                                    image: NetworkImage('${model.cover}'),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -116,7 +102,7 @@ class EditProfile extends StatelessWidget {
                               backgroundColor: Colors.red,
                               radius: 64.0,
                               child: CircleAvatar(
-                                backgroundImage: profileImage,
+                                backgroundImage:  NetworkImage('${model.image}'),
                                 radius: 60.0,
                               ),
                             ),

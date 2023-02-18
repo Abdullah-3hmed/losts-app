@@ -212,6 +212,7 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   void uploadPostImage({
+    required BuildContext context,
     required String postText,
     required String postDateTime,
   }) {
@@ -227,6 +228,7 @@ class AppCubit extends Cubit<AppStates> {
           print(value);
         }
         createPost(
+          context: context,
           postText: postText,
           dateTime: postDateTime,
           postImage: value,
@@ -241,6 +243,7 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   void createPost({
+    required BuildContext context,
     required String postText,
     required String dateTime,
     String? postImage,
@@ -269,6 +272,7 @@ class AppCubit extends Cubit<AppStates> {
           likes: [],
         ),
       );
+      Navigator.pop(context);
       emit(AppCreatePostSuccessState());
     }).catchError((error) {
       emit(AppCreatePostErrorState());
@@ -280,21 +284,8 @@ class AppCubit extends Cubit<AppStates> {
     emit(AppRemovePostImageState());
   }
 
-  void removeUploadedPostImage({
-    required Post postModel,
-  required String text,
-  required String postId,
-
-  }) {
-    editPost(
-      text: text,
-      postId: postId,
-      postModel: postModel,
-    ).then((value){
-      postModel.postImage = '';
-      emit(AppRemoveUploadedPostImageState());
-    });
-
+  void removeUploadedPostImage() {
+    emit(AppRemoveUploadedPostImageState());
   }
 
   List<Post> posts = [];
@@ -307,7 +298,7 @@ class AppCubit extends Cubit<AppStates> {
         .orderBy(
           'dateTime',
           descending: true,
-        ) // todo: change postDateTime to date_time
+        )
         .get()
         .then((postDocs) async {
       // get posts with likes
@@ -349,6 +340,7 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   Future<void> editPost({
+    required BuildContext context,
     required String text,
     String? postImage,
     required String postId,
@@ -362,8 +354,8 @@ class AppCubit extends Cubit<AppStates> {
     }).then((value) {
       // update changes on post model (copy by reference)
       postModel.postText = text;
-      postModel.postImage = postImage;
-
+      postModel.postImage = postImage ?? '';
+        Navigator.pop(context);
       emit(AppEditPostSuccessState());
     }).catchError((error) {
       emit(AppEditPostErrorState(error.toString()));
@@ -371,6 +363,7 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   Future<void> editPostWithImage({
+    required BuildContext context,
     required String text,
     required String postId,
     required Post postModel,
@@ -387,6 +380,7 @@ class AppCubit extends Cubit<AppStates> {
           print(value);
         }
         editPost(
+          context: context,
           postModel: postModel,
           postId: postId,
           text: text,
@@ -439,10 +433,10 @@ class AppCubit extends Cubit<AppStates> {
         post.likes.add(userModel!.uId);
       }
 
-      emit(AppLikePostSuccessState()); // todo: emit like post
+      emit(AppLikePostSuccessState());
     }).catchError((error) {
       debugPrint('error when likePost: ${error.toString()}');
-      emit(AppLikePostErrorState(error.toString())); // todo: emit like post
+      emit(AppLikePostErrorState(error.toString()));
     });
   }
 
@@ -470,7 +464,7 @@ class AppCubit extends Cubit<AppStates> {
       post.comments ??= [];
       // add comment to post model
       post.comments!.add(commentModel);
-      emit(AppCommentOnPostSuccessState()); // todo: emit
+      emit(AppCommentOnPostSuccessState());
     }).catchError((error) {
       debugPrint('error when commentPost: ${error.toString()}');
       emit(AppCommentOnPostErrorState(error.toString()));

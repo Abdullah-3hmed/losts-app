@@ -49,7 +49,6 @@ class AppLoginScreen extends StatelessWidget {
         builder: (context, state) {
           return Scaffold(
             backgroundColor: Colors.white,
-            appBar: AppBar(),
             body: Center(
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
@@ -59,6 +58,9 @@ class AppLoginScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        const Image(
+                          image: AssetImage('assets/images/logo.jpg'),
+                        ),
                         Text(
                           'LOGIN',
                           style: Theme.of(context)
@@ -72,7 +74,7 @@ class AppLoginScreen extends StatelessWidget {
                           height: 20,
                         ),
                         Text(
-                          'login now to to Communicate with friends ',
+                          'login now to to Communicate with people ',
                           style:
                               Theme.of(context).textTheme.bodyLarge!.copyWith(
                                     color: Colors.grey,
@@ -131,7 +133,15 @@ class AppLoginScreen extends StatelessWidget {
                                   );
                                 }
                               },
-                              child: const Text('LOGIN'),
+                              child: Text(
+                                'LOGIN',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .copyWith(
+                                      color: Colors.white,
+                                    ),
+                              ),
                             ),
                           ),
                           fallback: (context) => const Center(

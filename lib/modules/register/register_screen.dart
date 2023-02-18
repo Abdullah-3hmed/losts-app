@@ -48,7 +48,18 @@ class AppRegister extends StatelessWidget {
         },
         builder: (context, state) {
           return Scaffold(
-            appBar: AppBar(),
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              leading: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.black,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
             body: Center(
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
@@ -58,19 +69,24 @@ class AppRegister extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Register',
-                          style:
-                          Theme.of(context).textTheme.headlineMedium!.copyWith(
-                            color: Colors.black,
-                          ),
+                        const Image(
+                          image: AssetImage('assets/images/logo.jpg'),
                         ),
                         Text(
-                          'Register now to Communicate with friends ',
+                          'Register',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium!
+                              .copyWith(
+                                color: Colors.black,
+                              ),
+                        ),
+                        Text(
+                          'Register now to Communicate with people ',
                           style:
-                          Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            color: Colors.grey,
-                          ),
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    color: Colors.grey,
+                                  ),
                         ),
                         const SizedBox(
                           height: 30.0,
@@ -101,7 +117,7 @@ class AppRegister extends StatelessWidget {
                             type: TextInputType.visiblePassword,
                             controller: passwordController,
                             obscureText:
-                            AppRegisterCubit.get(context).isPassword,
+                                AppRegisterCubit.get(context).isPassword,
                             suffixIcon: AppRegisterCubit.get(context).suffix,
                             function: () {
                               AppRegisterCubit.get(context)
@@ -150,7 +166,15 @@ class AppRegister extends StatelessWidget {
                                   );
                                 }
                               },
-                              child: const Text('Register'),
+                              child: Text(
+                                'Register',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .copyWith(
+                                      color: Colors.white,
+                                    ),
+                              ),
                             ),
                           ),
                           fallback: (context) => const Center(

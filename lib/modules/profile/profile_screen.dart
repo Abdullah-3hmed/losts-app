@@ -44,7 +44,8 @@ class ProfileScreen extends StatelessWidget {
                                 image: NetworkImage(
                                   '${model!.cover}',
                                 ),
-                                onError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
+                                onError: (_, __) => const NetworkImage(
+                                    AppConstants.defaultImageUrl),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -57,7 +58,9 @@ class ProfileScreen extends StatelessWidget {
                             backgroundImage: NetworkImage(
                               '${model.image}',
                             ),
-                            onBackgroundImageError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
+                            onBackgroundImageError: (_, __) =>
+                                const NetworkImage(
+                                    AppConstants.defaultImageUrl),
                             radius: 60.0,
                           ),
                         ),
@@ -70,16 +73,16 @@ class ProfileScreen extends StatelessWidget {
                   Text(
                     model.name,
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   Text(
                     '${model.bio}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      fontSize: 14.0,
-                    ),
+                          fontSize: 14.0,
+                        ),
                   ),
                   Container(
                     margin: const EdgeInsets.all(20.0),
@@ -97,30 +100,20 @@ class ProfileScreen extends StatelessWidget {
                         );
                       },
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          const SizedBox(
-                            width: 10.0,
-                          ),
                           const Icon(
                             Icons.arrow_forward_ios_outlined,
                             color: Colors.black,
                             size: 16.0,
                           ),
-                          const SizedBox(
-                            width: 90.0,
-                          ),
                           Text(
                             'Settings',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .copyWith(
-                              color: Colors.black,
-                              fontSize: 22.0,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 70.0,
+                            style:
+                                Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                      color: Colors.black,
+                                      fontSize: 22.0,
+                                    ),
                           ),
                           const CircleAvatar(
                             backgroundColor: Colors.white,
@@ -144,40 +137,29 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     child: InkWell(
                       onTap: () {
-                        AppCubit.get(context).logout(context).then((value){
+                        AppCubit.get(context).logout(context).then((value) {
                           navigateAndFinish(
                             context,
                             const AppLoginScreen(),
                           );
                           AppCubit.get(context).currentIndex = 0;
                         });
-
                       },
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          const SizedBox(
-                            width: 10.0,
-                          ),
                           const Icon(
                             Icons.arrow_forward_ios_outlined,
                             color: Colors.black,
                             size: 16.0,
                           ),
-                          const SizedBox(
-                            width: 90.0,
-                          ),
                           Text(
                             'Log Out',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .copyWith(
-                              color: Colors.black,
-                              fontSize: 22.0,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 70.0,
+                            style:
+                                Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                      color: Colors.black,
+                                      fontSize: 22.0,
+                                    ),
                           ),
                           const CircleAvatar(
                             backgroundColor: Colors.white,

@@ -102,7 +102,7 @@ class EditProfile extends StatelessWidget {
                               backgroundColor: Colors.red,
                               radius: 64.0,
                               child: CircleAvatar(
-                                backgroundImage:  NetworkImage('${model.image}'),
+                                backgroundImage: NetworkImage('${model.image}'),
                                 radius: 60.0,
                               ),
                             ),

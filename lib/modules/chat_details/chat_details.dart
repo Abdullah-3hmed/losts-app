@@ -2,6 +2,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/models/message_model/message_model.dart';
+import 'package:social_app/models/user_model/user_model.dart';
 import 'package:social_app/shared/components/constants.dart';
 
 import '../../cubit/app_cubit/app_cubit.dart';
@@ -10,20 +11,16 @@ import '../../cubit/app_cubit/app_states.dart';
 class ChatDetails extends StatelessWidget {
   const ChatDetails({
     Key? key,
-    required this.uId,
-    required this.userImage,
-    required this.userName,
+    required this.userModel,
   }) : super(key: key);
-  final String uId;
-  final String userImage;
-  final String userName;
+  final AppUserModel userModel;
 
   @override
   Widget build(BuildContext context) {
     return Builder(
       builder: (BuildContext context) {
         AppCubit.get(context).getMessages(
-          receiverId: uId,
+          receiverId: userModel.uId,
         );
         return BlocConsumer<AppCubit, AppStates>(
           listener: (context, state) {},
@@ -34,7 +31,7 @@ class ChatDetails extends StatelessWidget {
                 centerTitle: true,
                 titleSpacing: 0.0,
                 title: Text(
-                  userName,
+                  userModel.name,
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: Colors.white,
                       ),
@@ -53,7 +50,7 @@ class ChatDetails extends StatelessWidget {
                             var message = AppCubit.get(context).messages[index];
                             if (AppCubit.get(context).userModel!.uId ==
                                 message.senderId) {
-                              return buildMyMessageItem(message,context);
+                              return buildMyMessageItem(message, context);
                             } else {
                               return buildMessageItem(message);
                             }
@@ -102,7 +99,7 @@ class ChatDetails extends StatelessWidget {
                               onPressed: () {
                                 AppCubit.get(context).sendMessage(
                                   text: messageController.text,
-                                  receiverId: uId,
+                                  receiverId: userModel.uId,
                                   dateTime: DateTime.now().toString(),
                                 );
                               },
@@ -132,8 +129,9 @@ class ChatDetails extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 20.0,
-              backgroundImage: NetworkImage(userImage),
-              onBackgroundImageError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
+              backgroundImage: NetworkImage('${userModel.image}'),
+              onBackgroundImageError: (_, __) =>
+                  const NetworkImage(AppConstants.defaultImageUrl),
             ),
             const SizedBox(
               width: 10.0,
@@ -198,7 +196,8 @@ class ChatDetails extends StatelessWidget {
               radius: 20.0,
               backgroundImage:
                   NetworkImage('${AppCubit.get(context).userModel!.image}'),
-              onBackgroundImageError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
+              onBackgroundImageError: (_, __) =>
+                  const NetworkImage(AppConstants.defaultImageUrl),
             ),
           ],
         ),

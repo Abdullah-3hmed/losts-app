@@ -57,9 +57,6 @@ class AppCubit extends Cubit<AppStates> {
   ];
 
   void changeBottomNavBar(int index) {
-    if (index == 1) {
-      getAllUsers();
-    }
     if (index == 2) {
       emit(AppNewPostState());
     } else {
@@ -474,7 +471,7 @@ class AppCubit extends Cubit<AppStates> {
   List<AppUserModel> users = [];
 
   void getAllUsers() {
-    if (users.isEmpty) {
+    if(users.isEmpty) {
       emit(AppGetAllUsersLoadingState());
       FirebaseFirestore.instance.collection('users').get().then((value) {
         for (var element in value.docs) {

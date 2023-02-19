@@ -41,9 +41,7 @@ class ChatsScreen extends StatelessWidget {
           navigateTo(
             context: context,
             screen: ChatDetails(
-             userName: userModel.name,
-              uId: userModel.uId,
-              userImage: userModel.image!,
+            userModel: userModel,
             ),
           );
         },

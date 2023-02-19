@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/modules/search/search_screen.dart';
 import 'package:social_app/shared/components/components.dart';
 
 import '../cubit/app_cubit/app_cubit.dart';
@@ -32,6 +33,17 @@ class AppLayout extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  navigateTo(
+                    context: context,
+                    screen: const SearchScreen(),
+                  );
+                },
+                icon: const Icon(Icons.search),
+              ),
+            ],
           ),
           body: cubit.screens[cubit.currentIndex],
           bottomNavigationBar: Container(

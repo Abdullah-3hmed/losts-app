@@ -26,6 +26,10 @@ class NewPostScreen extends StatelessWidget {
                actions: [
                  TextButton(
                    onPressed: () {
+                     // if(category.isEmpty){
+                     //   // showErrorSnackBar -> please select category first
+                     //   return;
+                     // }
                      DateTime now = DateTime.now();
                      String formattedDate =
                      DateFormat('yyyy-MM-dd – kk:mm').format(now);

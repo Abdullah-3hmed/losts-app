@@ -2,7 +2,6 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/cubit/app_cubit/app_cubit.dart';
-import 'package:social_app/modules/search/search_screen.dart';
 import 'package:social_app/shared/components/components.dart';
 
 import '../../cubit/app_cubit/app_states.dart';
@@ -17,17 +16,6 @@ class HomeScreen extends StatelessWidget {
       builder: (context, state) {
         return Column(
           children: [
-            //search
-            InkWell(
-              onTap: () {
-                // navigate to search screen
-                navigateTo(
-                  context: context,
-                  screen: SearchScreen(),
-                );
-              },
-              child: Text('Search'),
-            ),
             Expanded(
               child: ConditionalBuilder(
                 condition: AppCubit.get(context).posts.isNotEmpty && AppCubit.get(context).userModel != null,

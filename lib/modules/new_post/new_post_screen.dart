@@ -29,7 +29,7 @@ class NewPostScreen extends StatelessWidget {
                      DateTime now = DateTime.now();
                      String formattedDate =
                      DateFormat('yyyy-MM-dd – kk:mm').format(now);
-                     if (AppCubit.get(context).postImage == null) {
+                     if (AppCubit.get(context).pickedPostImage == null) {
                        AppCubit.get(context).createPost(
                          context: context,
                          postText: textController.text,
@@ -94,7 +94,7 @@ class NewPostScreen extends StatelessWidget {
                    const SizedBox(
                      height: 20.0,
                    ),
-                   if (AppCubit.get(context).postImage != null)
+                   if (AppCubit.get(context).pickedPostImage != null)
                      Expanded(
                        flex: 4,
                        child: Stack(
@@ -106,7 +106,7 @@ class NewPostScreen extends StatelessWidget {
                                borderRadius: BorderRadius.circular(4.0),
                                image: DecorationImage(
                                  image:
-                                 FileImage(AppCubit.get(context).postImage!),
+                                 FileImage(AppCubit.get(context).pickedPostImage!),
                                  fit: BoxFit.cover,
                                ),
                              ),

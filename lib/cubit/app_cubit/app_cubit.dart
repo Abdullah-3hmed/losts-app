@@ -191,20 +191,20 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  File? postImage;
+  File? pickedPostImage;
 
   Future<void> getPostImage() async {
     final pickedFile = await picker.pickImage(
       source: ImageSource.gallery,
     );
     if (pickedFile != null) {
-      postImage = File(pickedFile.path);
+      pickedPostImage = File(pickedFile.path);
       emit(AppPostImagePickedSuccessState());
     } else {
       if (kDebugMode) {
         print('no image selected');
-        emit(AppPostImagePickedErrorState());
       }
+      emit(AppPostImagePickedErrorState());
     }
   }
 
@@ -216,8 +216,8 @@ class AppCubit extends Cubit<AppStates> {
     emit(AppCreatePostLoadingState());
     firebase_storage.FirebaseStorage.instance
         .ref()
-        .child('posts/${Uri.file(postImage!.path).pathSegments.last}')
-        .putFile(postImage!)
+        .child('posts/${Uri.file(pickedPostImage!.path).pathSegments.last}')
+        .putFile(pickedPostImage!)
         .then(((value) {
       value.ref.getDownloadURL().then((value) {
         //emit(AppUploadCoverImageSuccessState());
@@ -236,7 +236,7 @@ class AppCubit extends Cubit<AppStates> {
     })).catchError((error) {
       emit(AppCreatePostErrorState());
     });
-    postImage = null;
+    pickedPostImage = null;
   }
 
   void createPost({
@@ -248,9 +248,9 @@ class AppCubit extends Cubit<AppStates> {
     emit(AppCreatePostLoadingState());
     PostModel model = PostModel(
       userName: userModel!.name,
-      image: userModel!.image!,
+      userImage: userModel!.image!,
       uId: userModel!.uId,
-      postImage: postImage ?? '',
+      image: postImage ?? '',
       postText: postText,
       dateTime: dateTime,
     );
@@ -275,7 +275,7 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   void removePostImage() {
-    postImage = null;
+    pickedPostImage = null;
     emit(AppRemovePostImageState());
   }
 
@@ -349,8 +349,8 @@ class AppCubit extends Cubit<AppStates> {
     }).then((value) {
       // update changes on post model (copy by reference)
       postModel.postText = text;
-      postModel.postImage = postImage ?? '';
-        Navigator.pop(context);
+      postModel.image = postImage ?? '';
+      Navigator.pop(context);
       emit(AppEditPostSuccessState());
     }).catchError((error) {
       emit(AppEditPostErrorState(error.toString()));
@@ -364,30 +364,30 @@ class AppCubit extends Cubit<AppStates> {
     required Post postModel,
   }) async {
     emit(AppEditPostLoadingState());
-    firebase_storage.FirebaseStorage.instance
+    await firebase_storage.FirebaseStorage.instance
         .ref()
-        .child('posts/${Uri.file(postImage!.path).pathSegments.last}')
-        .putFile(postImage!)
+        .child('posts/${Uri.file(pickedPostImage!.path).pathSegments.last}')
+        .putFile(pickedPostImage!)
         .then(((value) {
-      value.ref.getDownloadURL().then((value) {
+      value.ref.getDownloadURL().then((value) async {
         //emit(AppUploadCoverImageSuccessState());
         if (kDebugMode) {
           print(value);
         }
-        editPost(
+        await editPost(
           context: context,
           postModel: postModel,
           postId: postId,
           text: text,
           postImage: value,
         );
+        pickedPostImage = null;
       }).catchError((error) {
         emit(AppEditPostErrorState(error.toString()));
       });
     })).catchError((error) {
       emit(AppEditPostErrorState(error.toString()));
     });
-    postImage = null;
   }
 
   Future<void> deletePost({

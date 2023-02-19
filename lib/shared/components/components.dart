@@ -241,7 +241,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                 ),
                 CircleAvatar(
                   radius: 25.0,
-                  backgroundImage: NetworkImage(postModel.image),
+                  backgroundImage: NetworkImage(postModel.userImage),
                   onBackgroundImageError: (_, __) =>
                       const NetworkImage(AppConstants.defaultImageUrl),
                 ),
@@ -262,7 +262,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
             const SizedBox(
               height: 10.0,
             ),
-            if (postModel.postImage != '')
+            if (postModel.image != '')
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Container(
@@ -273,7 +273,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                     borderRadius: BorderRadius.circular(5.0),
                     image: DecorationImage(
                       image: NetworkImage(
-                        postModel.postImage!,
+                        postModel.image!,
                       ),
                       onError: (_, __) =>
                           const NetworkImage(AppConstants.defaultImageUrl),

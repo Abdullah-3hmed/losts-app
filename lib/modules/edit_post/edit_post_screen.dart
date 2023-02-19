@@ -14,16 +14,20 @@ class EditPost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    var temp = postModel.image;
+    var postText = postModel.postText;
+    var postTextController = TextEditingController();
+    postTextController.text = postText;
+
     return Builder(
       builder: (context) {
-        var temp = postModel.postImage;
-        var postText = postModel.postText;
-        var postTextController = TextEditingController();
-        postTextController.text = postText;
+
         return BlocConsumer<AppCubit, AppStates>(
           listener: (context, state) {},
           builder: (context, state) {
             var model = AppCubit.get(context).userModel;
+
             return Scaffold(
               appBar: AppBar(
                 centerTitle: true,
@@ -36,14 +40,14 @@ class EditPost extends StatelessWidget {
                 actions: [
                   TextButton(
                     onPressed: () {
-                      if (AppCubit.get(context).postImage == null) {
+                      if (AppCubit.get(context).pickedPostImage == null) {
                         AppCubit.get(context).editPost(
                           context: context,
                           text: postTextController.text,
                           postId: postModel.id,
                           postModel: postModel,
                         );
-                        postModel.postImage = temp;
+                        postModel.image = temp;
                       } else {
                         AppCubit.get(context).editPostWithImage(
                           context: context,
@@ -140,7 +144,7 @@ class EditPost extends StatelessWidget {
                           ],
                         ),
                       ),
-                    if (AppCubit.get(context).postImage != null)
+                    if (AppCubit.get(context).pickedPostImage != null)
                       Expanded(
                         flex: 4,
                         child: Stack(
@@ -153,7 +157,7 @@ class EditPost extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(4.0),
                                 image: DecorationImage(
                                   image: FileImage(
-                                      AppCubit.get(context).postImage!),
+                                      AppCubit.get(context).pickedPostImage!),
                                   fit: BoxFit.cover,
                                 ),
                               ),

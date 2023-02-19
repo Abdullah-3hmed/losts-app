@@ -247,10 +247,8 @@ class AppCubit extends Cubit<AppStates> {
   }) {
     emit(AppCreatePostLoadingState());
     PostModel model = PostModel(
-      coverImage: userModel!.cover,
-      userBio: userModel!.bio,
       userName: userModel!.name,
-      image: userModel!.image,
+      image: userModel!.image!,
       uId: userModel!.uId,
       postImage: postImage ?? '',
       postText: postText,

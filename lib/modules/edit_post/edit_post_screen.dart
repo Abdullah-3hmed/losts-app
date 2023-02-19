@@ -19,7 +19,7 @@ class EditPost extends StatelessWidget {
         var temp = postModel.postImage;
         var postText = postModel.postText;
         var postTextController = TextEditingController();
-        postTextController.text = postText!;
+        postTextController.text = postText;
         return BlocConsumer<AppCubit, AppStates>(
           listener: (context, state) {},
           builder: (context, state) {

@@ -211,7 +211,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                                 navigateTo(
                                   context: context,
                                   screen: UserProfile(
-                                    uId: postModel.uId!,
+                                    uId: postModel.uId,
                                   ),
                                 );
                               } else {
@@ -220,7 +220,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                             }
                           : null,
                       child: Text(
-                        '${postModel.userName}',
+                        postModel.userName,
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                               fontSize: 16.0,
                               height: 1.4,
@@ -228,7 +228,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                       ),
                     ),
                     Text(
-                      '${postModel.dateTime}',
+                      postModel.dateTime,
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
                             fontSize: 14.0,
                             height: 1.4,
@@ -241,7 +241,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                 ),
                 CircleAvatar(
                   radius: 25.0,
-                  backgroundImage: NetworkImage('${postModel.image}'),
+                  backgroundImage: NetworkImage(postModel.image),
                   onBackgroundImageError: (_, __) =>
                       const NetworkImage(AppConstants.defaultImageUrl),
                 ),
@@ -252,7 +252,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
             ),
             // post text
             Text(
-              '${postModel.postText}',
+              postModel.postText,
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     fontSize: 18.0,
                   ),
@@ -273,7 +273,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                     borderRadius: BorderRadius.circular(5.0),
                     image: DecorationImage(
                       image: NetworkImage(
-                        '${postModel.postImage}',
+                        postModel.postImage!,
                       ),
                       onError: (_, __) =>
                           const NetworkImage(AppConstants.defaultImageUrl),

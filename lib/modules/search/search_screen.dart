@@ -11,38 +11,53 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-
   final _searchController = TextEditingController();
   List<Post> posts = [];
+  bool _typing = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search'),
+        title: const Text('Search'),
       ),
       body: Column(
         children: [
           TextFormField(
-            controller: _searchController,
-            keyboardType: TextInputType.text,
-            onFieldSubmitted: (value) {
-              debugPrint('on sbmit search for "$value"');
-              posts = AppCubit.get(context).posts.where(
-                    (element) => element.postText.contains(value!),
-                  ).toList();
-              setState(() {
-
-              });
-            },
+              controller: _searchController,
+              keyboardType: TextInputType.text,
+              onFieldSubmitted: (value) {
+                debugPrint('on sbmit search for "$value"');
+                posts = AppCubit
+                    .get(context)
+                    .posts
+                    .where(
+                      (element) => element.postText.contains(value!),
+                )
+                    .toList();
+                setState(() {
+                  _typing = false;
+                });
+              },
+              onChanged: (value) {
+                _typing = true;
+                setState(() {});
+              },
+              onTap: () {
+                _typing = true;
+                setState(() {});
+              },
           ),
-          Expanded(
-            child: ListView.separated(
+          _typing
+              ? const Center(child: Text('Search for something ..'))
+              : Expanded(
+            child: posts.isEmpty ? const Center(child: Text('No posts found!')) : ListView.separated(
               physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) {
                 return buildPostItem(context, posts[index], isUserProfile: false);
               },
-              separatorBuilder: (context, index) => const SizedBox(
+              separatorBuilder: (context, index) =>
+              const SizedBox(
                 height: 10.0,
               ),
               itemCount: posts.length,

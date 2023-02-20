@@ -469,7 +469,7 @@ class AppCubit extends Cubit<AppStates> {
   List<AppUserModel> users = [];
 
   void getAllUsers() {
-    if(users.isEmpty) {
+    if (users.isEmpty) {
       emit(AppGetAllUsersLoadingState());
       FirebaseFirestore.instance.collection('users').get().then((value) {
         for (var element in value.docs) {
@@ -545,6 +545,22 @@ class AppCubit extends Cubit<AppStates> {
       }
       emit(AppGetMessageSuccessState());
     });
+  }
+
+  bool typing = true;
+  void searchOnTap() {
+    typing = true;
+    emit(AppSearchOnTapState());
+  }
+
+  void searchOnSubmit() {
+    typing = false;
+    emit(AppSearchOnSubmitState());
+  }
+
+  void searchOnchange() {
+    typing = true;
+    emit(AppSearchOnChangeState());
   }
 
   Future<void> logout(BuildContext context) async {

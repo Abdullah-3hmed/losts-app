@@ -113,3 +113,9 @@ class AppSendMessageErrorState extends AppStates {}
 class AppGetMessageSuccessState extends AppStates {}
 
 class AppLogOutSuccessState extends AppStates {}
+
+class AppSearchOnSubmitState extends AppStates {}
+
+class AppSearchOnChangeState extends AppStates {}
+
+class AppSearchOnTapState extends AppStates {}

@@ -33,17 +33,19 @@ class AppLayout extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  navigateTo(
-                    context: context,
-                    screen: const SearchScreen(),
-                  );
-                },
-                icon: const Icon(Icons.search),
-              ),
-            ],
+            actions: AppCubit.get(context).currentIndex == 0
+                ? [
+                    IconButton(
+                      onPressed: () {
+                        navigateTo(
+                          context: context,
+                          screen: const SearchScreen(),
+                        );
+                      },
+                      icon: const Icon(Icons.search),
+                    ),
+                  ]
+                : null,
           ),
           body: cubit.screens[cubit.currentIndex],
           bottomNavigationBar: Container(

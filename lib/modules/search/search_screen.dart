@@ -11,6 +11,7 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var searchController = TextEditingController();
+    AppCubit.get(context).typing = true;
 
     List<Post> posts = [];
     return BlocConsumer<AppCubit, AppStates>(

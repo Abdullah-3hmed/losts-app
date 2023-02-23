@@ -50,6 +50,7 @@ dependencies:
   firebase_storage: ^11.0.6
   smooth_page_indicator: ^1.0.0+2
   intl: ^0.17.0
+  firebase_messaging: ^14.2.5
 
 
 
@@ -95,6 +96,9 @@ flutter:
     - family: Tajawal
       fonts:
         - asset: assets/fonts/Tajawal-Bold.ttf
+    - family: IconBroken
+      fonts:
+        - asset: assets/fonts/icons.ttf
 
 
   #

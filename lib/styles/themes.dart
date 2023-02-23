@@ -34,15 +34,18 @@ ThemeData lightTheme = ThemeData(
   ),
   textTheme: const TextTheme(
     bodyLarge: TextStyle(
+      fontFamily: 'Tajawal',
       fontSize: 18.0,
       fontWeight: FontWeight.w600,
       color: Colors.black,
     ),
     titleMedium: TextStyle(
-        fontSize: 16.0,
-        fontWeight: FontWeight.w600,
-        color: Colors.black,
-        height: 1.3),
+      fontFamily: 'Tajawal',
+      fontSize: 16.0,
+      fontWeight: FontWeight.w600,
+      color: Colors.black,
+      height: 1.3,
+    ),
   ),
   fontFamily: 'Tajawal',
 );

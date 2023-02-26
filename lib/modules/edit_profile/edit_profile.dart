@@ -51,7 +51,8 @@ class EditProfile extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  if (state is AppUpdateUserLoadingState) const LinearProgressIndicator(),
+                  if (state is AppUpdateUserLoadingState)
+                    const LinearProgressIndicator(),
                   if (state is AppUpdateUserLoadingState)
                     const SizedBox(
                       height: 20.0,
@@ -75,22 +76,37 @@ class EditProfile extends StatelessWidget {
                                     topRight: Radius.circular(4.0),
                                   ),
                                   image: DecorationImage(
-                                    image: AppCubit.get(context).coverImage == null
+                                    image: AppCubit.get(context).coverImage ==
+                                            null
                                         ? Image.network('${model.cover}').image
-                                        : FileImage(AppCubit.get(context).coverImage!),
+                                        : FileImage(
+                                            AppCubit.get(context).coverImage!),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
                               CircleAvatar(
                                 radius: 20.0,
-                                child: IconButton(
-                                  onPressed: () {
-                                    AppCubit.get(context).getCoverImage();
+                                child: PopupMenuButton(
+                                  icon: const Icon(Icons.camera_alt_outlined),
+                                  onSelected: (String value) {
+                                    if (value == 'Camera') {
+                                      AppCubit.get(context)
+                                          .getCoverImageByCamera();
+                                    } else if (value == 'Gallery') {
+                                      AppCubit.get(context).getCoverImage();
+                                    }
                                   },
-                                  icon: const Icon(
-                                    Icons.camera_alt_outlined,
-                                  ),
+                                  itemBuilder: (context) => [
+                                    const PopupMenuItem(
+                                      value: 'Camera',
+                                      child: Text('Camera'),
+                                    ),
+                                    const PopupMenuItem(
+                                      value: 'Gallery',
+                                      child: Text('Gallery'),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -103,23 +119,41 @@ class EditProfile extends StatelessWidget {
                               backgroundColor: Colors.red,
                               radius: 64.0,
                               child: CircleAvatar(
-                                backgroundImage: AppCubit.get(context).profileImage == null
+                                backgroundImage: AppCubit.get(context)
+                                            .profileImage ==
+                                        null
                                     ? Image.network('${model.image}').image
-                                    : FileImage(AppCubit.get(context).profileImage!),
+                                    : FileImage(
+                                        AppCubit.get(context).profileImage!),
                                 radius: 60.0,
                               ),
                             ),
                             CircleAvatar(
                               radius: 20.0,
                               backgroundColor: Colors.red,
-                              child: IconButton(
-                                onPressed: () {
-                                  AppCubit.get(context).getProfileImage();
-                                },
+                              child: PopupMenuButton(
                                 icon: const Icon(
                                   Icons.edit,
                                   color: Colors.white,
                                 ),
+                                onSelected: (String value) {
+                                  if (value == 'Camera') {
+                                    AppCubit.get(context)
+                                        .getProfileImageByCamera();
+                                  } else if (value == 'Gallery') {
+                                    AppCubit.get(context).getProfileImage();
+                                  }
+                                },
+                                itemBuilder: (context) => [
+                                  const PopupMenuItem(
+                                    value: 'Camera',
+                                    child: Text('Camera'),
+                                  ),
+                                  const PopupMenuItem(
+                                    value: 'Gallery',
+                                    child: Text('Gallery'),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -130,7 +164,8 @@ class EditProfile extends StatelessWidget {
                   const SizedBox(
                     height: 30.0,
                   ),
-                  if (AppCubit.get(context).profileImage != null || AppCubit.get(context).coverImage != null)
+                  if (AppCubit.get(context).profileImage != null ||
+                      AppCubit.get(context).coverImage != null)
                     Row(
                       children: [
                         if (AppCubit.get(context).profileImage != null)
@@ -151,7 +186,8 @@ class EditProfile extends StatelessWidget {
                                   const SizedBox(
                                     height: 5.0,
                                   ),
-                                if (state is AppUpdateUserLoadingState) const LinearProgressIndicator(),
+                                if (state is AppUpdateUserLoadingState)
+                                  const LinearProgressIndicator(),
                               ],
                             ),
                           ),
@@ -176,13 +212,15 @@ class EditProfile extends StatelessWidget {
                                   const SizedBox(
                                     height: 5.0,
                                   ),
-                                if (state is AppUpdateUserLoadingState) const LinearProgressIndicator(),
+                                if (state is AppUpdateUserLoadingState)
+                                  const LinearProgressIndicator(),
                               ],
                             ),
                           ),
                       ],
                     ),
-                  if (AppCubit.get(context).profileImage != null || AppCubit.get(context).coverImage != null)
+                  if (AppCubit.get(context).profileImage != null ||
+                      AppCubit.get(context).coverImage != null)
                     const SizedBox(
                       height: 20.0,
                     ),

@@ -107,7 +107,7 @@ class EditPost extends StatelessWidget {
                     const SizedBox(
                       height: 20.0,
                     ),
-                    if (temp != '')
+                    if (temp != '' && AppCubit.get(context).pickedPostImage == null)
                       Expanded(
                         flex: 4,
                         child: Stack(
@@ -144,6 +144,9 @@ class EditPost extends StatelessWidget {
                           ],
                         ),
                       ),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
                     if (AppCubit.get(context).pickedPostImage != null)
                       Expanded(
                         flex: 4,
@@ -180,28 +183,50 @@ class EditPost extends StatelessWidget {
                       height: 20.0,
                     ),
                     Container(
+                      width: double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: const BorderRadius.all(
                           Radius.circular(10.0),
                         ),
                         border: Border.all(color: Colors.black),
                       ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextButton(
-                              onPressed: () {
-                                AppCubit.get(context).getPostImage();
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Icon(Icons.image_search_sharp),
-                                  SizedBox(width: 5.0),
-                                  Text('add photo'),
-                                ],
+                      child: PopupMenuButton(
+                        icon: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.image_search_sharp,
+                              color: Colors.blue,
+                            ),
+                            const SizedBox(
+                              width: 10.0,
+                            ),
+                            Text(
+                              'add photo',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(
+                                color: Colors.blue,
                               ),
                             ),
+                          ],
+                        ),
+                        onSelected: (String value) {
+                          if (value == 'Camera') {
+                            AppCubit.get(context).getPostImageByCamera();
+                          } else if (value == 'Gallery') {
+                            AppCubit.get(context).getPostImage();
+                          }
+                        },
+                        itemBuilder: (context) => [
+                          const PopupMenuItem(
+                            value: 'Camera',
+                            child: Text('Camera'),
+                          ),
+                          const PopupMenuItem(
+                            value: 'Gallery',
+                            child: Text('Gallery'),
                           ),
                         ],
                       ),

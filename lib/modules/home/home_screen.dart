@@ -11,56 +11,41 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //List posts = [];
-    return BlocConsumer<AppCubit, AppStates>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        return Column(
-          children: [
-        //     SizedBox(
-        //       height: 70,
-        //       child: ListView.separated(
-        //         scrollDirection: Axis.horizontal,
-        //         itemBuilder: (context, index){
-        //           return InkWell(
-        //             onTap: (){
-        //               _selectedCategory = AppCubit.get(context).categories[index];
-        //               posts = AppCubit.get(context).posts.where((element) => element.category == _selectedCategory.id).toList();
-        //             },
-        //             child: Container(
-        //               decoration: BoxDecoration(
-        //                 color: Colors.blue,
-        //               ),
-        //               padding: EdgeInsets.all(15),
-        //               child: Text('category ${index+1}'),
-        //             ),
-        //           );
-        //         },
-        //         separatorBuilder: (context, index) => const SizedBox(
-        //   height: 10.0,
-        // ),
-        //         itemCount: 10,
-        //       ),
-        //     ),
-            Expanded(
-              child: ConditionalBuilder(
-                condition: AppCubit.get(context).posts.isNotEmpty &&
-                    AppCubit.get(context).userModel != null,
-                builder: (context) => ListView.separated(
-                  physics: const BouncingScrollPhysics(),
-                  itemBuilder: (context, index) => buildPostItem(
-                      context, AppCubit.get(context).posts[index],
-                      isUserProfile: false),
-                  separatorBuilder: (context, index) => const SizedBox(
-                    height: 10.0,
+    return Builder(
+      builder: (context) {
+        if (AppCubit.get(context).userModel == null) {
+          AppCubit.get(context).getUserData();
+        } else if (AppCubit.get(context).posts.isEmpty) {
+          AppCubit.get(context).getPosts();
+        } else if(AppCubit.get(context).users.isEmpty){
+          AppCubit.get(context).getAllUsers();
+        }
+        return BlocConsumer<AppCubit, AppStates>(
+          listener: (context, state) {},
+          builder: (context, state) {
+            return Column(
+              children: [
+                Expanded(
+                  child: ConditionalBuilder(
+                    condition: AppCubit.get(context).posts.isNotEmpty &&
+                        AppCubit.get(context).userModel != null,
+                    builder: (context) => ListView.separated(
+                      physics: const BouncingScrollPhysics(),
+                      itemBuilder: (context, index) => buildPostItem(
+                          context, AppCubit.get(context).posts[index],
+                          isUserProfile: false),
+                      separatorBuilder: (context, index) => const SizedBox(
+                        height: 10.0,
+                      ),
+                      itemCount: AppCubit.get(context).posts.length,
+                    ),
+                    fallback: (context) =>
+                        const Center(child: CircularProgressIndicator()),
                   ),
-                  itemCount: AppCubit.get(context).posts.length,
                 ),
-                fallback: (context) =>
-                    const Center(child: CircularProgressIndicator()),
-              ),
-            ),
-          ],
+              ],
+            );
+          },
         );
       },
     );

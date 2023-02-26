@@ -26,9 +26,13 @@ class AppCubit extends Cubit<AppStates> {
   static AppCubit get(context) => BlocProvider.of(context);
   AppUserModel? userModel;
 
-  void getUserData() {
+  Future<void> getUserData() async {
     emit(AppGetUserLoadingState());
-    FirebaseFirestore.instance.collection('users').doc(uId).get().then((value) {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uId)
+        .get()
+        .then((value) {
       if (kDebugMode) {
         print(value.data());
       }
@@ -84,11 +88,41 @@ class AppCubit extends Cubit<AppStates> {
     }
   }
 
+  Future getProfileImageByCamera() async {
+    final pickedFile = await picker.pickImage(
+      source: ImageSource.camera,
+    );
+    if (pickedFile != null) {
+      profileImage = File(pickedFile.path);
+      emit(AppProfileImagePickedSuccessState());
+    } else {
+      if (kDebugMode) {
+        print('no image selected');
+        emit(AppProfileImagePickedErrorState());
+      }
+    }
+  }
+
   File? coverImage;
 
   Future getCoverImage() async {
     final pickedFile = await picker.pickImage(
       source: ImageSource.gallery,
+    );
+    if (pickedFile != null) {
+      coverImage = File(pickedFile.path);
+      emit(AppCoverImagePickedSuccessState());
+    } else {
+      if (kDebugMode) {
+        print('no image selected');
+        emit(AppCoverImagePickedErrorState());
+      }
+    }
+  }
+
+  Future getCoverImageByCamera() async {
+    final pickedFile = await picker.pickImage(
+      source: ImageSource.camera,
     );
     if (pickedFile != null) {
       coverImage = File(pickedFile.path);
@@ -194,8 +228,27 @@ class AppCubit extends Cubit<AppStates> {
   File? pickedPostImage;
 
   Future<void> getPostImage() async {
+    pickedPostImage = null;
+    emit(AppPostImagePickedLoadingState());
     final pickedFile = await picker.pickImage(
       source: ImageSource.gallery,
+    );
+    if (pickedFile != null) {
+      pickedPostImage = File(pickedFile.path);
+      emit(AppPostImagePickedSuccessState());
+    } else {
+      if (kDebugMode) {
+        print('no image selected');
+      }
+      emit(AppPostImagePickedErrorState());
+    }
+  }
+
+  Future<void> getPostImageByCamera() async {
+    pickedPostImage = null;
+    emit(AppPostImagePickedLoadingState());
+    final pickedFile = await picker.pickImage(
+      source: ImageSource.camera,
     );
     if (pickedFile != null) {
       pickedPostImage = File(pickedFile.path);
@@ -469,21 +522,21 @@ class AppCubit extends Cubit<AppStates> {
   List<AppUserModel> users = [];
 
   void getAllUsers() {
-    if (users.isEmpty) {
-      emit(AppGetAllUsersLoadingState());
-      FirebaseFirestore.instance.collection('users').get().then((value) {
-        for (var element in value.docs) {
-          if (element.data()['uId'] != userModel!.uId) {
-            users.add(
-              AppUserModel.fromJson(element.data()),
-            );
-          }
-          emit(AppGetAllUsersSuccessState());
+    users = [];
+    emit(AppGetAllUsersLoadingState());
+    FirebaseFirestore.instance.collection('users').get().then((value) {
+      for (var element in value.docs) {
+        if (element.data()['uId'] != userModel!.uId) {
+          users.add(
+            AppUserModel.fromJson(element.data()),
+          );
         }
-      }).catchError((error) {
-        emit(AppGetAllUsersErrorState(error.toString()));
-      });
-    }
+        emit(AppGetAllUsersSuccessState());
+      }
+    }).catchError((error) {
+      debugPrint('>>>>>>>>>>> ${error.toString()}');
+      emit(AppGetAllUsersErrorState(error.toString()));
+    });
   }
 
   void sendMessage({
@@ -548,6 +601,7 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   bool typing = true;
+
   void searchOnTap() {
     typing = true;
     emit(AppSearchOnTapState());

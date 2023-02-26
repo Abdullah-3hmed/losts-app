@@ -75,7 +75,7 @@ ThemeData darkTheme = ThemeData(
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     type: BottomNavigationBarType.fixed,
     selectedItemColor: Colors.blue,
-    unselectedItemColor: Colors.grey,
+    unselectedItemColor: Colors.white,
     backgroundColor: HexColor('333739'),
   ),
   textTheme: const TextTheme(
@@ -85,10 +85,11 @@ ThemeData darkTheme = ThemeData(
       color: Colors.white,
     ),
     titleMedium: TextStyle(
-        fontSize: 16.0,
-        fontWeight: FontWeight.w600,
-        color: Colors.white,
-        height: 1.3),
+      fontSize: 16.0,
+      fontWeight: FontWeight.w600,
+      color: Colors.white,
+      height: 1.3,
+    ),
   ),
   fontFamily: 'Tajawal',
 );

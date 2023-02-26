@@ -52,6 +52,8 @@ class AppCreatePostSuccessState extends AppStates {}
 
 class AppCreatePostErrorState extends AppStates {}
 
+class AppPostImagePickedLoadingState extends AppStates {}
+
 class AppPostImagePickedSuccessState extends AppStates {}
 
 class AppPostImagePickedErrorState extends AppStates {}

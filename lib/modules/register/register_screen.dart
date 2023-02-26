@@ -50,14 +50,22 @@ class AppRegister extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.transparent,
-              leading: IconButton(
-                icon: const Icon(
-                  Icons.arrow_back,
-                  color: Colors.black,
+              leading: Padding(
+                padding: const EdgeInsets.only(
+                  left: 3.0,
+                  top: 10.0,
                 ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Back',
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          color: Colors.black,
+                        ),
+                  ),
+                ),
               ),
             ),
             body: Center(

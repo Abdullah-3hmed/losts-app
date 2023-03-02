@@ -1,6 +1,7 @@
 class AppUserModel {
   late final String uId;
   late final String name;
+  late final String token;
   String? phone;
   String? email;
   String? image;
@@ -12,6 +13,7 @@ class AppUserModel {
     required this.name,
     required this.uId,
     this.phone,
+    this.token = '',
     this.image,
     this.bio,
     this.cover,
@@ -20,6 +22,7 @@ class AppUserModel {
   AppUserModel.fromJson(Map<String, dynamic>? json) {
     email = json!['email'];
     name = json['name'];
+    token = json['token']??'';
     phone = json['phone'];
     image = json['image'];
     cover = json['cover'];
@@ -33,6 +36,7 @@ class AppUserModel {
       'phone': phone,
       'uId': uId,
       'email': email,
+      'token': token,
       'cover': cover,
       'image':image,
       'bio':bio,

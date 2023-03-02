@@ -96,8 +96,9 @@ class ChatDetails extends StatelessWidget {
                             height: 40.0,
                             child: MaterialButton(
                               minWidth: 1.0,
-                              onPressed: () {
-                                AppCubit.get(context).sendMessage(
+                              onPressed: () async {
+                                await AppCubit.get(context).sendMessage(
+                                  userName: AppCubit.get(context).userModel!.name,
                                   text: messageController.text,
                                   receiverId: userModel.uId,
                                   dateTime: DateTime.now().toString(),

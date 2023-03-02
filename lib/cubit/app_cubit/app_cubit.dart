@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:social_app/helper/fcm_helper.dart';
 import 'package:social_app/models/comment_model/comment_model.dart';
 import 'package:social_app/models/post_model/post.dart';
 import 'package:social_app/network/local/cache_helper.dart';
@@ -318,6 +319,7 @@ class AppCubit extends Cubit<AppStates> {
           json: model.toMap(),
           id: value.id,
           likes: [],
+          // comments: [],
         ),
       );
       Navigator.pop(context);
@@ -454,7 +456,6 @@ class AppCubit extends Cubit<AppStates> {
         .delete()
         .then((value) {
       posts.remove(postModel);
-
       emit(AppDeletePostSuccessState());
     }).catchError((error) {
       emit(AppDeletePostErrorState(error.toString()));
@@ -467,7 +468,7 @@ class AppCubit extends Cubit<AppStates> {
     bool isLiked = post.likes.contains(userModel!.uId);
     debugPrint('user id: "${userModel?.uId}"');
 
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection('posts')
         .doc(post.id)
         .collection('likes')
@@ -480,7 +481,6 @@ class AppCubit extends Cubit<AppStates> {
       } else {
         post.likes.add(userModel!.uId);
       }
-
       emit(AppLikePostSuccessState());
     }).catchError((error) {
       debugPrint('error when likePost: ${error.toString()}');
@@ -508,10 +508,22 @@ class AppCubit extends Cubit<AppStates> {
         .collection('comments')
         .doc()
         .set(commentModel.toMap())
-        .then((_) {
+        .then((_) async {
       post.comments ??= [];
       // add comment to post model
       post.comments!.add(commentModel);
+      // push fcm to post user
+      // get user token
+      final userToken = users.firstWhere((user) => user.uId == post.uId).token;
+
+      await FCMHelper.pushCommentFCM(
+        title: '${commentModel.userName} commented on your post',
+        description: '',
+        postId: post.id,
+        userId: post.uId,
+        userToken: userToken,
+      );
+
       emit(AppCommentOnPostSuccessState());
     }).catchError((error) {
       debugPrint('error when commentPost: ${error.toString()}');
@@ -539,30 +551,42 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  void sendMessage({
+  Future<void> sendMessage({
     required String text,
+    required String userName,
     required String receiverId,
     required String dateTime,
-  }) {
+  }) async {
     MessageModel messageModel = MessageModel(
       dateTime: dateTime,
       receiverId: receiverId,
       senderId: userModel!.uId,
       text: text,
     );
-    FirebaseFirestore.instance
+
+    /// my message
+    await FirebaseFirestore.instance
         .collection('users')
         .doc(userModel!.uId)
         .collection('chats')
         .doc(receiverId)
         .collection('messages')
         .add(messageModel.toMap())
-        .then((value) {
+        .then((value) async {
+      final userToken =
+          users.firstWhere((user) => user.uId == receiverId).token;
+
+      await FCMHelper.pushChatMessageFCM(
+        title: '$userName sent you a message',
+        description: '',
+        userId: userModel!.uId,
+        userToken: userToken,
+      );
       emit(AppSendMessageSuccessState());
     }).catchError((error) {
       emit(AppSendMessageErrorState());
     });
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection('users')
         .doc(receiverId)
         .collection('chats')
@@ -618,6 +642,9 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   Future<void> logout(BuildContext context) async {
+    FirebaseFirestore.instance.collection('users').doc(uId).update(
+      {'token': ''},
+    );
     await CacheHelper.removeData(key: 'uId');
     uId = null;
     userModel = null;

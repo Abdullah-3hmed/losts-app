@@ -2,9 +2,11 @@
 // add the following to your pubspec.yaml
 // flutter:
 //   fonts:
-//    - family: Iconly-Broken
+//    - family: Icon-Broken
 //      fonts:
 //       - asset: fonts/icons.ttf
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/widgets.dart';
 
 class IconBroken {

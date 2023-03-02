@@ -15,9 +15,9 @@ class HomeScreen extends StatelessWidget {
       builder: (context) {
         if (AppCubit.get(context).userModel == null) {
           AppCubit.get(context).getUserData();
-        } else if (AppCubit.get(context).posts.isEmpty) {
+        }else if (AppCubit.get(context).posts.isEmpty) {
           AppCubit.get(context).getPosts();
-        } else if(AppCubit.get(context).users.isEmpty){
+        }else if (AppCubit.get(context).users.isEmpty) {
           AppCubit.get(context).getAllUsers();
         }
         return BlocConsumer<AppCubit, AppStates>(

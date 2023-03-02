@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:social_app/shared/components/constants.dart';
 
 import '../../models/user_model/user_model.dart';
 import 'register_states.dart';
@@ -22,8 +24,7 @@ class AppRegisterCubit extends Cubit<AppRegisterStates> {
         .createUserWithEmailAndPassword(
       email: email,
       password: password,
-    )
-        .then((value) {
+    ).then((value) {
       //  emit(AppRegisterSuccessState());
       // if (kDebugMode) {
       //   print(value.user!.email);
@@ -50,15 +51,18 @@ class AppRegisterCubit extends Cubit<AppRegisterStates> {
     required String phone,
     required String name,
     required String userId,
-  }) {
+  }) async {
+    final token = await _getToken();
+
     AppUserModel model = AppUserModel(
       email: email,
       name: name,
       phone: phone,
       uId: userId,
       bio: 'write your bio ...',
-      image: '',
-      cover: '',
+      image: AppConstants.defaultImageUrl,
+      cover: AppConstants.defaultImageUrl,
+      token: token ?? '',
     );
     FirebaseFirestore.instance
         .collection('users')
@@ -80,5 +84,9 @@ class AppRegisterCubit extends Cubit<AppRegisterStates> {
     isPassword = !isPassword;
     suffix = isPassword ? Icons.visibility : Icons.visibility_off;
     emit(AppRegisterChanePasswordVisibilityState());
+  }
+
+  Future<String?> _getToken() async {
+    return await FirebaseMessaging.instance.getToken();
   }
 }

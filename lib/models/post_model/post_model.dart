@@ -17,7 +17,6 @@ class PostModel {
 
   PostModel.fromJson(Map<String, dynamic> json) {
     image = json['postImage'];
-
     userName = json['name'];
     userImage = json['image'];
     postText = json['postText'];

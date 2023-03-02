@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/cubit/app_cubit/app_cubit.dart';
+import 'package:social_app/network/remote/dio_helper.dart';
 import 'package:social_app/shared/components/components.dart';
 
 import 'shared/bloc_observer.dart';
@@ -48,6 +49,7 @@ Future<void> main() async {
   });
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   await CacheHelper.init();
+  DioHelper.init();
   Bloc.observer = MyBlocObserver();
 
   Widget startScreen;

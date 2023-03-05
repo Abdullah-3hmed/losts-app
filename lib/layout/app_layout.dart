@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/modules/search/search_screen.dart';
 import 'package:social_app/shared/components/components.dart';
+import 'package:social_app/styles/icon_broken.dart';
 
 import '../cubit/app_cubit/app_cubit.dart';
 import '../cubit/app_cubit/app_states.dart';
@@ -42,7 +43,7 @@ class AppLayout extends StatelessWidget {
                           screen: const SearchScreen(),
                         );
                       },
-                      icon: const Icon(Icons.search),
+                      icon: const Icon(IconBroken.Search),
                     ),
                   ]
                 : null,
@@ -62,13 +63,13 @@ class AppLayout extends StatelessWidget {
               onTap: (int index) {
                 cubit.changeBottomNavBar(index);
               },
-              items: const [
+              items:  const [
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.home_outlined),
+                  icon: Icon(IconBroken.Home),
                   label: 'Home',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.chat_outlined),
+                  icon: Icon(IconBroken.Chat),
                   label: 'Chats',
                 ),
                 BottomNavigationBarItem(
@@ -76,7 +77,7 @@ class AppLayout extends StatelessWidget {
                   label: 'Post',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
+                  icon: Icon(IconBroken.Profile),
                   label: 'Profile',
                 ),
               ],

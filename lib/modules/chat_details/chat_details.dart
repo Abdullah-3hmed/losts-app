@@ -52,7 +52,7 @@ class ChatDetails extends StatelessWidget {
                                 message.senderId) {
                               return buildMyMessageItem(message, context);
                             } else {
-                              return buildMessageItem(message);
+                              return buildMessageItem(message,context);
                             }
                           },
                           separatorBuilder: (context, index) => const SizedBox(
@@ -84,21 +84,28 @@ class ChatDetails extends StatelessWidget {
                           Expanded(
                             child: TextFormField(
                               controller: messageController,
-                              decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.all(10.0),
+                              decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.all(10.0),
                                 border: InputBorder.none,
                                 hintText: 'Write your message here...',
+                                hintStyle:
+                                    Theme.of(context).textTheme.titleMedium,
                               ),
                             ),
                           ),
                           Container(
-                            color: Colors.blue,
-                            height: 40.0,
+                            height: 48.0,
+                            decoration: const BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.only(
+                                bottomRight: Radius.circular(15.0),
+                                topRight: Radius.circular(15.0),
+                              ),
+                            ),
                             child: MaterialButton(
                               minWidth: 1.0,
                               onPressed: () async {
                                 await AppCubit.get(context).sendMessage(
-                                  userName: AppCubit.get(context).userModel!.name,
                                   text: messageController.text,
                                   receiverId: userModel.uId,
                                   dateTime: DateTime.now().toString(),
@@ -124,7 +131,7 @@ class ChatDetails extends StatelessWidget {
     );
   }
 
-  Widget buildMessageItem(MessageModel messageModel) => Align(
+  Widget buildMessageItem(MessageModel messageModel,BuildContext context) => Align(
         alignment: AlignmentDirectional.centerStart,
         child: Row(
           children: [
@@ -142,8 +149,8 @@ class ChatDetails extends StatelessWidget {
                 vertical: 5.0,
                 horizontal: 10.0,
               ),
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
+              decoration:  BoxDecoration(
+                color: AppCubit.get(context).isDark ?Colors.grey[600]:Colors.grey[300],
                 borderRadius: const BorderRadiusDirectional.only(
                   bottomEnd: Radius.circular(10.0),
                   topEnd: Radius.circular(10.0),
@@ -152,9 +159,7 @@ class ChatDetails extends StatelessWidget {
               ),
               child: Text(
                 '${messageModel.text}',
-                style: const TextStyle(
-                  fontSize: 20.0,
-                ),
+                style:Theme.of(context).textTheme.bodyLarge,
               ),
             ),
           ],
@@ -175,8 +180,8 @@ class ChatDetails extends StatelessWidget {
                 vertical: 5.0,
                 horizontal: 10.0,
               ),
-              decoration: BoxDecoration(
-                color: Colors.blue.withOpacity(.2),
+              decoration:  BoxDecoration(
+                color:AppCubit.get(context).isDark? Colors.blue:Colors.blue.withOpacity(.4),
                 borderRadius: const BorderRadiusDirectional.only(
                   bottomStart: Radius.circular(10.0),
                   topEnd: Radius.circular(10.0),
@@ -185,9 +190,7 @@ class ChatDetails extends StatelessWidget {
               ),
               child: Text(
                 '${messageModel.text}',
-                style: const TextStyle(
-                  fontSize: 20.0,
-                ),
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
             const SizedBox(

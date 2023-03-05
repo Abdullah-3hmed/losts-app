@@ -50,6 +50,7 @@ Widget defaultTextFormField({
   TextEditingController? controller,
   required TextInputType type,
   required IconData prefixIcon,
+  required BuildContext context,
   IconData? suffixIcon,
   required bool obscureText,
   required String label,
@@ -64,16 +65,33 @@ Widget defaultTextFormField({
       onFieldSubmitted: onSubmit,
       decoration: InputDecoration(
         hintText: hintText,
-        prefixIcon: Icon(prefixIcon),
+        hintStyle: Theme.of(context).textTheme.titleMedium,
+        prefixIcon: Icon(
+          prefixIcon,
+        ),
         suffixIcon: IconButton(
           icon: Icon(suffixIcon),
           onPressed: function,
         ),
         label: Text(
           label,
+          style: Theme.of(context).textTheme.titleMedium,
         ),
         contentPadding: const EdgeInsets.all(20.0),
-        border: const OutlineInputBorder(),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: BorderSide(
+            color:Theme.of(context).iconTheme.color!,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: const BorderSide(
+            color:Colors.blue,
+          ),
+        ),
+        prefixIconColor: Theme.of(context).iconTheme.color,
+        suffixIconColor: Theme.of(context).iconTheme.color,
       ),
       validator: (value) {
         if (value!.isEmpty) {
@@ -357,9 +375,9 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                         const SizedBox(
                           width: 5.0,
                         ),
-                        const Icon(
+                        Icon(
                           Icons.comment_outlined,
-                          color: Colors.black26,
+                          color: Theme.of(context).iconTheme.color,
                           size: 24.0,
                         ),
                       ],

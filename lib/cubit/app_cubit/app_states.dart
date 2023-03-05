@@ -66,6 +66,16 @@ class AppGetPostsLoadingState extends AppStates {}
 
 class AppGetPostsSuccessState extends AppStates {}
 
+class AppEditCommentLoadingState extends AppStates {}
+
+class AppEditCommentSuccessState extends AppStates {}
+
+class AppEditCommentErrorState extends AppStates {
+  final String error;
+
+  AppEditCommentErrorState(this.error);
+}
+
 class AppGetPostsErrorState extends AppStates {}
 
 class AppEditPostLoadingState extends AppStates {}
@@ -79,6 +89,14 @@ class AppEditPostErrorState extends AppStates {
 }
 
 class AppDeletePostLoadingState extends AppStates {}
+
+class AppDeleteCommentSuccessState extends AppStates {}
+
+class AppDeleteCommentErrorState extends AppStates {
+  final String error;
+
+  AppDeleteCommentErrorState(this.error);
+}
 
 class AppDeletePostSuccessState extends AppStates {}
 

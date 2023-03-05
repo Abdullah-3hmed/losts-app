@@ -1,13 +1,13 @@
 class CommentModel {
   late final String userImage;
-  late final String comment;
+  late final String text;
   late final String dateTime;
   late final String userName;
   late final String userId;
 
   CommentModel({
     required this.userImage,
-    required this.comment,
+    required this.text,
     required this.dateTime,
     required this.userName,
     required this.userId,
@@ -15,7 +15,7 @@ class CommentModel {
 
   CommentModel.fromJson(Map<String, dynamic> json) {
     userImage = json['user_image'];
-    comment = json['comment'];
+    text = json['comment'];
     dateTime = json['date_time'];
     userName = json['user_name'];
     userId = json['user_id'];
@@ -23,7 +23,7 @@ class CommentModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'comment': comment,
+      'comment': text,
       'user_image': userImage,
       'date_time': dateTime,
       'user_id': userId,

@@ -78,6 +78,10 @@ ThemeData darkTheme = ThemeData(
     unselectedItemColor: Colors.white,
     backgroundColor: HexColor('333739'),
   ),
+  cardColor: HexColor('333739'),
+  iconTheme: const IconThemeData(
+    color: Colors.white,
+  ),
   textTheme: const TextTheme(
     bodyLarge: TextStyle(
       fontSize: 18.0,
@@ -89,6 +93,9 @@ ThemeData darkTheme = ThemeData(
       fontWeight: FontWeight.w600,
       color: Colors.white,
       height: 1.3,
+    ),
+    bodySmall: TextStyle(
+      color: Colors.white,
     ),
   ),
   fontFamily: 'Tajawal',

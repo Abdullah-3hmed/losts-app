@@ -116,7 +116,7 @@ class EditProfile extends StatelessWidget {
                           alignment: AlignmentDirectional.bottomEnd,
                           children: [
                             CircleAvatar(
-                              backgroundColor: Colors.red,
+                              backgroundColor:Theme.of(context).iconTheme.color,
                               radius: 64.0,
                               child: CircleAvatar(
                                 backgroundImage: AppCubit.get(context)
@@ -130,11 +130,11 @@ class EditProfile extends StatelessWidget {
                             ),
                             CircleAvatar(
                               radius: 20.0,
-                              backgroundColor: Colors.red,
+                              backgroundColor:Colors.blue,
                               child: PopupMenuButton(
-                                icon: const Icon(
+                                icon:  Icon(
                                   Icons.edit,
-                                  color: Colors.white,
+                                  color: Theme.of(context).iconTheme.color,
                                 ),
                                 onSelected: (String value) {
                                   if (value == 'Camera') {
@@ -225,16 +225,20 @@ class EditProfile extends StatelessWidget {
                       height: 20.0,
                     ),
                   defaultTextFormField(
-                      controller: nameController,
-                      type: TextInputType.name,
-                      prefixIcon: Icons.person,
-                      obscureText: false,
-                      label: 'Name',
-                      hintText: 'update your name ...'),
+                    context: context,
+                    controller: nameController,
+                    type: TextInputType.name,
+                    prefixIcon: Icons.person,
+                    obscureText: false,
+                    label: 'Name',
+                    hintText: 'update your name ...',
+
+                  ),
                   const SizedBox(
                     height: 15.0,
                   ),
                   defaultTextFormField(
+                    context: context,
                     controller: bioController,
                     type: TextInputType.text,
                     prefixIcon: Icons.info_outline,
@@ -246,6 +250,7 @@ class EditProfile extends StatelessWidget {
                     height: 15.0,
                   ),
                   defaultTextFormField(
+                    context: context,
                     controller: phoneController,
                     type: TextInputType.number,
                     prefixIcon: Icons.call,

@@ -81,8 +81,8 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (BuildContext context) => AppCubit()
         ..getUserData()
-        ..getAllUsers()
-        ..getPosts(),
+        ..getPosts()
+        ..getAllUsers(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: lightTheme,

@@ -67,9 +67,7 @@ class NewPostScreen extends StatelessWidget {
                       children: [
                         Text(
                           model!.name,
-                          style: const TextStyle(
-                            height: 1.4,
-                          ),
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
                         const SizedBox(
                           width: 15.0,
@@ -85,8 +83,9 @@ class NewPostScreen extends StatelessWidget {
                     Expanded(
                       child: TextFormField(
                         controller: textController,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           hintText: 'what is on your mind ...',
+                          hintStyle: Theme.of(context).textTheme.titleMedium,
                           border: InputBorder.none,
                         ),
                       ),
@@ -134,27 +133,24 @@ class NewPostScreen extends StatelessWidget {
                         borderRadius: const BorderRadius.all(
                           Radius.circular(10.0),
                         ),
-                        border: Border.all(color: Colors.black),
+                        border: Border.all(
+                          color: Theme.of(context).iconTheme.color!,
+                        ),
                       ),
                       child: PopupMenuButton(
                         icon: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.image_search_sharp,
-                              color: Colors.blue,
+                              color: Theme.of(context).iconTheme.color,
                             ),
                             const SizedBox(
                               width: 10.0,
                             ),
                             Text(
                               'add photo',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .copyWith(
-                                    color: Colors.blue,
-                                  ),
+                              style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ],
                         ),

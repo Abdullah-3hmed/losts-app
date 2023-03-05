@@ -14,15 +14,12 @@ class EditPost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     var temp = postModel.image;
-    var postText = postModel.postText;
     var postTextController = TextEditingController();
-    postTextController.text = postText;
+    postTextController.text = postModel.postText;
 
     return Builder(
       builder: (context) {
-
         return BlocConsumer<AppCubit, AppStates>(
           listener: (context, state) {},
           builder: (context, state) {
@@ -81,9 +78,7 @@ class EditPost extends StatelessWidget {
                       children: [
                         Text(
                           model!.name,
-                          style: const TextStyle(
-                            height: 1.4,
-                          ),
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
                         const SizedBox(
                           width: 15.0,
@@ -107,7 +102,8 @@ class EditPost extends StatelessWidget {
                     const SizedBox(
                       height: 20.0,
                     ),
-                    if (temp != '' && AppCubit.get(context).pickedPostImage == null)
+                    if (temp != '' &&
+                        AppCubit.get(context).pickedPostImage == null)
                       Expanded(
                         flex: 4,
                         child: Stack(
@@ -188,27 +184,24 @@ class EditPost extends StatelessWidget {
                         borderRadius: const BorderRadius.all(
                           Radius.circular(10.0),
                         ),
-                        border: Border.all(color: Colors.black),
+                        border: Border.all(
+                          color: Theme.of(context).iconTheme.color!,
+                        ),
                       ),
                       child: PopupMenuButton(
                         icon: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.image_search_sharp,
-                              color: Colors.blue,
+                              color: Theme.of(context).iconTheme.color,
                             ),
                             const SizedBox(
                               width: 10.0,
                             ),
                             Text(
                               'add photo',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .copyWith(
-                                color: Colors.blue,
-                              ),
+                              style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ],
                         ),

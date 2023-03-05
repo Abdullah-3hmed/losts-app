@@ -33,15 +33,24 @@ class SearchScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(20.0),
                 child: TextFormField(
                   controller: searchController,
-                  decoration: const InputDecoration(
+                  decoration:  InputDecoration(
                     prefixIcon: Icon(
                       Icons.search,
+                      color: Theme.of(context).iconTheme.color,
                     ),
                     hintText: 'Search Posts',
-                    contentPadding: EdgeInsets.all(20.0),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8.0),
+                    hintStyle: Theme.of(context).textTheme.titleMedium,
+                    contentPadding: const EdgeInsets.all(20.0),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: const BorderSide(
+                      color:Colors.blue,
+                    ),
+                  ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide:  BorderSide(
+                        color:Theme.of(context).iconTheme.color!,
                       ),
                     ),
                   ),
@@ -52,8 +61,7 @@ class SearchScreen extends StatelessWidget {
                         .posts
                         .where(
                           (element) => element.postText.contains(value),
-                        )
-                        .toList();
+                        ).toList();
 
                     AppCubit.get(context).searchOnSubmit();
                   },
@@ -71,9 +79,7 @@ class SearchScreen extends StatelessWidget {
                         child: Text(
                           'Search for something ..',
                           style:
-                              Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                    color: Colors.grey[800],
-                                  ),
+                              Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
                     )
@@ -84,10 +90,7 @@ class SearchScreen extends StatelessWidget {
                                 'No posts found!',
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyLarge!
-                                    .copyWith(
-                                      color: Colors.grey[800],
-                                    ),
+                                    .bodyLarge,
                               ),
                             )
                           : ListView.separated(

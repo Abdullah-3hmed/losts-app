@@ -100,6 +100,7 @@ class AppRegister extends StatelessWidget {
                           height: 30.0,
                         ),
                         defaultTextFormField(
+                          context: context,
                           label: 'User Name',
                           prefixIcon: Icons.person,
                           type: TextInputType.name,
@@ -110,6 +111,7 @@ class AppRegister extends StatelessWidget {
                           height: 30.0,
                         ),
                         defaultTextFormField(
+                          context: context,
                           label: 'Email Address',
                           prefixIcon: Icons.email_outlined,
                           type: TextInputType.text,
@@ -120,6 +122,7 @@ class AppRegister extends StatelessWidget {
                           height: 30.0,
                         ),
                         defaultTextFormField(
+                            context: context,
                             label: 'Password',
                             prefixIcon: Icons.lock_outline,
                             type: TextInputType.visiblePassword,
@@ -145,6 +148,7 @@ class AppRegister extends StatelessWidget {
                           height: 30.0,
                         ),
                         defaultTextFormField(
+                          context: context,
                           label: 'Phone',
                           prefixIcon: Icons.phone,
                           type: TextInputType.phone,

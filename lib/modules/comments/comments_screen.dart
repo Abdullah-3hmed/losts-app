@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:social_app/cubit/app_cubit/app_states.dart';
-import 'package:social_app/models/comment_model/comment_model.dart';
+import 'package:social_app/models/comment_model/comment.dart';
 import 'package:social_app/models/post_model/post.dart';
+import 'package:social_app/modules/edit_comment/edit_comment_screen.dart';
+import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 
 import '../../cubit/app_cubit/app_cubit.dart';
@@ -105,10 +107,38 @@ class CommentsScreen extends StatelessWidget {
     });
   }
 
-  Widget buildCommentItem(CommentModel comment, context) => Row(
+  Widget buildCommentItem(MainComment comment, context) => Row(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if(comment.userId == AppCubit.get(context).userModel!.uId)
+          PopupMenuButton(
+            icon: const Icon(
+              Icons.more_horiz_rounded,
+              size: 16.0,
+            ),
+            onSelected: (String value) {
+              if (value == 'Edit') {
+                navigateTo(
+                  context: context,
+                  screen: EditComment(
+                    postId: postModel.id,
+                    commentModel: comment,
+                  ),
+                );
+              } else if (value == 'Delete') {}
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'Edit',
+                child: Text('Edit'),
+              ),
+              const PopupMenuItem(
+                value: 'Delete',
+                child: Text('Delete'),
+              ),
+            ],
+          ),
           Flexible(
             fit: FlexFit.loose,
             child: Column(
@@ -137,7 +167,7 @@ class CommentsScreen extends StatelessWidget {
                             ),
                       ),
                       Text(
-                        '${comment.comment} ',
+                        '${comment.text} ',
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                               fontSize: 16.0,
                             ),
@@ -145,7 +175,9 @@ class CommentsScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 5.0,),
+                const SizedBox(
+                  height: 5.0,
+                ),
                 Text(
                   comment.dateTime,
                   style: Theme.of(context).textTheme.bodySmall,
@@ -159,7 +191,8 @@ class CommentsScreen extends StatelessWidget {
           CircleAvatar(
             radius: 25.0,
             backgroundImage: NetworkImage(comment.userImage),
-            onBackgroundImageError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
+            onBackgroundImageError: (_, __) =>
+                const NetworkImage(AppConstants.defaultImageUrl),
           ),
         ],
       );

@@ -52,9 +52,7 @@ class ChatsScreen extends StatelessWidget {
             children: [
               Text(
                 userModel.name,
-                style: const TextStyle(
-                  height: 1.4,
-                ),
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
               const SizedBox(
                 width: 15.0,

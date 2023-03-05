@@ -84,6 +84,7 @@ class AppLoginScreen extends StatelessWidget {
                           height: 30.0,
                         ),
                         defaultTextFormField(
+                          context: context,
                           label: 'Email Address',
                           prefixIcon: Icons.email_outlined,
                           type: TextInputType.text,
@@ -94,6 +95,7 @@ class AppLoginScreen extends StatelessWidget {
                           height: 30.0,
                         ),
                         defaultTextFormField(
+                            context: context,
                             label: 'Password',
                             prefixIcon: Icons.lock_outline,
                             type: TextInputType.visiblePassword,

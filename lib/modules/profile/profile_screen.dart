@@ -52,7 +52,7 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
                         CircleAvatar(
-                          backgroundColor: Colors.red,
+                          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                           radius: 64.0,
                           child: CircleAvatar(
                             backgroundImage: NetworkImage(

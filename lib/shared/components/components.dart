@@ -310,7 +310,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                   Row(
                     children: [
                       const Icon(
-                        Icons.comment_outlined,
+                       Icons.comment_sharp,
                         color: Colors.amber,
                       ),
                       const SizedBox(

@@ -73,7 +73,7 @@ class AppLayout extends StatelessWidget {
                   label: 'Chats',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.cloud_upload_outlined),
+                  icon: Icon(IconBroken.Upload),
                   label: 'Post',
                 ),
                 BottomNavigationBarItem(

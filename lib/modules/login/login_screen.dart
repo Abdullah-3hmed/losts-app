@@ -48,7 +48,6 @@ class AppLoginScreen extends StatelessWidget {
         },
         builder: (context, state) {
           return Scaffold(
-            backgroundColor: Colors.white,
             body: Center(
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
@@ -61,14 +60,14 @@ class AppLoginScreen extends StatelessWidget {
                         const Image(
                           image: AssetImage('assets/images/logo.jpg'),
                         ),
+                        const SizedBox(height: 20.0,),
                         Text(
                           'LOGIN',
                           style: Theme.of(context)
                               .textTheme
-                              .headlineMedium!
-                              .copyWith(
-                                color: Colors.black,
-                              ),
+                              .bodyLarge!.copyWith(
+                            fontSize: 32.0,
+                          ),
                         ),
                         const SizedBox(
                           height: 20,
@@ -76,9 +75,7 @@ class AppLoginScreen extends StatelessWidget {
                         Text(
                           'login now to to Communicate with people ',
                           style:
-                              Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                    color: Colors.grey,
-                                  ),
+                              Theme.of(context).textTheme.bodyLarge,
                         ),
                         const SizedBox(
                           height: 30.0,
@@ -156,8 +153,9 @@ class AppLoginScreen extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text(
-                              'Don\'t have an account?',
+                             Text(
+                              'Don\'t have an account ?',
+                              style: Theme.of(context).textTheme.bodyLarge,
                             ),
                             TextButton(
                               onPressed: () {

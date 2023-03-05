@@ -25,6 +25,9 @@ ThemeData lightTheme = ThemeData(
       color: Colors.white,
     ),
   ),
+  iconTheme: const IconThemeData(
+    color: Colors.black45,
+  ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: Colors.blue,
     type: BottomNavigationBarType.fixed,

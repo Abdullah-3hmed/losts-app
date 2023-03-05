@@ -116,7 +116,7 @@ class EditProfile extends StatelessWidget {
                           alignment: AlignmentDirectional.bottomEnd,
                           children: [
                             CircleAvatar(
-                              backgroundColor:Theme.of(context).iconTheme.color,
+                              backgroundColor:Theme.of(context).scaffoldBackgroundColor,
                               radius: 64.0,
                               child: CircleAvatar(
                                 backgroundImage: AppCubit.get(context)
@@ -134,7 +134,7 @@ class EditProfile extends StatelessWidget {
                               child: PopupMenuButton(
                                 icon:  Icon(
                                   Icons.edit,
-                                  color: Theme.of(context).iconTheme.color,
+                                  color: Theme.of(context).scaffoldBackgroundColor,
                                 ),
                                 onSelected: (String value) {
                                   if (value == 'Camera') {

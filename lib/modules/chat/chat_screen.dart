@@ -35,7 +35,6 @@ class ChatsScreen extends StatelessWidget {
       },
     );
   }
-
   Widget buildChatItem(AppUserModel userModel, BuildContext context) => InkWell(
         onTap: () {
           navigateTo(

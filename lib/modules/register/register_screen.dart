@@ -61,9 +61,7 @@ class AppRegister extends StatelessWidget {
                   },
                   child: Text(
                     'Back',
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: Colors.black,
-                        ),
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
               ),
@@ -80,21 +78,20 @@ class AppRegister extends StatelessWidget {
                         const Image(
                           image: AssetImage('assets/images/logo.jpg'),
                         ),
+                        const SizedBox(
+                          height: 20,
+                        ),
                         Text(
                           'Register',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineMedium!
-                              .copyWith(
-                                color: Colors.black,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    fontSize: 32.0,
+                                  ),
                         ),
                         Text(
                           'Register now to Communicate with people ',
                           style:
-                              Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                    color: Colors.grey,
-                                  ),
+                              Theme.of(context).textTheme.bodyLarge,
                         ),
                         const SizedBox(
                           height: 30.0,

@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/cubit/app_cubit/app_cubit.dart';
+import 'package:social_app/cubit/app_cubit/app_states.dart';
 import 'package:social_app/network/remote/dio_helper.dart';
 import 'package:social_app/shared/components/components.dart';
 
@@ -55,6 +56,7 @@ Future<void> main() async {
   Widget startScreen;
   var onBoarding = CacheHelper.getData(key: 'onBoarding');
   uId = CacheHelper.getData(key: 'uId');
+  bool? isDark = CacheHelper.getData(key: 'isDark');
 
   if (onBoarding != null) {
     if (uId != null) {
@@ -68,25 +70,39 @@ Future<void> main() async {
   runApp(
     MyApp(
       startWidget: startScreen,
+      isDark: isDark,
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key, required this.startWidget}) : super(key: key);
+  const MyApp({
+    Key? key,
+    required this.startWidget,
+    required this.isDark,
+  }) : super(key: key);
   final Widget startWidget;
+  final bool? isDark;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) => AppCubit()
-        ..getUserData()
-        ..getPosts()
-        ..getAllUsers(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: lightTheme,
-        home: startWidget,
+        ..changeAppMode(
+          fromShared: isDark,
+        ),
+      child: BlocConsumer<AppCubit, AppStates>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode:
+                AppCubit.get(context).isDark ? ThemeMode.dark : ThemeMode.light,
+            home: startWidget,
+          );
+        },
       ),
     );
   }

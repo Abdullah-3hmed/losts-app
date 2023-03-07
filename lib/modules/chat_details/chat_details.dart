@@ -150,7 +150,7 @@ class ChatDetails extends StatelessWidget {
                 horizontal: 10.0,
               ),
               decoration:  BoxDecoration(
-                color: AppCubit.get(context).isDark ?Colors.grey[600]:Colors.grey[300],
+                color: AppCubit.get(context).isDark ?Colors.grey[700]:Colors.grey[300],
                 borderRadius: const BorderRadiusDirectional.only(
                   bottomEnd: Radius.circular(10.0),
                   topEnd: Radius.circular(10.0),
@@ -181,7 +181,7 @@ class ChatDetails extends StatelessWidget {
                 horizontal: 10.0,
               ),
               decoration:  BoxDecoration(
-                color:AppCubit.get(context).isDark? Colors.blue:Colors.blue.withOpacity(.4),
+                color:AppCubit.get(context).isDark ? Colors.blue:Colors.blue.withOpacity(.3),
                 borderRadius: const BorderRadiusDirectional.only(
                   bottomStart: Radius.circular(10.0),
                   topEnd: Radius.circular(10.0),

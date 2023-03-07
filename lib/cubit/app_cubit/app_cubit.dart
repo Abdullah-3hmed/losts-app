@@ -27,26 +27,27 @@ class AppCubit extends Cubit<AppStates> {
 
   static AppCubit get(context) => BlocProvider.of(context);
   AppUserModel? userModel;
-  bool isDark = false;
 
   Future<void> getUserData() async {
-    emit(AppGetUserLoadingState());
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(uId)
-        .get()
-        .then((value) {
-      if (kDebugMode) {
-        print(value.data());
-      }
-      userModel = AppUserModel.fromJson(value.data());
-      emit(AppGetUserSuccessState());
-    }).catchError((error) {
-      if (kDebugMode) {
-        print(error.toString());
-      }
-      emit(AppGetUserErrorState(error.toString()));
-    });
+    if(userModel == null) {
+      emit(AppGetUserLoadingState());
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uId)
+          .get()
+          .then((value) {
+        if (kDebugMode) {
+          print(value.data());
+        }
+        userModel = AppUserModel.fromJson(value.data());
+        emit(AppGetUserSuccessState());
+      }).catchError((error) {
+        if (kDebugMode) {
+          print(error.toString());
+        }
+        emit(AppGetUserErrorState(error.toString()));
+      });
+    }
   }
 
   int currentIndex = 0;
@@ -63,12 +64,19 @@ class AppCubit extends Cubit<AppStates> {
     'Profile',
   ];
 
-  void changeBottomNavBar(int index) {
+  Future<void> changeBottomNavBar(int index) async {
     if (index == 2) {
       emit(AppNewPostState());
     } else {
       currentIndex = index;
       emit(AppChangeBottomNavState());
+    }
+    if (index == 0) {
+      await getUserData();
+      await getPosts();
+    }
+    if (index == 1) {
+      await getAllUsers();
     }
   }
 
@@ -343,15 +351,14 @@ class AppCubit extends Cubit<AppStates> {
   List<Post> posts = [];
 
   Future<void> getPosts() async {
-    posts = [];
+    if (posts.isEmpty){
     emit(AppGetPostsLoadingState());
     await FirebaseFirestore.instance
         .collection('posts')
         .orderBy(
-          'dateTime',
-          descending: true,
-        )
-        .get()
+      'dateTime',
+      descending: true,
+    ).get()
         .then((postDocs) async {
       // get posts with likes
       for (var postDoc in postDocs.docs) {
@@ -391,6 +398,7 @@ class AppCubit extends Cubit<AppStates> {
       emit(AppGetPostsErrorState());
     });
   }
+  }
 
   Future<void> editPost({
     required BuildContext context,
@@ -401,11 +409,7 @@ class AppCubit extends Cubit<AppStates> {
   }) async {
     emit(AppEditPostLoadingState());
 
-    await FirebaseFirestore
-        .instance
-        .collection('posts')
-        .doc(postId)
-        .update({
+    await FirebaseFirestore.instance.collection('posts').doc(postId).update({
       'postText': text,
       'postImage': postImage ?? '',
     }).then((value) {
@@ -592,22 +596,27 @@ class AppCubit extends Cubit<AppStates> {
 
   List<AppUserModel> users = [];
 
-  void getAllUsers() {
-    users = [];
-    emit(AppGetAllUsersLoadingState());
-    FirebaseFirestore.instance.collection('users').get().then((value) {
-      for (var element in value.docs) {
-        if (element.data()['uId'] != uId) {
-          users.add(
-            AppUserModel.fromJson(element.data()),
-          );
+  Future<void> getAllUsers() async{
+    if (users.isEmpty) {
+      emit(AppGetAllUsersLoadingState());
+     await  FirebaseFirestore
+          .instance
+          .collection('users')
+          .get()
+          .then((value) {
+        for (var element in value.docs) {
+          if (element.data()['uId'] != userModel!.uId) {
+            users.add(
+              AppUserModel.fromJson(element.data()),
+            );
+          }
+          emit(AppGetAllUsersSuccessState());
         }
-        emit(AppGetAllUsersSuccessState());
-      }
-    }).catchError((error) {
-      debugPrint('>>>>>>>>>>> ${error.toString()}');
-      emit(AppGetAllUsersErrorState(error.toString()));
-    });
+      }).catchError((error) {
+        debugPrint('>>>>>>>>>>> ${error.toString()}');
+        emit(AppGetAllUsersErrorState(error.toString()));
+      });
+    }
   }
 
   Future<void> sendMessage({
@@ -705,7 +714,22 @@ class AppCubit extends Cubit<AppStates> {
     );
     await CacheHelper.removeData(key: 'uId');
     uId = null;
+    users = [];
+    posts = [];
     userModel = null;
     emit(AppLogOutSuccessState());
+  }
+
+  bool isDark = false;
+
+  void changeAppMode({bool? fromShared}) {
+    if (fromShared != null) {
+      isDark = fromShared;
+      emit(ChangeAppThemeModeState());
+    } else {
+      CacheHelper.saveData(key: 'isDark', value: isDark).then((value) {
+        emit(ChangeAppThemeModeState());
+      });
+    }
   }
 }

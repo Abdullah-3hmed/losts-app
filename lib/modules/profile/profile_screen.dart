@@ -52,7 +52,8 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
                         CircleAvatar(
-                          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                          backgroundColor:
+                              Theme.of(context).scaffoldBackgroundColor,
                           radius: 64.0,
                           child: CircleAvatar(
                             backgroundImage: NetworkImage(
@@ -129,6 +130,40 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10.0),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        const Icon(
+                          Icons.brightness_4_outlined,
+                          color: Colors.black,
+                        ),
+                        Text(
+                          'Theme',
+                          style:
+                          Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: Colors.black,
+                            fontSize: 22.0,
+                          ),
+                        ),
+                        Switch(
+                          value: AppCubit.get(context).isDark,
+                          onChanged: (bool newValue) {
+                            debugPrint(AppCubit.get(context).isDark.toString());
+                            AppCubit.get(context).isDark = newValue;
+                            AppCubit.get(context).changeAppMode();
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(20.0),
                     decoration: BoxDecoration(
                       color: Colors.grey[100],
                       borderRadius: const BorderRadius.all(

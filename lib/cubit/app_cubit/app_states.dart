@@ -139,3 +139,5 @@ class AppSearchOnSubmitState extends AppStates {}
 class AppSearchOnChangeState extends AppStates {}
 
 class AppSearchOnTapState extends AppStates {}
+
+class ChangeAppThemeModeState extends AppStates {}

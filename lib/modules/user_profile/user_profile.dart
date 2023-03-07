@@ -6,6 +6,7 @@ import 'package:social_app/cubit/app_cubit/app_states.dart';
 import 'package:social_app/modules/chat_details/chat_details.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
+import 'package:social_app/styles/icon_broken.dart';
 
 class UserProfile extends StatelessWidget {
   const UserProfile({
@@ -74,7 +75,7 @@ class UserProfile extends StatelessWidget {
                               ),
                             ),
                             CircleAvatar(
-                              backgroundColor: Colors.red,
+                              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                               radius: 64.0,
                               child: CircleAvatar(
                                 backgroundImage: NetworkImage(
@@ -152,7 +153,7 @@ class UserProfile extends StatelessWidget {
                               const CircleAvatar(
                                 backgroundColor: Colors.blue,
                                 child: Icon(
-                                  Icons.chat,
+                                 IconBroken.Chat,
                                   size: 30.0,
                                   color: Colors.white,
                                 ),

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:social_app/cubit/app_cubit/app_cubit.dart';
 import 'package:social_app/cubit/app_cubit/app_states.dart';
 import 'package:social_app/network/remote/dio_helper.dart';
 import 'package:social_app/shared/components/components.dart';
+import 'package:social_app/translations/codegen_loader.g.dart';
 
 import 'shared/bloc_observer.dart';
 import 'firebase_options.dart';
@@ -27,6 +29,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -68,9 +71,18 @@ Future<void> main() async {
     startScreen = const OnBoardingScreen();
   }
   runApp(
-    MyApp(
-      startWidget: startScreen,
-      isDark: isDark,
+    EasyLocalization(
+      path: 'assets/translations/',
+      supportedLocales: const [
+        Locale('en'),
+        Locale('ar'),
+      ],
+      fallbackLocale: const Locale('en'),
+      assetLoader: const CodegenLoader(),
+      child: MyApp(
+        startWidget: startScreen,
+        isDark: isDark,
+      ),
     ),
   );
 }
@@ -95,6 +107,9 @@ class MyApp extends StatelessWidget {
         listener: (context, state) {},
         builder: (context, state) {
           return MaterialApp(
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
             debugShowCheckedModeBanner: false,
             theme: lightTheme,
             darkTheme: darkTheme,

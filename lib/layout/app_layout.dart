@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/modules/search/search_screen.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/styles/icon_broken.dart';
+import 'package:social_app/translations/locale_keys.g.dart';
 
 import '../cubit/app_cubit/app_cubit.dart';
 import '../cubit/app_cubit/app_states.dart';
@@ -13,6 +15,12 @@ class AppLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<String> titles = [
+     LocaleKeys.home.tr(),
+     LocaleKeys.chats.tr(),
+     LocaleKeys.post.tr(),
+     LocaleKeys.profile.tr(),
+    ];
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {
         if (state is AppNewPostState) {
@@ -28,7 +36,7 @@ class AppLayout extends StatelessWidget {
           appBar: AppBar(
             centerTitle: true,
             title: Text(
-              cubit.titles[cubit.currentIndex],
+              titles[cubit.currentIndex],
               style: const TextStyle(
                 fontSize: 24.0,
                 color: Colors.white,
@@ -63,22 +71,22 @@ class AppLayout extends StatelessWidget {
               onTap: (int index) {
                 cubit.changeBottomNavBar(index);
               },
-              items:  const [
+              items: [
                 BottomNavigationBarItem(
-                  icon: Icon(IconBroken.Home),
-                  label: 'Home',
+                  icon: const Icon(IconBroken.Home),
+                  label: LocaleKeys.home.tr(),
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(IconBroken.Chat),
-                  label: 'Chats',
+                  icon: const Icon(IconBroken.Chat),
+                  label: LocaleKeys.chats.tr(),
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(IconBroken.Upload),
-                  label: 'Post',
+                  icon: const Icon(IconBroken.Upload),
+                  label: LocaleKeys.post.tr(),
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(IconBroken.Profile),
-                  label: 'Profile',
+                  icon: const Icon(IconBroken.Profile),
+                  label: LocaleKeys.profile.tr(),
                 ),
               ],
             ),

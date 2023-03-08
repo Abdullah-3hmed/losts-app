@@ -1,6 +1,8 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/translations/locale_keys.g.dart';
 
 import '../../cubit/register_cubit/register_cubit.dart';
 import '../../cubit/register_cubit/register_states.dart';
@@ -52,7 +54,6 @@ class AppRegister extends StatelessWidget {
               backgroundColor: Colors.transparent,
               leading: Padding(
                 padding: const EdgeInsets.only(
-                  left: 3.0,
                   top: 10.0,
                 ),
                 child: TextButton(
@@ -60,7 +61,7 @@ class AppRegister extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   child: Text(
-                    'Back',
+                   LocaleKeys.back.tr(),
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
@@ -82,14 +83,14 @@ class AppRegister extends StatelessWidget {
                           height: 20,
                         ),
                         Text(
-                          'Register',
+                           LocaleKeys.register.tr(),
                           style:
                               Theme.of(context).textTheme.bodyLarge!.copyWith(
                                     fontSize: 32.0,
                                   ),
                         ),
                         Text(
-                          'Register now to Communicate with people ',
+                         LocaleKeys.hi_register.tr(),
                           style:
                               Theme.of(context).textTheme.bodyLarge,
                         ),
@@ -98,7 +99,7 @@ class AppRegister extends StatelessWidget {
                         ),
                         defaultTextFormField(
                           context: context,
-                          label: 'User Name',
+                          label: LocaleKeys.user_name.tr(),
                           prefixIcon: Icons.person,
                           type: TextInputType.name,
                           controller: nameController,
@@ -109,7 +110,7 @@ class AppRegister extends StatelessWidget {
                         ),
                         defaultTextFormField(
                           context: context,
-                          label: 'Email Address',
+                          label: LocaleKeys.email_address.tr(),
                           prefixIcon: Icons.email_outlined,
                           type: TextInputType.text,
                           controller: emailController,
@@ -120,7 +121,7 @@ class AppRegister extends StatelessWidget {
                         ),
                         defaultTextFormField(
                             context: context,
-                            label: 'Password',
+                            label: LocaleKeys.password.tr(),
                             prefixIcon: Icons.lock_outline,
                             type: TextInputType.visiblePassword,
                             controller: passwordController,
@@ -146,7 +147,7 @@ class AppRegister extends StatelessWidget {
                         ),
                         defaultTextFormField(
                           context: context,
-                          label: 'Phone',
+                          label: LocaleKeys.phone.tr(),
                           prefixIcon: Icons.phone,
                           type: TextInputType.phone,
                           controller: phoneController,
@@ -176,7 +177,7 @@ class AppRegister extends StatelessWidget {
                                 }
                               },
                               child: Text(
-                                'Register',
+                               LocaleKeys.register.tr(),
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyLarge!
@@ -190,6 +191,23 @@ class AppRegister extends StatelessWidget {
                             child: CircularProgressIndicator(),
                           ),
                         ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        //   children: [
+                        //     ElevatedButton(
+                        //       onPressed: () async {
+                        //         await context.setLocale(const Locale('en'));
+                        //       },
+                        //       child: const Text('English'),
+                        //     ),
+                        //     ElevatedButton(
+                        //       onPressed: () async {
+                        //         await context.setLocale(const Locale('ar'));
+                        //       },
+                        //       child: const Text('العربية'),
+                        //     ),
+                        //   ],
+                        // ),
                       ],
                     ),
                   ),

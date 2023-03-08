@@ -1,8 +1,10 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:social_app/network/local/cache_helper.dart';
+import 'package:social_app/translations/locale_keys.g.dart';
 
 import '../../cubit/login_cubit/login_cubit.dart';
 import '../../cubit/login_cubit/login_states.dart';
@@ -60,29 +62,29 @@ class AppLoginScreen extends StatelessWidget {
                         const Image(
                           image: AssetImage('assets/images/logo.jpg'),
                         ),
-                        const SizedBox(height: 20.0,),
+                        const SizedBox(
+                          height: 20.0,
+                        ),
                         Text(
-                          'LOGIN',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!.copyWith(
-                            fontSize: 32.0,
-                          ),
+                          LocaleKeys.login.tr(),
+                          style:
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    fontSize: 32.0,
+                                  ),
                         ),
                         const SizedBox(
                           height: 20,
                         ),
                         Text(
-                          'login now to to Communicate with people ',
-                          style:
-                              Theme.of(context).textTheme.bodyLarge,
+                          LocaleKeys.hi_login.tr(),
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
                         const SizedBox(
                           height: 30.0,
                         ),
                         defaultTextFormField(
                           context: context,
-                          label: 'Email Address',
+                          label: LocaleKeys.email_address.tr(),
                           prefixIcon: Icons.email_outlined,
                           type: TextInputType.text,
                           controller: emailController,
@@ -93,7 +95,7 @@ class AppLoginScreen extends StatelessWidget {
                         ),
                         defaultTextFormField(
                             context: context,
-                            label: 'Password',
+                            label: LocaleKeys.password.tr(),
                             prefixIcon: Icons.lock_outline,
                             type: TextInputType.visiblePassword,
                             controller: passwordController,
@@ -133,7 +135,7 @@ class AppLoginScreen extends StatelessWidget {
                                 }
                               },
                               child: Text(
-                                'LOGIN',
+                                LocaleKeys.login.tr(),
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyLarge!
@@ -153,8 +155,8 @@ class AppLoginScreen extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                             Text(
-                              'Don\'t have an account ?',
+                            Text(
+                             LocaleKeys.have_account.tr(),
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                             TextButton(
@@ -164,7 +166,7 @@ class AppLoginScreen extends StatelessWidget {
                                   screen: const AppRegister(),
                                 );
                               },
-                              child: const Text('REGISTER NOW'),
+                              child: Text(LocaleKeys.register_now.tr()),
                             ),
                           ],
                         ),

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:social_app/cubit/app_cubit/app_cubit.dart';
@@ -6,6 +7,7 @@ import 'package:social_app/modules/comments/comments_screen.dart';
 import 'package:social_app/modules/edit_post/edit_post_screen.dart';
 import 'package:social_app/modules/user_profile/user_profile.dart';
 import 'package:social_app/shared/components/constants.dart';
+import 'package:social_app/translations/locale_keys.g.dart';
 
 void showToast({
   required String message,
@@ -369,7 +371,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                     child: Row(
                       children: [
                         Text(
-                          'comment',
+                          LocaleKeys.comment.tr(),
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                         const SizedBox(
@@ -391,7 +393,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                     child: Row(
                       children: [
                         Text(
-                          'Like',
+                        LocaleKeys.like.tr(),
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                         const SizedBox(

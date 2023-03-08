@@ -29,7 +29,7 @@ class AppCubit extends Cubit<AppStates> {
   AppUserModel? userModel;
 
   Future<void> getUserData() async {
-    if(userModel == null) {
+    if (userModel == null) {
       emit(AppGetUserLoadingState());
       await FirebaseFirestore.instance
           .collection('users')
@@ -56,12 +56,6 @@ class AppCubit extends Cubit<AppStates> {
     const ChatsScreen(),
     const NewPostScreen(),
     const ProfileScreen(),
-  ];
-  List<String> titles = [
-    'Home',
-    'Chats',
-    'Add Post',
-    'Profile',
   ];
 
   Future<void> changeBottomNavBar(int index) async {
@@ -351,53 +345,54 @@ class AppCubit extends Cubit<AppStates> {
   List<Post> posts = [];
 
   Future<void> getPosts() async {
-    if (posts.isEmpty){
-    emit(AppGetPostsLoadingState());
-    await FirebaseFirestore.instance
-        .collection('posts')
-        .orderBy(
-      'dateTime',
-      descending: true,
-    ).get()
-        .then((postDocs) async {
-      // get posts with likes
-      for (var postDoc in postDocs.docs) {
-        // get post likes
-        await postDoc.reference
-            .collection('likes')
-            .where('like', isEqualTo: true)
-            .get()
-            .then((likeDoc) {
-          posts.add(
-            Post.fromJson(
-              json: postDoc.data(),
-              id: postDoc.id,
-              likes: likeDoc.docs.map((e) => e.id).toList(),
-            ),
-          );
-        });
-
-        // get post comments
-        posts.last.comments = [];
-        await postDoc.reference
-            .collection('comments')
-            .orderBy('date_time')
-            .get()
-            .then((commentDocs) {
-          for (var commentDoc in commentDocs.docs) {
-            posts.last.comments!.add(
-              MainComment.fromJson(
-                  commentId: commentDoc.id, json: commentDoc.data()),
+    if (posts.isEmpty) {
+      emit(AppGetPostsLoadingState());
+      await FirebaseFirestore.instance
+          .collection('posts')
+          .orderBy(
+            'dateTime',
+            descending: true,
+          )
+          .get()
+          .then((postDocs) async {
+        // get posts with likes
+        for (var postDoc in postDocs.docs) {
+          // get post likes
+          await postDoc.reference
+              .collection('likes')
+              .where('like', isEqualTo: true)
+              .get()
+              .then((likeDoc) {
+            posts.add(
+              Post.fromJson(
+                json: postDoc.data(),
+                id: postDoc.id,
+                likes: likeDoc.docs.map((e) => e.id).toList(),
+              ),
             );
-          }
-        });
-        debugPrint(posts.toString());
-        emit(AppGetPostsSuccessState());
-      }
-    }).catchError((error) {
-      emit(AppGetPostsErrorState());
-    });
-  }
+          });
+
+          // get post comments
+          posts.last.comments = [];
+          await postDoc.reference
+              .collection('comments')
+              .orderBy('date_time')
+              .get()
+              .then((commentDocs) {
+            for (var commentDoc in commentDocs.docs) {
+              posts.last.comments!.add(
+                MainComment.fromJson(
+                    commentId: commentDoc.id, json: commentDoc.data()),
+              );
+            }
+          });
+          debugPrint(posts.toString());
+          emit(AppGetPostsSuccessState());
+        }
+      }).catchError((error) {
+        emit(AppGetPostsErrorState());
+      });
+    }
   }
 
   Future<void> editPost({
@@ -596,14 +591,10 @@ class AppCubit extends Cubit<AppStates> {
 
   List<AppUserModel> users = [];
 
-  Future<void> getAllUsers() async{
+  Future<void> getAllUsers() async {
     if (users.isEmpty) {
       emit(AppGetAllUsersLoadingState());
-     await  FirebaseFirestore
-          .instance
-          .collection('users')
-          .get()
-          .then((value) {
+      await FirebaseFirestore.instance.collection('users').get().then((value) {
         for (var element in value.docs) {
           if (element.data()['uId'] != userModel!.uId) {
             users.add(

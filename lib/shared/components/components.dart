@@ -186,7 +186,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
-          crossAxisAlignment:CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -279,12 +279,9 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
               ),
             ),
             // post image
-            const SizedBox(
-              height: 10.0,
-            ),
             if (postModel.image != '')
               Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 5,),
                 child: Container(
                   height: 400.0,
                   width: double.infinity,
@@ -302,7 +299,6 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                   ),
                 ),
               ),
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Row(
@@ -314,10 +310,9 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                       Text(
                         '${postModel.likes.length}',
                         style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          fontSize: 18.0,
-                        ),
+                              fontSize: 18.0,
+                            ),
                       ),
-
                       const SizedBox(
                         width: 5.0,
                       ),
@@ -327,7 +322,6 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                             : Icons.favorite_border_outlined,
                         color: Colors.red,
                       ),
-
                     ],
                   ),
                   // comments
@@ -405,7 +399,10 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                         ),
                         Icon(
                           Icons.comment_rounded,
-                          color: Theme.of(context).iconTheme.color,
+                          color: Theme.of(context)
+                              .iconTheme
+                              .color!
+                              .withOpacity(.3),
                           size: 24.0,
                         ),
                       ],

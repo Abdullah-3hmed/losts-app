@@ -91,9 +91,9 @@ class CodegenLoader extends AssetLoader {
     "no_commens_yet": "No Comments Yet",
     "write_a_comment": "Add a comment",
     "edit_comment": "Edit Comment",
-    "edit_post": "ُEdit Post",
-    "add_photo": "ُAdd Photo",
-    "camera": "ُCamera",
+    "edit_post": "Edit Post",
+    "add_photo": "Add Photo",
+    "camera": "Camera",
     "gallery": "Gallery",
     "edit_profile": "Edit Profile",
     "update": "Update",
@@ -119,6 +119,7 @@ class CodegenLoader extends AssetLoader {
     "select_your_language": "Select Your Preferred Language",
     "selected_language": "English",
     "what_is_in_your_mind": "What is in your mind ?",
+
   };
   static const Map<String, Map<String, dynamic>> mapLocales = {
     "ar": ar,

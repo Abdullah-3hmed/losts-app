@@ -26,7 +26,7 @@ class NewPostScreen extends StatelessWidget {
                 title:LocaleKeys.create_post.tr(),
                 actions: [
                   TextButton(
-                    onPressed: () {
+                    onPressed: () async{
                       DateTime now = DateTime.now();
                       String formattedDate =
                           DateFormat('yyyy-MM-dd – kk:mm').format(now);
@@ -37,7 +37,7 @@ class NewPostScreen extends StatelessWidget {
                           dateTime: formattedDate,
                         );
                       } else {
-                        AppCubit.get(context).uploadPostImage(
+                        await AppCubit.get(context).uploadPostImage(
                           postText: textController.text,
                           postDateTime: formattedDate,
                           context: context,

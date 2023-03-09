@@ -138,7 +138,7 @@ class CommentsScreen extends StatelessWidget {
                     borderRadius: const BorderRadiusDirectional.only(
                       bottomStart: Radius.circular(15.0),
                       bottomEnd: Radius.circular(15.0),
-                      topStart: Radius.circular(15.0),
+                      topEnd: Radius.circular(15.0),
                     ),
                   ),
                   child: Column(

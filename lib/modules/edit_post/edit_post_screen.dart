@@ -109,7 +109,7 @@ class EditPost extends StatelessWidget {
                     if (temp != '' &&
                         AppCubit.get(context).pickedPostImage == null)
                       Expanded(
-                        flex: 4,
+                        flex: 7,
                         child: Stack(
                           alignment: AlignmentDirectional.topEnd,
                           children: [

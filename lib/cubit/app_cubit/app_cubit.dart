@@ -268,13 +268,13 @@ class AppCubit extends Cubit<AppStates> {
     }
   }
 
-  void uploadPostImage({
+  Future<void> uploadPostImage({
     required BuildContext context,
     required String postText,
     required String postDateTime,
-  }) {
+  })async {
     emit(AppCreatePostLoadingState());
-    firebase_storage.FirebaseStorage.instance
+    await firebase_storage.FirebaseStorage.instance
         .ref()
         .child('posts/${Uri.file(pickedPostImage!.path).pathSegments.last}')
         .putFile(pickedPostImage!)
@@ -290,13 +290,14 @@ class AppCubit extends Cubit<AppStates> {
           dateTime: postDateTime,
           postImage: value,
         );
+        pickedPostImage = null;
       }).catchError((error) {
         emit(AppCreatePostErrorState());
       });
     })).catchError((error) {
       emit(AppCreatePostErrorState());
     });
-    pickedPostImage = null;
+
   }
 
   void createPost({

@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
+import 'package:social_app/translations/locale_keys.g.dart';
 
 import '../../cubit/app_cubit/app_cubit.dart';
 import '../../cubit/app_cubit/app_states.dart';
@@ -22,7 +24,7 @@ class NewPostScreen extends StatelessWidget {
             return Scaffold(
               appBar: defaultAppBar(
                 context: context,
-                title: 'Create Post',
+                title:LocaleKeys.create_post.tr(),
                 actions: [
                   TextButton(
                     onPressed: () {
@@ -44,7 +46,7 @@ class NewPostScreen extends StatelessWidget {
                       }
                     },
                     child: Text(
-                      'POST',
+                      LocaleKeys.post.tr(),
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             color: Colors.white,
                           ),
@@ -84,7 +86,7 @@ class NewPostScreen extends StatelessWidget {
                       child: TextFormField(
                         controller: textController,
                         decoration: InputDecoration(
-                          hintText: 'what is on your mind ...',
+                          hintText:LocaleKeys.what_is_in_your_mind.tr(),
                           hintStyle: Theme.of(context).textTheme.titleMedium,
                           border: InputBorder.none,
                         ),
@@ -149,7 +151,7 @@ class NewPostScreen extends StatelessWidget {
                               width: 10.0,
                             ),
                             Text(
-                              'add photo',
+                            LocaleKeys.add_photo.tr(),
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ],
@@ -162,13 +164,13 @@ class NewPostScreen extends StatelessWidget {
                           }
                         },
                         itemBuilder: (context) => [
-                          const PopupMenuItem(
+                           PopupMenuItem(
                             value: 'Camera',
-                            child: Text('Camera'),
+                            child: Text(LocaleKeys.camera.tr()),
                           ),
-                          const PopupMenuItem(
+                           PopupMenuItem(
                             value: 'Gallery',
-                            child: Text('Gallery'),
+                            child: Text(LocaleKeys.gallery.tr()),
                           ),
                         ],
                       ),

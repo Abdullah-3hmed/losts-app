@@ -1,9 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/cubit/app_cubit/app_cubit.dart';
 import 'package:social_app/cubit/app_cubit/app_states.dart';
 import 'package:social_app/models/comment_model/comment.dart';
 import 'package:social_app/shared/components/constants.dart';
+import 'package:social_app/translations/locale_keys.g.dart';
 
 class EditComment extends StatelessWidget {
   const EditComment({
@@ -27,7 +29,7 @@ class EditComment extends StatelessWidget {
           appBar: AppBar(
             centerTitle: true,
             title: Text(
-              'Edit Comment',
+             LocaleKeys.edit_comment.tr(),
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     color: Colors.white,
                   ),
@@ -44,7 +46,7 @@ class EditComment extends StatelessWidget {
                   );
                 },
                 child: Text(
-                  'Edit',
+                 LocaleKeys.edit.tr(),
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: Colors.white,
                       ),

@@ -211,13 +211,13 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                       }
                     },
                     itemBuilder: (context) => [
-                      const PopupMenuItem(
+                       PopupMenuItem(
                         value: 'Edit',
-                        child: Text('Edit'),
+                        child: Text(LocaleKeys.edit.tr()),
                       ),
-                      const PopupMenuItem(
+                       PopupMenuItem(
                         value: 'Delete',
-                        child: Text('Delete'),
+                        child: Text(LocaleKeys.delete.tr()),
                       ),
                     ],
                   ),

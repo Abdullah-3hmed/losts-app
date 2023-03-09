@@ -1,4 +1,5 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/cubit/app_cubit/app_cubit.dart';
@@ -7,6 +8,7 @@ import 'package:social_app/modules/chat_details/chat_details.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/styles/icon_broken.dart';
+import 'package:social_app/translations/locale_keys.g.dart';
 
 class UserProfile extends StatelessWidget {
   const UserProfile({
@@ -36,7 +38,7 @@ class UserProfile extends StatelessWidget {
               appBar: AppBar(
                 centerTitle: true,
                 title: Text(
-                  'User Profile',
+                LocaleKeys.user_profile.tr(),
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: Colors.white,
                       ),
@@ -138,7 +140,7 @@ class UserProfile extends StatelessWidget {
                                 width: 90.0,
                               ),
                               Text(
-                                'Chat',
+                              LocaleKeys.chat.tr(),
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyLarge!

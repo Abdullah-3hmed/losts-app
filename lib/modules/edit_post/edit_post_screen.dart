@@ -1,9 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/cubit/app_cubit/app_cubit.dart';
 import 'package:social_app/cubit/app_cubit/app_states.dart';
 import 'package:social_app/models/post_model/post.dart';
 import 'package:social_app/shared/components/constants.dart';
+import 'package:social_app/translations/locale_keys.g.dart';
 
 class EditPost extends StatelessWidget {
   const EditPost({
@@ -29,7 +31,7 @@ class EditPost extends StatelessWidget {
               appBar: AppBar(
                 centerTitle: true,
                 title: Text(
-                  'Edit Post',
+                  LocaleKeys.edit_post.tr(),
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: Colors.white,
                       ),
@@ -55,7 +57,7 @@ class EditPost extends StatelessWidget {
                       }
                     },
                     child: Text(
-                      'Edit',
+                      LocaleKeys.edit.tr(),
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             color: Colors.white,
                           ),
@@ -200,7 +202,7 @@ class EditPost extends StatelessWidget {
                               width: 10.0,
                             ),
                             Text(
-                              'add photo',
+                              LocaleKeys.add_photo.tr(),
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ],
@@ -213,13 +215,13 @@ class EditPost extends StatelessWidget {
                           }
                         },
                         itemBuilder: (context) => [
-                          const PopupMenuItem(
+                          PopupMenuItem(
                             value: 'Camera',
-                            child: Text('Camera'),
+                            child: Text(LocaleKeys.camera.tr()),
                           ),
-                          const PopupMenuItem(
+                          PopupMenuItem(
                             value: 'Gallery',
-                            child: Text('Gallery'),
+                            child: Text(LocaleKeys.gallery.tr()),
                           ),
                         ],
                       ),

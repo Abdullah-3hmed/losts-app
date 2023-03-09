@@ -1,9 +1,12 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/modules/language/language_screen.dart';
 import 'package:social_app/modules/login/login_screen.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
+import 'package:social_app/translations/locale_keys.g.dart';
 
 import '../../cubit/app_cubit/app_cubit.dart';
 import '../../cubit/app_cubit/app_states.dart';
@@ -86,6 +89,7 @@ class ProfileScreen extends StatelessWidget {
                         ),
                   ),
                   Container(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
                     margin: const EdgeInsets.all(20.0),
                     decoration: BoxDecoration(
                       color: Colors.grey[100],
@@ -109,7 +113,7 @@ class ProfileScreen extends StatelessWidget {
                             size: 16.0,
                           ),
                           Text(
-                            'Settings',
+                            LocaleKeys.settings.tr(),
                             style:
                                 Theme.of(context).textTheme.bodyLarge!.copyWith(
                                       color: Colors.black,
@@ -144,12 +148,12 @@ class ProfileScreen extends StatelessWidget {
                           color: Colors.black,
                         ),
                         Text(
-                          'Theme',
+                          LocaleKeys.theme.tr(),
                           style:
-                          Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            color: Colors.black,
-                            fontSize: 22.0,
-                          ),
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    color: Colors.black,
+                                    fontSize: 22.0,
+                                  ),
                         ),
                         Switch(
                           value: AppCubit.get(context).isDark,
@@ -162,7 +166,54 @@ class ProfileScreen extends StatelessWidget {
                       ],
                     ),
                   ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
                   Container(
+                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10.0),
+                      ),
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        navigateTo(
+                          context: context,
+                          screen: const LanguageScreen(),
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          const Icon(
+                            Icons.language_outlined,
+                            color: Colors.black,
+                          ),
+                          Text(
+                            LocaleKeys.language.tr(),
+                            style:
+                                Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                      color: Colors.black,
+                                      fontSize: 22.0,
+                                    ),
+                          ),
+                          Text(
+                         LocaleKeys.selected_language.tr(),
+                            style:
+                                Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                      color: Colors.black,
+                                      fontSize: 20.0,
+                                    ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 6.0),
                     margin: const EdgeInsets.all(20.0),
                     decoration: BoxDecoration(
                       color: Colors.grey[100],
@@ -189,7 +240,7 @@ class ProfileScreen extends StatelessWidget {
                             size: 16.0,
                           ),
                           Text(
-                            'Log Out',
+                            LocaleKeys.log_out.tr(),
                             style:
                                 Theme.of(context).textTheme.bodyLarge!.copyWith(
                                       color: Colors.black,

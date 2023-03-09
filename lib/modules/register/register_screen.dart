@@ -191,23 +191,6 @@ class AppRegister extends StatelessWidget {
                             child: CircularProgressIndicator(),
                           ),
                         ),
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        //   children: [
-                        //     ElevatedButton(
-                        //       onPressed: () async {
-                        //         await context.setLocale(const Locale('en'));
-                        //       },
-                        //       child: const Text('English'),
-                        //     ),
-                        //     ElevatedButton(
-                        //       onPressed: () async {
-                        //         await context.setLocale(const Locale('ar'));
-                        //       },
-                        //       child: const Text('العربية'),
-                        //     ),
-                        //   ],
-                        // ),
                       ],
                     ),
                   ),

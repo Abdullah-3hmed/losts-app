@@ -1,13 +1,14 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:social_app/cubit/app_cubit/app_states.dart';
 import 'package:social_app/models/comment_model/comment.dart';
 import 'package:social_app/models/post_model/post.dart';
 import 'package:social_app/modules/edit_comment/edit_comment_screen.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
+import 'package:social_app/translations/locale_keys.g.dart';
 
 import '../../cubit/app_cubit/app_cubit.dart';
 
@@ -30,7 +31,7 @@ class CommentsScreen extends StatelessWidget {
             appBar: AppBar(
               centerTitle: true,
               title: Text(
-                'Comments',
+                LocaleKeys.comments.tr(),
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       color: Colors.white,
                     ),
@@ -54,8 +55,8 @@ class CommentsScreen extends StatelessWidget {
                         ),
                         itemCount: postModel.comments?.length ?? 0,
                       ),
-                      fallback: (context) => const Center(
-                        child: Text('Not Comments Yet'),
+                      fallback: (context) => Center(
+                        child: Text(LocaleKeys.no_commens_yet.tr()),
                       ),
                     ),
                   ),
@@ -72,8 +73,8 @@ class CommentsScreen extends StatelessWidget {
                         Expanded(
                           child: TextFormField(
                             controller: commentController,
-                            decoration: const InputDecoration(
-                              hintText: 'write a comment',
+                            decoration: InputDecoration(
+                              hintText: LocaleKeys.write_a_comment.tr(),
                               border: InputBorder.none,
                             ),
                           ),
@@ -111,34 +112,34 @@ class CommentsScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if(comment.userId == AppCubit.get(context).userModel!.uId)
-          PopupMenuButton(
-            icon: const Icon(
-              Icons.more_horiz_rounded,
-              size: 16.0,
+          if (comment.userId == AppCubit.get(context).userModel!.uId)
+            PopupMenuButton(
+              icon: const Icon(
+                Icons.more_horiz_rounded,
+                size: 16.0,
+              ),
+              onSelected: (String value) {
+                if (value == 'Edit') {
+                  navigateTo(
+                    context: context,
+                    screen: EditComment(
+                      postId: postModel.id,
+                      commentModel: comment,
+                    ),
+                  );
+                } else if (value == 'Delete') {}
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 'Edit',
+                  child: Text(LocaleKeys.edit.tr()),
+                ),
+                PopupMenuItem(
+                  value: 'Delete',
+                  child: Text(LocaleKeys.delete.tr()),
+                ),
+              ],
             ),
-            onSelected: (String value) {
-              if (value == 'Edit') {
-                navigateTo(
-                  context: context,
-                  screen: EditComment(
-                    postId: postModel.id,
-                    commentModel: comment,
-                  ),
-                );
-              } else if (value == 'Delete') {}
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 'Edit',
-                child: Text('Edit'),
-              ),
-              const PopupMenuItem(
-                value: 'Delete',
-                child: Text('Delete'),
-              ),
-            ],
-          ),
           Flexible(
             fit: FlexFit.loose,
             child: Column(

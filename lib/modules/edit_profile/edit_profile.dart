@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/shared/components/components.dart';
+import 'package:social_app/translations/locale_keys.g.dart';
 
 import '../../cubit/app_cubit/app_cubit.dart';
 import '../../cubit/app_cubit/app_states.dart';
@@ -24,7 +26,7 @@ class EditProfile extends StatelessWidget {
         return Scaffold(
           appBar: defaultAppBar(
             context: context,
-            title: 'Edit Profile',
+            title: LocaleKeys.edit_profile.tr(),
             actions: [
               TextButton(
                 onPressed: () {
@@ -35,7 +37,7 @@ class EditProfile extends StatelessWidget {
                   );
                 },
                 child: Text(
-                  'UPDATE',
+                 LocaleKeys.update.tr(),
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: Colors.white,
                       ),
@@ -98,13 +100,13 @@ class EditProfile extends StatelessWidget {
                                     }
                                   },
                                   itemBuilder: (context) => [
-                                    const PopupMenuItem(
+                                     PopupMenuItem(
                                       value: 'Camera',
-                                      child: Text('Camera'),
+                                      child: Text(LocaleKeys.camera.tr()),
                                     ),
-                                    const PopupMenuItem(
+                                     PopupMenuItem(
                                       value: 'Gallery',
-                                      child: Text('Gallery'),
+                                      child: Text(LocaleKeys.gallery.tr()),
                                     ),
                                   ],
                                 ),
@@ -145,13 +147,13 @@ class EditProfile extends StatelessWidget {
                                   }
                                 },
                                 itemBuilder: (context) => [
-                                  const PopupMenuItem(
+                                   PopupMenuItem(
                                     value: 'Camera',
-                                    child: Text('Camera'),
+                                    child: Text(LocaleKeys.camera.tr()),
                                   ),
-                                  const PopupMenuItem(
+                                   PopupMenuItem(
                                     value: 'Gallery',
-                                    child: Text('Gallery'),
+                                    child: Text(LocaleKeys.gallery.tr()),
                                   ),
                                 ],
                               ),
@@ -180,7 +182,7 @@ class EditProfile extends StatelessWidget {
                                       bio: bioController.text,
                                     );
                                   },
-                                  text: 'upload profile',
+                                  text:LocaleKeys.upload_profile.tr(),
                                 ),
                                 if (state is AppUpdateUserLoadingState)
                                   const SizedBox(
@@ -206,7 +208,7 @@ class EditProfile extends StatelessWidget {
                                       bio: bioController.text,
                                     );
                                   },
-                                  text: 'upload cover',
+                                  text: LocaleKeys.upload_cover.tr(),
                                 ),
                                 if (state is AppUpdateUserLoadingState)
                                   const SizedBox(
@@ -230,8 +232,8 @@ class EditProfile extends StatelessWidget {
                     type: TextInputType.name,
                     prefixIcon: Icons.person,
                     obscureText: false,
-                    label: 'Name',
-                    hintText: 'update your name ...',
+                    label: LocaleKeys.user_name.tr(),
+                    hintText:LocaleKeys.update_your_name.tr(),
 
                   ),
                   const SizedBox(
@@ -243,8 +245,8 @@ class EditProfile extends StatelessWidget {
                     type: TextInputType.text,
                     prefixIcon: Icons.info_outline,
                     obscureText: false,
-                    label: 'Bio',
-                    hintText: 'update your bio ...',
+                    label: LocaleKeys.bio.tr(),
+                    hintText: LocaleKeys.update_your_bio.tr(),
                   ),
                   const SizedBox(
                     height: 15.0,
@@ -255,8 +257,8 @@ class EditProfile extends StatelessWidget {
                     type: TextInputType.number,
                     prefixIcon: Icons.call,
                     obscureText: false,
-                    label: 'Phone Number',
-                    hintText: 'update your Phone Number',
+                    label:LocaleKeys.phone.tr(),
+                    hintText:LocaleKeys.update_your_phone.tr(),
                   ),
                 ],
               ),

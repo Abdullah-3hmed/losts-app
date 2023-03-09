@@ -1,9 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/cubit/app_cubit/app_cubit.dart';
 import 'package:social_app/cubit/app_cubit/app_states.dart';
 import 'package:social_app/models/post_model/post.dart';
 import 'package:social_app/shared/components/components.dart';
+import 'package:social_app/translations/locale_keys.g.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -21,7 +23,7 @@ class SearchScreen extends StatelessWidget {
           appBar: AppBar(
             centerTitle: true,
             title: Text(
-              'Search',
+              LocaleKeys.search.tr(),
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     color: Colors.white,
                   ),
@@ -38,7 +40,7 @@ class SearchScreen extends StatelessWidget {
                       Icons.search,
                       color: Theme.of(context).iconTheme.color,
                     ),
-                    hintText: 'Search Posts',
+                    hintText: LocaleKeys.search_post.tr(),
                     hintStyle: Theme.of(context).textTheme.titleMedium,
                     contentPadding: const EdgeInsets.all(20.0),
                   focusedBorder: OutlineInputBorder(
@@ -56,7 +58,6 @@ class SearchScreen extends StatelessWidget {
                   ),
                   keyboardType: TextInputType.text,
                   onFieldSubmitted: (value) {
-                    debugPrint('on submit search for "$value"');
                     posts = AppCubit.get(context)
                         .posts
                         .where(
@@ -77,7 +78,7 @@ class SearchScreen extends StatelessWidget {
                   ? Expanded(
                       child: Center(
                         child: Text(
-                          'Search for something ..',
+                        LocaleKeys.search_for_something.tr(),
                           style:
                               Theme.of(context).textTheme.bodyLarge,
                         ),
@@ -87,7 +88,7 @@ class SearchScreen extends StatelessWidget {
                       child: posts.isEmpty
                           ? Center(
                               child: Text(
-                                'No posts found!',
+                               LocaleKeys.no_posts_found.tr(),
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyLarge,

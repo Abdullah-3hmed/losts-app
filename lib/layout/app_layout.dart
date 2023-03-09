@@ -15,12 +15,6 @@ class AppLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> titles = [
-     LocaleKeys.home.tr(),
-     LocaleKeys.chats.tr(),
-     LocaleKeys.post.tr(),
-     LocaleKeys.profile.tr(),
-    ];
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {
         if (state is AppNewPostState) {
@@ -32,6 +26,12 @@ class AppLayout extends StatelessWidget {
       },
       builder: (context, state) {
         var cubit = AppCubit.get(context);
+        List<String> titles = [
+          LocaleKeys.home.tr(),
+          LocaleKeys.chats.tr(),
+          LocaleKeys.post.tr(),
+          LocaleKeys.profile.tr(),
+        ];
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,

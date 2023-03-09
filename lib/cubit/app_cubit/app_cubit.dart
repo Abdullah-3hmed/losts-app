@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -722,5 +723,19 @@ class AppCubit extends Cubit<AppStates> {
         emit(ChangeAppThemeModeState());
       });
     }
+  }
+
+  Future<void> setEnglish({
+    required BuildContext context,
+  }) async {
+    await context.setLocale(const Locale('en'));
+    emit(AppChangeLanguageState());
+  }
+
+  Future<void> setArabic({
+    required BuildContext context,
+  }) async {
+    await context.setLocale(const Locale('ar'));
+    emit(AppChangeLanguageState());
   }
 }

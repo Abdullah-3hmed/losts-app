@@ -66,7 +66,7 @@ class EditPost extends StatelessWidget {
                 ],
               ),
               body: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(15.0),
                 child: Column(
                   children: [
                     if (state is AppEditPostLoadingState)
@@ -76,28 +76,30 @@ class EditPost extends StatelessWidget {
                         height: 10.0,
                       ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(
-                          model!.name,
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                        const SizedBox(
-                          width: 15.0,
-                        ),
                         CircleAvatar(
-                          backgroundImage: NetworkImage('${model.image}'),
+                          backgroundImage: NetworkImage('${model!.image}'),
                           onBackgroundImageError: (_, __) =>
                               const NetworkImage(AppConstants.defaultImageUrl),
                           radius: 25.0,
                         ),
+                        const SizedBox(
+                          width: 15.0,
+                        ),
+                        Text(
+                          model.name,
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
                       ],
                     ),
                     Expanded(
-                      child: TextFormField(
-                        controller: postTextController,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10.0),
+                        child: TextFormField(
+                          controller: postTextController,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                          ),
                         ),
                       ),
                     ),

@@ -29,7 +29,7 @@ class EditComment extends StatelessWidget {
           appBar: AppBar(
             centerTitle: true,
             title: Text(
-             LocaleKeys.edit_comment.tr(),
+              LocaleKeys.edit_comment.tr(),
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     color: Colors.white,
                   ),
@@ -46,7 +46,7 @@ class EditComment extends StatelessWidget {
                   );
                 },
                 child: Text(
-                 LocaleKeys.edit.tr(),
+                  LocaleKeys.edit.tr(),
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: Colors.white,
                       ),
@@ -65,29 +65,31 @@ class EditComment extends StatelessWidget {
                     height: 20.0,
                   ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
-                      '${commentModel.userName} ',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            fontSize: 14.0,
-                          ),
-                    ),
-                    const SizedBox(
-                      width: 10.0,
-                    ),
                     CircleAvatar(
                       radius: 25.0,
                       backgroundImage: NetworkImage(commentModel.userImage),
                       onBackgroundImageError: (_, __) =>
                           const NetworkImage(AppConstants.defaultImageUrl),
                     ),
+                    const SizedBox(
+                      width: 10.0,
+                    ),
+                    Text(
+                      '${commentModel.userName} ',
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            fontSize: 14.0,
+                          ),
+                    ),
                   ],
                 ),
-                TextFormField(
-                  controller: commentController,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: TextFormField(
+                    controller: commentController,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                    ),
                   ),
                 ),
               ],

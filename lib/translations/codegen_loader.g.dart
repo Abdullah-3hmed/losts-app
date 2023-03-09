@@ -85,7 +85,7 @@ class CodegenLoader extends AssetLoader {
     "profile": "My Profile",
     "like": "Like",
     "comment": "Comment",
-    "edit": "ُEdit",
+    "edit": "Edit",
     "delete": "Delete",
     "comments": "Comments",
     "no_commens_yet": "No Comments Yet",
@@ -118,6 +118,7 @@ class CodegenLoader extends AssetLoader {
     "arabic": "Arabic",
     "select_your_language": "Select Your Preferred Language",
     "selected_language": "English",
+    "what_is_in_your_mind": "What is in your mind ?",
   };
   static const Map<String, Map<String, dynamic>> mapLocales = {
     "ar": ar,

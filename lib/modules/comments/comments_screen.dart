@@ -56,14 +56,14 @@ class CommentsScreen extends StatelessWidget {
                         itemCount: postModel.comments?.length ?? 0,
                       ),
                       fallback: (context) => Center(
-                        child: Text(LocaleKeys.no_commens_yet.tr()),
+                        child: Text(LocaleKeys.no_commens_yet.tr(),style: Theme.of(context).textTheme.bodyLarge,),
                       ),
                     ),
                   ),
                   Container(
                     padding: const EdgeInsets.only(left: 10.0),
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black45),
+                      border: Border.all(color: Theme.of(context).iconTheme.color!),
                       borderRadius: const BorderRadius.all(
                         Radius.circular(10.0),
                       ),
@@ -75,16 +75,17 @@ class CommentsScreen extends StatelessWidget {
                             controller: commentController,
                             decoration: InputDecoration(
                               hintText: LocaleKeys.write_a_comment.tr(),
+                              hintStyle: Theme.of(context).textTheme.bodyLarge,
                               border: InputBorder.none,
                             ),
                           ),
                         ),
                         IconButton(
-                          onPressed: () {
+                          onPressed: ()async {
                             DateTime now = DateTime.now();
                             String formattedDate =
                                 DateFormat('yyyy-MM-dd – kk:mm').format(now);
-                            AppCubit.get(context).commentOnPost(
+                            await AppCubit.get(context).commentOnPost(
                               comment: commentController.text,
                               post: postModel,
                               dateTime: formattedDate,
@@ -109,9 +110,65 @@ class CommentsScreen extends StatelessWidget {
   }
 
   Widget buildCommentItem(MainComment comment, context) => Row(
-        mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          CircleAvatar(
+            radius: 25.0,
+            backgroundImage: NetworkImage(comment.userImage),
+            onBackgroundImageError: (_, __) =>
+                const NetworkImage(AppConstants.defaultImageUrl),
+          ),
+          const SizedBox(
+            width: 10.0,
+          ),
+          Flexible(
+            fit: FlexFit.loose,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 5.0,
+                    horizontal: 10.0,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppCubit.get(context).isDark
+                        ? Colors.grey[700]
+                        : Colors.grey[200],
+                    borderRadius: const BorderRadiusDirectional.only(
+                      bottomStart: Radius.circular(15.0),
+                      bottomEnd: Radius.circular(15.0),
+                      topStart: Radius.circular(15.0),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${comment.userName} ',
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                              fontSize: 14.0,
+                            ),
+                      ),
+                      Text(
+                        '${comment.text} ',
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                              fontSize: 16.0,
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 5.0,
+                ),
+                Text(
+                  comment.dateTime,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
+            ),
+          ),
           if (comment.userId == AppCubit.get(context).userModel!.uId)
             PopupMenuButton(
               icon: const Icon(
@@ -140,61 +197,6 @@ class CommentsScreen extends StatelessWidget {
                 ),
               ],
             ),
-          Flexible(
-            fit: FlexFit.loose,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 5.0,
-                    horizontal: 10.0,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: const BorderRadiusDirectional.only(
-                      bottomStart: Radius.circular(15.0),
-                      bottomEnd: Radius.circular(15.0),
-                      topStart: Radius.circular(15.0),
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        '${comment.userName} ',
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                              fontSize: 14.0,
-                            ),
-                      ),
-                      Text(
-                        '${comment.text} ',
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                              fontSize: 16.0,
-                            ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 5.0,
-                ),
-                Text(
-                  comment.dateTime,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            width: 10.0,
-          ),
-          CircleAvatar(
-            radius: 25.0,
-            backgroundImage: NetworkImage(comment.userImage),
-            onBackgroundImageError: (_, __) =>
-                const NetworkImage(AppConstants.defaultImageUrl),
-          ),
         ],
       );
 }

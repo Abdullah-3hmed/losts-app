@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/translations/locale_keys.g.dart';
@@ -65,21 +64,22 @@ class NewPostScreen extends StatelessWidget {
                         height: 10.0,
                       ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(
-                          model!.name,
-                          style: Theme.of(context).textTheme.bodyLarge,
+                        CircleAvatar(
+                          backgroundImage: NetworkImage('${model!.image}'),
+                          onBackgroundImageError: (_, __) =>
+                          const NetworkImage(AppConstants.defaultImageUrl),
+                          radius: 25.0,
                         ),
+
                         const SizedBox(
                           width: 15.0,
                         ),
-                        CircleAvatar(
-                          backgroundImage: NetworkImage('${model.image}'),
-                          onBackgroundImageError: (_, __) =>
-                              const NetworkImage(AppConstants.defaultImageUrl),
-                          radius: 25.0,
+                        Text(
+                          model.name,
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
+
                       ],
                     ),
                     Expanded(

@@ -15,7 +15,7 @@ class CommentModel {
 
   CommentModel.fromJson(Map<String, dynamic> json) {
     userImage = json['user_image'];
-    text = json['comment'];
+    text = json['text'];
     dateTime = json['date_time'];
     userName = json['user_name'];
     userId = json['user_id'];
@@ -23,7 +23,7 @@ class CommentModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'comment': text,
+      'text': text,
       'user_image': userImage,
       'date_time': dateTime,
       'user_id': userId,

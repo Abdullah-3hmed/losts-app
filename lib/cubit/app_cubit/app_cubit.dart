@@ -28,6 +28,7 @@ class AppCubit extends Cubit<AppStates> {
 
   static AppCubit get(context) => BlocProvider.of(context);
   AppUserModel? userModel;
+  bool isEnglish = true;
 
   Future<void> getUserData() async {
     if (userModel == null) {
@@ -202,13 +203,13 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  void updateUser({
+  Future<void> updateUser({
     required String name,
     required String phone,
     required String bio,
     String? coverImage,
     String? profileImage,
-  }) {
+  }) async {
     emit(AppUpdateUserLoadingState());
     AppUserModel model = AppUserModel(
       name: name,
@@ -219,12 +220,12 @@ class AppCubit extends Cubit<AppStates> {
       email: userModel!.email,
       bio: bio,
     );
-    FirebaseFirestore.instance
+    userModel = model;
+    await FirebaseFirestore.instance
         .collection('users')
         .doc(userModel!.uId)
         .update(model.toMap())
         .then((value) {
-      userModel = model;
       emit(AppGetUserSuccessState());
     }).catchError((error) {
       emit(AppUpdateUserErrorState());
@@ -467,6 +468,7 @@ class AppCubit extends Cubit<AppStates> {
     //   userName: commentModel.userName,
     //   userId: commentModel.userId,
     // );
+    // commentModel = model;
     await FirebaseFirestore.instance
         .collection('posts')
         .doc(postId)
@@ -475,7 +477,6 @@ class AppCubit extends Cubit<AppStates> {
         .update({
       'text': text,
     }).then((value) {
-      commentModel.text = text;
       Navigator.pop(context);
       emit(AppEditCommentSuccessState());
     }).catchError((error) {
@@ -551,7 +552,7 @@ class AppCubit extends Cubit<AppStates> {
     required String dateTime,
     required Post post,
   }) async {
-    var commentModel = CommentModel(
+    var model = CommentModel(
       text: comment,
       userImage: userModel!.image!,
       dateTime: dateTime,
@@ -564,19 +565,19 @@ class AppCubit extends Cubit<AppStates> {
         .collection('posts')
         .doc(post.id)
         .collection('comments')
-        .add(commentModel.toMap())
+        .add(model.toMap())
         .then((value) async {
       post.comments ??= [];
       // add comment to post model
       post.comments!.add(
-        MainComment.fromJson(json: commentModel.toMap(), commentId: value.id),
+        MainComment.fromJson(json: model.toMap(), commentId: value.id),
       );
       // push fcm to post user
       // get user token
       final userToken = users.firstWhere((user) => user.uId == post.uId).token;
 
       await FCMHelper.pushCommentFCM(
-        title: '${commentModel.userName} commented on your post',
+        title: '${model.userName} commented on your post',
         description: '',
         postId: post.id,
         userId: post.uId,
@@ -729,6 +730,7 @@ class AppCubit extends Cubit<AppStates> {
     required BuildContext context,
   }) async {
     await context.setLocale(const Locale('en'));
+    isEnglish = true;
     emit(AppChangeLanguageState());
   }
 
@@ -736,6 +738,7 @@ class AppCubit extends Cubit<AppStates> {
     required BuildContext context,
   }) async {
     await context.setLocale(const Locale('ar'));
+    isEnglish = false;
     emit(AppChangeLanguageState());
   }
 }

@@ -29,8 +29,8 @@ class EditProfile extends StatelessWidget {
             title: LocaleKeys.edit_profile.tr(),
             actions: [
               TextButton(
-                onPressed: () {
-                  AppCubit.get(context).updateUser(
+                onPressed: () async {
+                  await AppCubit.get(context).updateUser(
                     name: nameController.text,
                     phone: phoneController.text,
                     bio: bioController.text,
@@ -136,7 +136,7 @@ class EditProfile extends StatelessWidget {
                               child: PopupMenuButton(
                                 icon:  Icon(
                                   Icons.edit,
-                                  color: Theme.of(context).scaffoldBackgroundColor,
+                                  color: Theme.of(context).iconTheme.color,
                                 ),
                                 onSelected: (String value) {
                                   if (value == 'Camera') {

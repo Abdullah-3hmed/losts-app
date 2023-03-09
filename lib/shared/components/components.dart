@@ -83,13 +83,13 @@ Widget defaultTextFormField({
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
           borderSide: BorderSide(
-            color:Theme.of(context).iconTheme.color!,
+            color: Theme.of(context).iconTheme.color!,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
           borderSide: const BorderSide(
-            color:Colors.blue,
+            color: Colors.blue,
           ),
         ),
         prefixIconColor: Theme.of(context).iconTheme.color,
@@ -186,43 +186,21 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment:CrossAxisAlignment.start,
           children: [
-            // image & name & time
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                if (postModel.uId == AppCubit.get(context).userModel!.uId)
-                  PopupMenuButton(
-                    icon: const Icon(Icons.more_horiz_rounded),
-                    onSelected: (String value) {
-                      if (value == 'Edit') {
-                        navigateTo(
-                          context: context,
-                          screen: EditPost(
-                            postModel: postModel,
-                          ),
-                        );
-                      } else if (value == 'Delete') {
-                        AppCubit.get(context).deletePost(
-                          postModel: postModel,
-                        );
-                      }
-                    },
-                    itemBuilder: (context) => [
-                       PopupMenuItem(
-                        value: 'Edit',
-                        child: Text(LocaleKeys.edit.tr()),
-                      ),
-                       PopupMenuItem(
-                        value: 'Delete',
-                        child: Text(LocaleKeys.delete.tr()),
-                      ),
-                    ],
-                  ),
-                const Spacer(),
+                CircleAvatar(
+                  radius: 25.0,
+                  backgroundImage: NetworkImage(postModel.userImage),
+                  onBackgroundImageError: (_, __) =>
+                      const NetworkImage(AppConstants.defaultImageUrl),
+                ),
+                const SizedBox(
+                  width: 10.0,
+                ),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     InkWell(
                       onTap: isUserProfile == false
@@ -256,28 +234,50 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                     ),
                   ],
                 ),
-                const SizedBox(
-                  width: 10.0,
-                ),
-                CircleAvatar(
-                  radius: 25.0,
-                  backgroundImage: NetworkImage(postModel.userImage),
-                  onBackgroundImageError: (_, __) =>
-                      const NetworkImage(AppConstants.defaultImageUrl),
-                ),
+                const Spacer(),
+                if (postModel.uId == AppCubit.get(context).userModel!.uId)
+                  PopupMenuButton(
+                    icon: const Icon(Icons.more_horiz_rounded),
+                    onSelected: (String value) {
+                      if (value == 'Edit') {
+                        navigateTo(
+                          context: context,
+                          screen: EditPost(
+                            postModel: postModel,
+                          ),
+                        );
+                      } else if (value == 'Delete') {
+                        AppCubit.get(context).deletePost(
+                          postModel: postModel,
+                        );
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        value: 'Edit',
+                        child: Text(LocaleKeys.edit.tr()),
+                      ),
+                      PopupMenuItem(
+                        value: 'Delete',
+                        child: Text(LocaleKeys.delete.tr()),
+                      ),
+                    ],
+                  ),
               ],
             ),
             const SizedBox(
               height: 10.0,
             ),
             // post text
-            Text(
-              postModel.postText,
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    fontSize: 18.0,
-                  ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10.0),
+              child: Text(
+                postModel.postText,
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      fontSize: 18.0,
+                    ),
+              ),
             ),
-
             // post image
             const SizedBox(
               height: 10.0,
@@ -308,41 +308,43 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // comments
-                  Row(
-                    children: [
-                      const Icon(
-                       Icons.comment_sharp,
-                        color: Colors.amber,
-                      ),
-                      const SizedBox(
-                        width: 5.0,
-                      ),
-                      Text(
-                        postModel.comments?.length.toString() ?? '0',
-                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                              fontSize: 15.0,
-                            ),
-                      ),
-                    ],
-                  ),
                   // likes
                   Row(
                     children: [
+                      Text(
+                        '${postModel.likes.length}',
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          fontSize: 18.0,
+                        ),
+                      ),
+
+                      const SizedBox(
+                        width: 5.0,
+                      ),
                       Icon(
                         postModel.likes.contains(uId)
                             ? Icons.favorite
                             : Icons.favorite_border_outlined,
                         color: Colors.red,
                       ),
-                      const SizedBox(
-                        width: 5.0,
-                      ),
+
+                    ],
+                  ),
+                  // comments
+                  Row(
+                    children: [
                       Text(
-                        '${postModel.likes.length}',
+                        postModel.comments?.length.toString() ?? '0',
                         style: Theme.of(context).textTheme.bodySmall!.copyWith(
                               fontSize: 15.0,
                             ),
+                      ),
+                      const SizedBox(
+                        width: 5.0,
+                      ),
+                      const Icon(
+                        Icons.comment_sharp,
+                        color: Colors.amber,
                       ),
                     ],
                   ),
@@ -358,6 +360,30 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  // like button
+                  InkWell(
+                    onTap: () {
+                      AppCubit.get(context).likePost(post: postModel);
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          LocaleKeys.like.tr(),
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        const SizedBox(
+                          width: 5.0,
+                        ),
+                        Icon(
+                          Icons.favorite_border_outlined,
+                          size: 26.0,
+                          color: postModel.likes.contains(uId)
+                              ? Colors.red
+                              : Colors.grey[400],
+                        ),
+                      ],
+                    ),
+                  ),
                   // comment button
                   InkWell(
                     onTap: () {
@@ -378,33 +404,9 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                           width: 5.0,
                         ),
                         Icon(
-                          Icons.comment_outlined,
+                          Icons.comment_rounded,
                           color: Theme.of(context).iconTheme.color,
                           size: 24.0,
-                        ),
-                      ],
-                    ),
-                  ),
-                  // like button
-                  InkWell(
-                    onTap: () {
-                      AppCubit.get(context).likePost(post: postModel);
-                    },
-                    child: Row(
-                      children: [
-                        Text(
-                        LocaleKeys.like.tr(),
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                        const SizedBox(
-                          width: 5.0,
-                        ),
-                        Icon(
-                          Icons.favorite_border_outlined,
-                          size: 30.0,
-                          color: postModel.likes.contains(uId)
-                              ? Colors.red
-                              : Colors.black26,
                         ),
                       ],
                     ),

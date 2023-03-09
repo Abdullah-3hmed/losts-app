@@ -81,7 +81,7 @@ class ProfileScreen extends StatelessWidget {
                         ),
                   ),
                   Text(
-                    '${model.bio}',
+                    '${model.bio =='write your bio ...'?'': model.bio}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
@@ -117,7 +117,7 @@ class ProfileScreen extends StatelessWidget {
                             style:
                                 Theme.of(context).textTheme.bodyLarge!.copyWith(
                                       color: Colors.black,
-                                      fontSize: 22.0,
+                                      fontSize: 18.0,
                                     ),
                           ),
                           const CircleAvatar(
@@ -152,7 +152,7 @@ class ProfileScreen extends StatelessWidget {
                           style:
                               Theme.of(context).textTheme.bodyLarge!.copyWith(
                                     color: Colors.black,
-                                    fontSize: 22.0,
+                                    fontSize: 18.0,
                                   ),
                         ),
                         Switch(
@@ -197,7 +197,7 @@ class ProfileScreen extends StatelessWidget {
                             style:
                                 Theme.of(context).textTheme.bodyLarge!.copyWith(
                                       color: Colors.black,
-                                      fontSize: 22.0,
+                                      fontSize: 18.0,
                                     ),
                           ),
                           Text(
@@ -205,7 +205,7 @@ class ProfileScreen extends StatelessWidget {
                             style:
                                 Theme.of(context).textTheme.bodyLarge!.copyWith(
                                       color: Colors.black,
-                                      fontSize: 20.0,
+                                      fontSize: 16.0,
                                     ),
                           ),
                         ],
@@ -244,7 +244,7 @@ class ProfileScreen extends StatelessWidget {
                             style:
                                 Theme.of(context).textTheme.bodyLarge!.copyWith(
                                       color: Colors.black,
-                                      fontSize: 22.0,
+                                      fontSize: 18.0,
                                     ),
                           ),
                           const CircleAvatar(

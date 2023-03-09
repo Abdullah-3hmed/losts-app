@@ -127,17 +127,13 @@ class UserProfile extends StatelessWidget {
                             );
                           },
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              const SizedBox(
-                                width: 10.0,
-                              ),
+
                               const Icon(
                                 Icons.arrow_forward_ios_outlined,
                                 color: Colors.white,
                                 size: 16.0,
-                              ),
-                              const SizedBox(
-                                width: 90.0,
                               ),
                               Text(
                               LocaleKeys.chat.tr(),
@@ -149,9 +145,7 @@ class UserProfile extends StatelessWidget {
                                       fontSize: 22.0,
                                     ),
                               ),
-                              const SizedBox(
-                                width: 100.0,
-                              ),
+
                               const CircleAvatar(
                                 backgroundColor: Colors.blue,
                                 child: Icon(

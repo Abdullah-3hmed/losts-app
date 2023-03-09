@@ -35,33 +35,34 @@ class ChatsScreen extends StatelessWidget {
       },
     );
   }
+
   Widget buildChatItem(AppUserModel userModel, BuildContext context) => InkWell(
         onTap: () {
           navigateTo(
             context: context,
             screen: ChatDetails(
-            userModel: userModel,
+              userModel: userModel,
             ),
           );
         },
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0,vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text(
-                userModel.name,
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              const SizedBox(
-                width: 15.0,
-              ),
               CircleAvatar(
                 backgroundImage: NetworkImage(
                   '${userModel.image}',
                 ),
-                onBackgroundImageError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
+                onBackgroundImageError: (_, __) =>
+                    const NetworkImage(AppConstants.defaultImageUrl),
                 radius: 25.0,
+              ),
+              const SizedBox(
+                width: 15.0,
+              ),
+              Text(
+                userModel.name,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             ],
           ),

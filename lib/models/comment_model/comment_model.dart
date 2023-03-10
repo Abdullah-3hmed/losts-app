@@ -1,6 +1,6 @@
 class CommentModel {
   late final String userImage;
-  late final String text;
+  late String text;
   late final String dateTime;
   late final String userName;
   late final String userId;

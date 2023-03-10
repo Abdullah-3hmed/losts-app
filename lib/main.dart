@@ -78,6 +78,7 @@ Future<void> main() async {
         Locale('ar'),
       ],
       fallbackLocale: const Locale('en'),
+      startLocale: const Locale('en'),
       assetLoader: const CodegenLoader(),
       child: MyApp(
         startWidget: startScreen,

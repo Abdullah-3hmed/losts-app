@@ -271,7 +271,7 @@ class AppCubit extends Cubit<AppStates> {
   Future<void> uploadPostImage({
     required BuildContext context,
     required String postText,
-    required String postDateTime,
+    required DateTime postDateTime,
   })async {
     emit(AppCreatePostLoadingState());
     await firebase_storage.FirebaseStorage.instance
@@ -303,7 +303,7 @@ class AppCubit extends Cubit<AppStates> {
   void createPost({
     required BuildContext context,
     required String postText,
-    required String dateTime,
+    required DateTime dateTime,
     String? postImage,
   }) {
     emit(AppCreatePostLoadingState());
@@ -317,13 +317,13 @@ class AppCubit extends Cubit<AppStates> {
     );
     FirebaseFirestore.instance
         .collection('posts')
-        .add(model.toMap())
+        .add(model.toJson())
         .then((value) {
       // add post to posts
       posts.insert(
         0,
         Post.fromJson(
-          json: model.toMap(),
+          json: model.toJson(),
           id: value.id,
           likes: [],
           // comments: [],
@@ -478,6 +478,7 @@ class AppCubit extends Cubit<AppStates> {
         .update({
       'text': text,
     }).then((value) {
+      commentModel.text = text;
       Navigator.pop(context);
       emit(AppEditCommentSuccessState());
     }).catchError((error) {
@@ -640,7 +641,7 @@ class AppCubit extends Cubit<AppStates> {
       await FCMHelper.pushChatMessageFCM(
         title: '${userModel!.name} sent you a message',
         description: '',
-        userId: userModel!.uId,
+        userId: receiverId,
         userToken: userToken,
       );
       emit(AppSendMessageSuccessState());

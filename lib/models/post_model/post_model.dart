@@ -1,10 +1,12 @@
+import 'package:social_app/helper/date_time_converter.dart';
+
 class PostModel {
   late String userName;
   late String uId;
   late String userImage;
   late String postText;
   String? image;
-  late String dateTime;
+  late DateTime dateTime;
 
   PostModel({
     required this.userName,
@@ -21,17 +23,17 @@ class PostModel {
     userImage = json['image'];
     postText = json['postText'];
     uId = json['uId'];
-    dateTime = json['dateTime'];
+    dateTime = DateTimeConverter.getDateTimeFromStamp(json['dateTime']);// 564687312 -> 11-2-2032
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'name': userName,
       'postText': postText,
       'uId': uId,
       'postImage': image,
       'image': userImage,
-      'dateTime': dateTime,
+      'dateTime': dateTime.toUtc().millisecondsSinceEpoch,
     };
   }
 }

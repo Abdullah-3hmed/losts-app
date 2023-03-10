@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:social_app/cubit/app_cubit/app_cubit.dart';
+import 'package:social_app/helper/date_time_converter.dart';
 import 'package:social_app/models/post_model/post.dart';
 import 'package:social_app/modules/comments/comments_screen.dart';
 import 'package:social_app/modules/edit_post/edit_post_screen.dart';
@@ -226,7 +227,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                       ),
                     ),
                     Text(
-                      postModel.dateTime,
+                      DateTimeConverter.getFormattedDate(postModel.dateTime),
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
                             fontSize: 14.0,
                             height: 1.4,

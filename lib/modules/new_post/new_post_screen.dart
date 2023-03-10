@@ -28,18 +28,16 @@ class NewPostScreen extends StatelessWidget {
                   TextButton(
                     onPressed: () async{
                       DateTime now = DateTime.now();
-                      String formattedDate =
-                          DateFormat('yyyy-MM-dd – kk:mm').format(now);
                       if (AppCubit.get(context).pickedPostImage == null) {
                         AppCubit.get(context).createPost(
                           context: context,
                           postText: textController.text,
-                          dateTime: formattedDate,
+                          dateTime: now,
                         );
                       } else {
                         await AppCubit.get(context).uploadPostImage(
                           postText: textController.text,
-                          postDateTime: formattedDate,
+                          postDateTime: now,
                           context: context,
                         );
                       }

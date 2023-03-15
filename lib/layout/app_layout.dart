@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/local_notification_service/notification_service.dart';
 import 'package:social_app/modules/search/search_screen.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/styles/icon_broken.dart';
@@ -15,6 +16,7 @@ class AppLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    listenToNotification();
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {
         if (state is AppNewPostState) {
@@ -91,8 +93,28 @@ class AppLayout extends StatelessWidget {
               ],
             ),
           ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              await LocalNotificationService().showNotificationWithPayload(
+                id: 1,
+                title: 'title',
+                body: 'body',
+               payload: 'nothing'
+              );
+            },
+            child: const Icon(Icons.add),
+          ),
         );
       },
     );
+  }
+  void listenToNotification() => LocalNotificationService()
+      .onNotificationClick
+      .stream
+      .listen(onNotificationListener);
+  void onNotificationListener(String? payload) {
+    if (payload != null && payload.isNotEmpty) {
+      debugPrint('payload $payload');
+    }
   }
 }

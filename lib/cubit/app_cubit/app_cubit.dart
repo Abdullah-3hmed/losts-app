@@ -70,8 +70,6 @@ class AppCubit extends Cubit<AppStates> {
     if (index == 0) {
       await getUserData();
       await getPosts();
-    }
-    if (index == 1) {
       await getAllUsers();
     }
   }

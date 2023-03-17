@@ -7,10 +7,9 @@ import 'package:social_app/cubit/app_cubit/app_cubit.dart';
 import 'package:social_app/cubit/app_cubit/app_states.dart';
 import 'package:social_app/local_notification_service/notification_service.dart';
 import 'package:social_app/network/remote/dio_helper.dart';
+import 'package:social_app/shared/bloc_observer.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/translations/codegen_loader.g.dart';
-
-import 'shared/bloc_observer.dart';
 import 'firebase_options.dart';
 import 'layout/app_layout.dart';
 import 'modules/login/login_screen.dart';

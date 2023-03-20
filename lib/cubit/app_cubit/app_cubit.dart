@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -270,7 +271,7 @@ class AppCubit extends Cubit<AppStates> {
     required BuildContext context,
     required String postText,
     required DateTime postDateTime,
-  })async {
+  }) async {
     emit(AppCreatePostLoadingState());
     await firebase_storage.FirebaseStorage.instance
         .ref()
@@ -295,7 +296,6 @@ class AppCubit extends Cubit<AppStates> {
     })).catchError((error) {
       emit(AppCreatePostErrorState());
     });
-
   }
 
   void createPost({
@@ -596,7 +596,11 @@ class AppCubit extends Cubit<AppStates> {
   Future<void> getAllUsers() async {
     if (users.isEmpty) {
       emit(AppGetAllUsersLoadingState());
-      await FirebaseFirestore.instance.collection('users').get().then((value) {
+      await FirebaseFirestore
+          .instance
+          .collection('users')
+          .get()
+          .then((value) {
         for (var element in value.docs) {
           if (element.data()['uId'] != userModel!.uId) {
             users.add(
@@ -740,5 +744,15 @@ class AppCubit extends Cubit<AppStates> {
     await context.setLocale(const Locale('ar'));
     isEnglish = false;
     emit(AppChangeLanguageState());
+  }
+
+  void resetPassword({required String email}) {
+    FirebaseAuth.instance.sendPasswordResetEmail(
+      email: email,
+    ).then((value){
+      emit(AppResetPasswordSuccessState());
+    }).catchError((error){
+      emit(AppResetPasswordErrorState());
+    });
   }
 }

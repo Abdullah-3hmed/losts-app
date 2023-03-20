@@ -66,6 +66,10 @@ class CodegenLoader extends AssetLoader {
     "arabic": "العربية",
     "select_your_language": "حدد لغتك المفضلة",
     "selected_language": "العربية",
+    "forget_password": "هل نسيت كلمة السر ؟",
+    "reset_now": "إعادة تعيين الآن",
+    "reset_password": "إعادة تعيين كلمة المرور",
+    "confirm": "تأكيد",
   };
   static const Map<String, dynamic> en = {
     "hi_login": "login now to to Communicate with others",
@@ -119,6 +123,10 @@ class CodegenLoader extends AssetLoader {
     "select_your_language": "Select Your Preferred Language",
     "selected_language": "English",
     "what_is_in_your_mind": "What is in your mind ?",
+    "forget_password": "Forget Password ?",
+    "reset_now": "Reset Now",
+    "reset_password": "Reset Password",
+    "confirm": "Confirm",
 
   };
   static const Map<String, Map<String, dynamic>> mapLocales = {

@@ -2,6 +2,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/modules/reset_password/reset_password_screen.dart';
 
 import 'package:social_app/network/local/cache_helper.dart';
 import 'package:social_app/translations/locale_keys.g.dart';
@@ -156,7 +157,7 @@ class AppLoginScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                             LocaleKeys.have_account.tr(),
+                              LocaleKeys.have_account.tr(),
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                             TextButton(
@@ -167,6 +168,24 @@ class AppLoginScreen extends StatelessWidget {
                                 );
                               },
                               child: Text(LocaleKeys.register_now.tr()),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              LocaleKeys.forget_password.tr(),
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                navigateTo(
+                                  context: context,
+                                  screen: const ResetPassword(),
+                                );
+                              },
+                              child: Text(LocaleKeys.reset_now.tr()),
                             ),
                           ],
                         ),

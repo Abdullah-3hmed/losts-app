@@ -11,43 +11,30 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (context) {
-        if (AppCubit.get(context).userModel == null) {
-          AppCubit.get(context).getUserData();
-        }
-        if (AppCubit.get(context).posts.isEmpty) {
-          AppCubit.get(context).getPosts();
-        }
-        if (AppCubit.get(context).users.isEmpty) {
-          AppCubit.get(context).getAllUsers();
-        }
-        return BlocConsumer<AppCubit, AppStates>(
-          listener: (context, state) {},
-          builder: (context, state) {
-            return Column(
-              children: [
-                Expanded(
-                  child: ConditionalBuilder(
-                    condition: AppCubit.get(context).posts.isNotEmpty &&
-                        AppCubit.get(context).userModel != null,
-                    builder: (context) => ListView.separated(
-                      physics: const BouncingScrollPhysics(),
-                      itemBuilder: (context, index) => buildPostItem(
-                          context, AppCubit.get(context).posts[index],
-                          isUserProfile: false),
-                      separatorBuilder: (context, index) => const SizedBox(
-                        height: 10.0,
-                      ),
-                      itemCount: AppCubit.get(context).posts.length,
-                    ),
-                    fallback: (context) =>
-                        const Center(child: CircularProgressIndicator()),
+    return BlocConsumer<AppCubit, AppStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return Column(
+          children: [
+            Expanded(
+              child: ConditionalBuilder(
+                condition: AppCubit.get(context).posts.isNotEmpty &&
+                    AppCubit.get(context).userModel != null,
+                builder: (context) => ListView.separated(
+                  physics: const BouncingScrollPhysics(),
+                  itemBuilder: (context, index) => buildPostItem(
+                      context, AppCubit.get(context).posts[index],
+                      isUserProfile: false),
+                  separatorBuilder: (context, index) => const SizedBox(
+                    height: 10.0,
                   ),
+                  itemCount: AppCubit.get(context).posts.length,
                 ),
-              ],
-            );
-          },
+                fallback: (context) =>
+                    const Center(child: CircularProgressIndicator()),
+              ),
+            ),
+          ],
         );
       },
     );

@@ -49,5 +49,9 @@
   "english": "English",
   "arabic": "Arabic",
   "select_your_language": "Select Your Preferred Language",
-  "selected_language": "English"
+  "selected_language": "English",
+  "forget_password": "Forget Password ?",
+  "reset_now": "Reset Now",
+  "reset_password": "Reset Password",
+  "confirm": "Confirm"
 }

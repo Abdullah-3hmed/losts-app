@@ -52,5 +52,9 @@ abstract class  LocaleKeys {
   static const arabic = 'arabic';
   static const select_your_language = 'select_your_language';
   static const selected_language = 'selected_language';
+  static const forget_password = 'forget_password';
+  static const reset_now = 'reset_now';
+  static const reset_password = 'reset_password';
+  static const confirm = 'confirm';
 
 }

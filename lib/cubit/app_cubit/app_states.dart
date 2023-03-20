@@ -143,3 +143,7 @@ class AppSearchOnTapState extends AppStates {}
 class ChangeAppThemeModeState extends AppStates {}
 
 class AppChangeLanguageState extends AppStates {}
+
+class AppResetPasswordSuccessState extends AppStates {}
+
+class AppResetPasswordErrorState extends AppStates {}

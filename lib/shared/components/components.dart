@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -193,9 +194,11 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
               children: [
                 CircleAvatar(
                   radius: 25.0,
-                  backgroundImage: NetworkImage(postModel.userImage),
-                  onBackgroundImageError: (_, __) =>
-                      const NetworkImage(AppConstants.defaultImageUrl),
+                  backgroundImage:
+                      CachedNetworkImageProvider(postModel.userImage),
+                  onBackgroundImageError: (_, __) => CachedNetworkImage(
+                    imageUrl: AppConstants.defaultImageUrl,
+                  ),
                 ),
                 const SizedBox(
                   width: 10.0,
@@ -282,7 +285,10 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
             // post image
             if (postModel.image != '')
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 5,),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10.0,
+                  vertical: 5,
+                ),
                 child: Container(
                   height: 400.0,
                   width: double.infinity,
@@ -290,7 +296,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5.0),
                     image: DecorationImage(
-                      image: NetworkImage(
+                      image: CachedNetworkImageProvider(
                         postModel.image!,
                       ),
                       onError: (_, __) =>

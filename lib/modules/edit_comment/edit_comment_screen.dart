@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -68,9 +69,9 @@ class EditComment extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 25.0,
-                      backgroundImage: NetworkImage(commentModel.userImage),
+                      backgroundImage: CachedNetworkImageProvider(commentModel.userImage),
                       onBackgroundImageError: (_, __) =>
-                          const NetworkImage(AppConstants.defaultImageUrl),
+                           CachedNetworkImage(imageUrl: AppConstants.defaultImageUrl),
                     ),
                     const SizedBox(
                       width: 10.0,

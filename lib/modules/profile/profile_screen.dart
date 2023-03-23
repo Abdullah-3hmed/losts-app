@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -44,11 +45,12 @@ class ProfileScreen extends StatelessWidget {
                                 topRight: Radius.circular(4.0),
                               ),
                               image: DecorationImage(
-                                image: NetworkImage(
+                                image: CachedNetworkImageProvider(
                                   '${model!.cover}',
                                 ),
-                                onError: (_, __) => const NetworkImage(
-                                    AppConstants.defaultImageUrl),
+                                onError: (_, __) => CachedNetworkImage(
+                                  imageUrl: AppConstants.defaultImageUrl,
+                                ),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -59,7 +61,7 @@ class ProfileScreen extends StatelessWidget {
                               Theme.of(context).scaffoldBackgroundColor,
                           radius: 64.0,
                           child: CircleAvatar(
-                            backgroundImage: NetworkImage(
+                            backgroundImage: CachedNetworkImageProvider(
                               '${model.image}',
                             ),
                             onBackgroundImageError: (_, __) =>
@@ -81,7 +83,7 @@ class ProfileScreen extends StatelessWidget {
                         ),
                   ),
                   Text(
-                    '${model.bio =='write your bio ...'?'': model.bio}',
+                    '${model.bio == 'write your bio ...' ? '' : model.bio}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
@@ -201,7 +203,7 @@ class ProfileScreen extends StatelessWidget {
                                     ),
                           ),
                           Text(
-                         LocaleKeys.selected_language.tr(),
+                            LocaleKeys.selected_language.tr(),
                             style:
                                 Theme.of(context).textTheme.bodyLarge!.copyWith(
                                       color: Colors.black,

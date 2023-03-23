@@ -1,8 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/models/message_model/message_model.dart';
-import 'package:social_app/models/user_model/user_model.dart';
 import 'package:social_app/shared/components/constants.dart';
 
 import '../../cubit/app_cubit/app_cubit.dart';
@@ -11,16 +11,22 @@ import '../../cubit/app_cubit/app_states.dart';
 class ChatDetails extends StatelessWidget {
   const ChatDetails({
     Key? key,
-    required this.userModel,
+    required this.userId, required this.userName, required this.userImage,
   }) : super(key: key);
-  final AppUserModel userModel;
+  final String userId;
+  final String userName;
+  final String userImage;
 
   @override
   Widget build(BuildContext context) {
+    if (AppCubit.get(context).users.isEmpty) {
+      AppCubit.get(context).getAllUsers().then((_) {});
+    }
+    debugPrint(AppCubit.get(context).users.length.toString());
     return Builder(
       builder: (BuildContext context) {
         AppCubit.get(context).getMessages(
-          receiverId: userModel.uId,
+          receiverId: userId,
         );
         return BlocConsumer<AppCubit, AppStates>(
           listener: (context, state) {},
@@ -31,7 +37,7 @@ class ChatDetails extends StatelessWidget {
                 centerTitle: true,
                 titleSpacing: 0.0,
                 title: Text(
-                  userModel.name,
+                  userName,
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: Colors.white,
                       ),
@@ -52,7 +58,8 @@ class ChatDetails extends StatelessWidget {
                                 message.senderId) {
                               return buildMyMessageItem(message, context);
                             } else {
-                              return buildMessageItem(message,context);
+                              return buildMessageItem(
+                                  message, context, userImage);
                             }
                           },
                           separatorBuilder: (context, index) => const SizedBox(
@@ -105,11 +112,13 @@ class ChatDetails extends StatelessWidget {
                             child: MaterialButton(
                               minWidth: 1.0,
                               onPressed: () async {
-                                await AppCubit.get(context).sendMessage(
+                                if(messageController.text.isNotEmpty) {
+                                  await AppCubit.get(context).sendMessage(
                                   text: messageController.text,
-                                  receiverId: userModel.uId,
+                                  receiverId: userId,
                                   dateTime: DateTime.now().toString(),
                                 );
+                                }
                               },
                               child: const Icon(
                                 Icons.send,
@@ -131,15 +140,17 @@ class ChatDetails extends StatelessWidget {
     );
   }
 
-  Widget buildMessageItem(MessageModel messageModel,BuildContext context) => Align(
+  Widget buildMessageItem(
+          MessageModel messageModel, BuildContext context, String userImage) =>
+      Align(
         alignment: AlignmentDirectional.centerStart,
         child: Row(
           children: [
             CircleAvatar(
               radius: 20.0,
-              backgroundImage: NetworkImage('${userModel.image}'),
+              backgroundImage: CachedNetworkImageProvider(userImage),
               onBackgroundImageError: (_, __) =>
-                  const NetworkImage(AppConstants.defaultImageUrl),
+                  CachedNetworkImage(imageUrl: AppConstants.defaultImageUrl),
             ),
             const SizedBox(
               width: 10.0,
@@ -149,8 +160,10 @@ class ChatDetails extends StatelessWidget {
                 vertical: 5.0,
                 horizontal: 10.0,
               ),
-              decoration:  BoxDecoration(
-                color: AppCubit.get(context).isDark ?Colors.grey[700]:Colors.grey[300],
+              decoration: BoxDecoration(
+                color: AppCubit.get(context).isDark
+                    ? Colors.grey[700]
+                    : Colors.grey[300],
                 borderRadius: const BorderRadiusDirectional.only(
                   bottomEnd: Radius.circular(10.0),
                   topEnd: Radius.circular(10.0),
@@ -159,7 +172,7 @@ class ChatDetails extends StatelessWidget {
               ),
               child: Text(
                 '${messageModel.text}',
-                style:Theme.of(context).textTheme.bodyLarge,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
           ],
@@ -180,8 +193,10 @@ class ChatDetails extends StatelessWidget {
                 vertical: 5.0,
                 horizontal: 10.0,
               ),
-              decoration:  BoxDecoration(
-                color:AppCubit.get(context).isDark ? Colors.blue:Colors.blue.withOpacity(.3),
+              decoration: BoxDecoration(
+                color: AppCubit.get(context).isDark
+                    ? Colors.blue
+                    : Colors.blue.withOpacity(.3),
                 borderRadius: const BorderRadiusDirectional.only(
                   bottomStart: Radius.circular(10.0),
                   topEnd: Radius.circular(10.0),
@@ -198,8 +213,8 @@ class ChatDetails extends StatelessWidget {
             ),
             CircleAvatar(
               radius: 20.0,
-              backgroundImage:
-                  NetworkImage('${AppCubit.get(context).userModel!.image}'),
+              backgroundImage: CachedNetworkImageProvider(
+                  '${AppCubit.get(context).userModel!.image}'),
               onBackgroundImageError: (_, __) =>
                   const NetworkImage(AppConstants.defaultImageUrl),
             ),

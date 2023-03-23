@@ -23,8 +23,10 @@ class HomeScreen extends StatelessWidget {
                 builder: (context) => ListView.separated(
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) => buildPostItem(
-                      context, AppCubit.get(context).posts[index],
-                      isUserProfile: false),
+                    context,
+                    AppCubit.get(context).posts[index],
+                    isUserProfile: false,
+                  ),
                   separatorBuilder: (context, index) => const SizedBox(
                     height: 10.0,
                   ),

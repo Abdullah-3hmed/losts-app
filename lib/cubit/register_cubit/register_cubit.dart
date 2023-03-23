@@ -69,8 +69,7 @@ class AppRegisterCubit extends Cubit<AppRegisterStates> {
         .doc(userId)
         .set(
           model.toMap(),
-        )
-        .then((value) {
+        ).then((value) {
       emit(AppCreateUserSuccessState(userId));
     }).catchError((error) {
       emit(AppCreateUserErrorState(error.toString()));

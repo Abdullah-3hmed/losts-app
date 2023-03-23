@@ -36,11 +36,11 @@ class AppRegister extends StatelessWidget {
               message: 'register Success',
               state: ToastStates.success,
             );
+            uId = state.uId;
             CacheHelper.saveData(
               key: 'uId',
               value: state.uId,
             ).then((value) {
-              uId = state.uId;
               navigateAndFinish(
                 context,
                 const AppLayout(),

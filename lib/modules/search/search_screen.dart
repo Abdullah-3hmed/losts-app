@@ -35,7 +35,7 @@ class SearchScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(20.0),
                 child: TextFormField(
                   controller: searchController,
-                  decoration:  InputDecoration(
+                  decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.search,
                       color: Theme.of(context).iconTheme.color,
@@ -43,16 +43,16 @@ class SearchScreen extends StatelessWidget {
                     hintText: LocaleKeys.search_post.tr(),
                     hintStyle: Theme.of(context).textTheme.titleMedium,
                     contentPadding: const EdgeInsets.all(20.0),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(
-                      color:Colors.blue,
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(
+                        color: Colors.blue,
+                      ),
                     ),
-                  ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
-                      borderSide:  BorderSide(
-                        color:Theme.of(context).iconTheme.color!,
+                      borderSide: BorderSide(
+                        color: Theme.of(context).iconTheme.color!,
                       ),
                     ),
                   ),
@@ -78,9 +78,8 @@ class SearchScreen extends StatelessWidget {
                   ? Expanded(
                       child: Center(
                         child: Text(
-                        LocaleKeys.search_for_something.tr(),
-                          style:
-                              Theme.of(context).textTheme.bodyLarge,
+                          LocaleKeys.search_for_something.tr(),
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
                     )
@@ -88,10 +87,8 @@ class SearchScreen extends StatelessWidget {
                       child: posts.isEmpty
                           ? Center(
                               child: Text(
-                               LocaleKeys.no_posts_found.tr(),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge,
+                                LocaleKeys.no_posts_found.tr(),
+                                style: Theme.of(context).textTheme.bodyLarge,
                               ),
                             )
                           : ListView.separated(

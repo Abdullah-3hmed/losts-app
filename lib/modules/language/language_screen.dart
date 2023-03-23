@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +18,7 @@ class LanguageScreen extends StatelessWidget {
           appBar: AppBar(
             centerTitle: true,
             title: Text(
-             LocaleKeys.language.tr(),
+              LocaleKeys.language.tr(),
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     color: Colors.white,
                   ),
@@ -28,7 +29,7 @@ class LanguageScreen extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                 LocaleKeys.select_your_language.tr(),
+                  LocaleKeys.select_your_language.tr(),
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 const SizedBox(
@@ -42,22 +43,35 @@ class LanguageScreen extends StatelessWidget {
                     ),
                   ),
                   child: InkWell(
-                    onTap: (){
+                    onTap: () {
                       AppCubit.get(context).setEnglish(context: context);
                     },
                     child: Row(
                       children: [
-                        const Icon(
-                          Icons.ac_unit,
-                          size: 26.0,
+                        CachedNetworkImage(
+                          imageUrl:
+                              'https://as1.ftcdn.net/v2/jpg/02/70/24/98/1000_F_270249859_mf1Kyad7MO3Gb1BGvBahbB9SNttnVZO7.jpg',
+                          height: 40.0,
+                          width: 40.0,
                         ),
                         const SizedBox(
                           width: 10.0,
                         ),
                         Text(
-                         LocaleKeys.english.tr(),
+                          LocaleKeys.english.tr(),
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
+                        const Spacer(),
+                        AppCubit.get(context).isEnglish
+                            ? const CircleAvatar(
+                                radius: 15.0,
+                                backgroundColor: Colors.white,
+                                child: Icon(
+                                  Icons.check_circle_outline,
+                                  color: Colors.green,
+                                ),
+                              )
+                            : const SizedBox(),
                       ],
                     ),
                   ),
@@ -77,18 +91,32 @@ class LanguageScreen extends StatelessWidget {
                       AppCubit.get(context).setArabic(context: context);
                     },
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const Icon(
-                          Icons.ac_unit,
-                          size: 26.0,
+                        CachedNetworkImage(
+                          imageUrl:
+                              'https://as2.ftcdn.net/v2/jpg/04/85/06/45/1000_F_485064580_nAzxr60edcRlLgEVwGp5gDdBexZhdp38.jpg',
+                          height: 40.0,
+                          width: 40.0,
                         ),
                         const SizedBox(
                           width: 10.0,
                         ),
                         Text(
-                         LocaleKeys.arabic.tr(),
+                          LocaleKeys.arabic.tr(),
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
+                        const Spacer(),
+                        AppCubit.get(context).isEnglish
+                            ? const SizedBox()
+                            : const CircleAvatar(
+                                radius: 15.0,
+                                backgroundColor: Colors.white,
+                                child: Icon(
+                                  Icons.check_circle_outline,
+                                  color: Colors.green,
+                                ),
+                              ),
                       ],
                     ),
                   ),

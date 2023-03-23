@@ -39,9 +39,9 @@ class AppCubit extends Cubit<AppStates> {
           .doc(uId)
           .get()
           .then((value) {
-        if (kDebugMode) {
-          print(value.data());
-        }
+        // if (kDebugMode) {
+        //   print(value.data());
+        // }
         userModel = AppUserModel.fromJson(value.data());
         emit(AppGetUserSuccessState());
       }).catchError((error) {
@@ -67,11 +67,6 @@ class AppCubit extends Cubit<AppStates> {
     } else {
       currentIndex = index;
       emit(AppChangeBottomNavState());
-    }
-    if (index == 0) {
-      await getUserData();
-      await getPosts();
-      await getAllUsers();
     }
   }
 
@@ -596,13 +591,9 @@ class AppCubit extends Cubit<AppStates> {
   Future<void> getAllUsers() async {
     if (users.isEmpty) {
       emit(AppGetAllUsersLoadingState());
-      await FirebaseFirestore
-          .instance
-          .collection('users')
-          .get()
-          .then((value) {
+      await FirebaseFirestore.instance.collection('users').get().then((value) {
         for (var element in value.docs) {
-          if (element.data()['uId'] != userModel!.uId) {
+          if (element.data()['uId'] != uId) {
             users.add(
               AppUserModel.fromJson(element.data()),
             );
@@ -637,13 +628,14 @@ class AppCubit extends Cubit<AppStates> {
         .collection('messages')
         .add(messageModel.toMap())
         .then((value) async {
-      final userToken =
-          users.firstWhere((user) => user.uId == receiverId).token;
+      final userToken = users.firstWhere((user) => user.uId == receiverId).token;
 
       await FCMHelper.pushChatMessageFCM(
         title: '${userModel!.name} sent you a message',
+        userName: userModel!.name,
+        userImage: userModel!.image!,
         description: '',
-        userId: receiverId,
+        userId: userModel!.uId,
         userToken: userToken,
       );
       emit(AppSendMessageSuccessState());
@@ -747,11 +739,13 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   void resetPassword({required String email}) {
-    FirebaseAuth.instance.sendPasswordResetEmail(
+    FirebaseAuth.instance
+        .sendPasswordResetEmail(
       email: email,
-    ).then((value){
+    )
+        .then((value) {
       emit(AppResetPasswordSuccessState());
-    }).catchError((error){
+    }).catchError((error) {
       emit(AppResetPasswordErrorState());
     });
   }

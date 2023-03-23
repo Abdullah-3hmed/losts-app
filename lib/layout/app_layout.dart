@@ -1,7 +1,13 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/helper/fcm_init_helper.dart';
 import 'package:social_app/local_notification_service/notification_service.dart';
+import 'package:social_app/main.dart';
+import 'package:social_app/modules/chat_details/chat_details.dart';
+import 'package:social_app/modules/commented_post/commented_post.dart';
 import 'package:social_app/modules/search/search_screen.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/styles/icon_broken.dart';
@@ -11,12 +17,40 @@ import '../cubit/app_cubit/app_cubit.dart';
 import '../cubit/app_cubit/app_states.dart';
 import '../modules/new_post/new_post_screen.dart';
 
-class AppLayout extends StatelessWidget {
+class AppLayout extends StatefulWidget {
   const AppLayout({super.key});
 
   @override
+  State<AppLayout> createState() => _AppLayoutState();
+}
+
+class _AppLayoutState extends State<AppLayout> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    AppCubit.get(context).getUserData();
+    AppCubit.get(context).getAllUsers();
+    AppCubit.get(context).getPosts();
+    FCMInitHelper(context: context).initListeners();
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        LocalNotificationService.requestPermissions();
+      }
+    });
+    FirebaseMessaging.instance.getToken().then((token) {
+      debugPrint('token >>>> $token');
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      AwesomeNotifications().setListeners(
+        onActionReceivedMethod: onActionReceivedHandlerMethod,
+      );
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    listenToNotification();
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {
         if (state is AppNewPostState) {
@@ -44,19 +78,24 @@ class AppLayout extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            actions: AppCubit.get(context).currentIndex == 0
-                ? [
-                    IconButton(
-                      onPressed: () {
-                        navigateTo(
-                          context: context,
-                          screen: const SearchScreen(),
-                        );
-                      },
-                      icon: const Icon(IconBroken.Search),
-                    ),
-                  ]
-                : null,
+            actions: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  IconBroken.Notification,
+                  size: 28.0,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  navigateTo(
+                    context: context,
+                    screen: const SearchScreen(),
+                  );
+                },
+                icon: const Icon(IconBroken.Search),
+              ),
+            ],
           ),
           body: cubit.screens[cubit.currentIndex],
           bottomNavigationBar: Container(
@@ -64,8 +103,8 @@ class AppLayout extends StatelessWidget {
             decoration: const BoxDecoration(
               color: Colors.blue,
               borderRadius: BorderRadiusDirectional.only(
-                topStart: Radius.circular(40.0),
-                topEnd: Radius.circular(40.0),
+                topStart: Radius.circular(0.0),
+                topEnd: Radius.circular(0.0),
               ),
             ),
             child: BottomNavigationBar(
@@ -94,13 +133,8 @@ class AppLayout extends StatelessWidget {
             ),
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () async {
-              await LocalNotificationService().showNotificationWithPayload(
-                id: 1,
-                title: 'title',
-                body: 'body',
-               payload: 'nothing'
-              );
+            onPressed: () {
+              LocalNotificationService.requestPermissions();
             },
             child: const Icon(Icons.add),
           ),
@@ -108,13 +142,29 @@ class AppLayout extends StatelessWidget {
       },
     );
   }
-  void listenToNotification() => LocalNotificationService()
-      .onNotificationClick
-      .stream
-      .listen(onNotificationListener);
-  void onNotificationListener(String? payload) {
-    if (payload != null && payload.isNotEmpty) {
-      debugPrint('payload $payload');
+
+  static Future<void> onActionReceivedHandlerMethod(
+      ReceivedAction action) async {
+    if (action.payload!['type'] == 'message') {
+      debugPrint('payload >>>>>>>>>>>>>>>> ${action.payload!['userId']}');
+      debugPrint('payload >>>>>>>>>>>>>>>> ${action.payload!['userName']}');
+      debugPrint('payload >>>>>>>>>>>>>>>> ${action.payload!['userImage']}');
+      MyApp.navigatorKey.currentState?.push(
+        MaterialPageRoute(
+          builder: (_) => ChatDetails(
+            userId: action.payload!['userId']!,
+            userName: action.payload!['userName']!,
+            userImage: action.payload!['userImage']!,
+          ),
+        ),
+      );
+    } else if (action.payload!['type'] == 'comment') {
+      debugPrint('payload >>>>>>>>>>>>>>>> ${action.payload!['postId']}');
+      MyApp.navigatorKey.currentState?.push(
+        MaterialPageRoute(
+          builder: (_) => CommentedPost(postId: action.payload!['postId']!),
+        ),
+      );
     }
   }
 }

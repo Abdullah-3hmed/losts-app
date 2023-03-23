@@ -134,9 +134,9 @@ class EditProfile extends StatelessWidget {
                               radius: 20.0,
                               backgroundColor:Colors.blue,
                               child: PopupMenuButton(
-                                icon:  Icon(
+                                icon:  const Icon(
                                   Icons.edit,
-                                  color: Theme.of(context).iconTheme.color,
+                                  color: Colors.white,
                                 ),
                                 onSelected: (String value) {
                                   if (value == 'Camera') {

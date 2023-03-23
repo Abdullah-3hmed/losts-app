@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,9 +65,9 @@ class NewPostScreen extends StatelessWidget {
                     Row(
                       children: [
                         CircleAvatar(
-                          backgroundImage: NetworkImage('${model!.image}'),
+                          backgroundImage: CachedNetworkImageProvider('${model!.image}'),
                           onBackgroundImageError: (_, __) =>
-                          const NetworkImage(AppConstants.defaultImageUrl),
+                           CachedNetworkImage(imageUrl:AppConstants.defaultImageUrl),
                           radius: 25.0,
                         ),
 

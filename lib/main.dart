@@ -30,29 +30,11 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  await LocalNotificationService().initialize();
+  await LocalNotificationService.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  var token = await FirebaseMessaging.instance.getToken();
-  debugPrint('token >>>> $token');
-  FirebaseMessaging.onMessage.listen((event) {
-    debugPrint('onMessage');
-    debugPrint(event.data.toString());
-    debugPrint(event.notification!.body);
-    showToast(
-      message: 'onMessage',
-      state: ToastStates.success,
-    );
-  });
-  FirebaseMessaging.onMessageOpenedApp.listen((event) {
-    debugPrint('on Message opened app ');
-    debugPrint(event.data.toString());
-    showToast(
-      message: 'on Message opened app',
-      state: ToastStates.success,
-    );
-  });
+
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   await CacheHelper.init();
   DioHelper.init();
@@ -60,8 +42,8 @@ Future<void> main() async {
 
   Widget startScreen;
   var onBoarding = CacheHelper.getData(key: 'onBoarding');
-  uId = CacheHelper.getData(key: 'uId');
-  bool? isDark = CacheHelper.getData(key: 'isDark');
+  uId = await CacheHelper.getData(key: 'uId');
+  bool? isDark = await CacheHelper.getData(key: 'isDark');
 
   if (onBoarding != null) {
     if (uId != null) {
@@ -98,6 +80,7 @@ class MyApp extends StatelessWidget {
   }) : super(key: key);
   final Widget startWidget;
   final bool? isDark;
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -110,6 +93,7 @@ class MyApp extends StatelessWidget {
         listener: (context, state) {},
         builder: (context, state) {
           return MaterialApp(
+            navigatorKey: navigatorKey,
             localizationsDelegates: context.localizationDelegates,
             supportedLocales: context.supportedLocales,
             locale: context.locale,

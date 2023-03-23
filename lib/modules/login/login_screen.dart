@@ -37,11 +37,11 @@ class AppLoginScreen extends StatelessWidget {
               message: 'login Success',
               state: ToastStates.success,
             );
+            uId = state.uId;
             CacheHelper.saveData(
               key: 'uId',
               value: state.uId,
             ).then((value) {
-              uId = state.uId;
               navigateAndFinish(
                 context,
                 const AppLayout(),

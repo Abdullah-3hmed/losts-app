@@ -2,11 +2,13 @@ import 'package:social_app/network/remote/dio_helper.dart';
 import 'package:social_app/shared/components/constants.dart';
 
 class FCMHelper {
-  static const _serverKey = 'AAAARwqMvzs:APA91bH9PlZYgLtorTqf7gQ7HPzV6RdPjM9EYK8EuZOawcyt4e_oGLYCmaK-dbT8mxKuqcXm5oFMu2QBUrCvgfKjqwHHoNhJLByc66hjeqOzmi8hBdqgbroepvXpCResSc3HMHuOmkuz';
+  static const _serverKey =
+      'AAAARwqMvzs:APA91bH9PlZYgLtorTqf7gQ7HPzV6RdPjM9EYK8EuZOawcyt4e_oGLYCmaK-dbT8mxKuqcXm5oFMu2QBUrCvgfKjqwHHoNhJLByc66hjeqOzmi8hBdqgbroepvXpCResSc3HMHuOmkuz';
 
   static Future<void> pushCommentFCM({
     /// notification title
     required String title,
+
     /// notification description
     required String description,
     required String userId,
@@ -44,13 +46,16 @@ class FCMHelper {
   static Future<void> pushChatMessageFCM({
     /// notification title
     required String title,
+
     /// notification description
     required String description,
+    required String userName,
+    required String userImage,
     required String userId,
     required String userToken,
   }) async {
     // check if user is not current user
-    if (userId == uId) {
+    if (userId != uId) {
       return;
     }
     // POST METHOD
@@ -72,7 +77,11 @@ class FCMHelper {
             "default_sound": true
           }
         },
-        "data": _messageData(userId),
+        "data": _messageData(
+          userId: userId,
+          userName: userName,
+          userImage: userImage,
+        ),
       },
     );
   }
@@ -85,10 +94,16 @@ class FCMHelper {
     };
   }
 
-  static Map<String, dynamic> _messageData(String userId) {
+  static Map<String, dynamic> _messageData({
+    required String userId,
+    required String userName,
+    required String userImage,
+  }) {
     return {
       "type": "message",
       "user_id": userId,
+      "user_name": userName,
+      "user_image": userImage,
       "click_action": "FLUTTER_NOTIFICATION_CLICK"
     };
   }

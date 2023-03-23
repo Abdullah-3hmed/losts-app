@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -56,14 +57,18 @@ class CommentsScreen extends StatelessWidget {
                         itemCount: postModel.comments?.length ?? 0,
                       ),
                       fallback: (context) => Center(
-                        child: Text(LocaleKeys.no_commens_yet.tr(),style: Theme.of(context).textTheme.bodyLarge,),
+                        child: Text(
+                          LocaleKeys.no_commens_yet.tr(),
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
                       ),
                     ),
                   ),
                   Container(
                     padding: const EdgeInsets.only(left: 10.0),
                     decoration: BoxDecoration(
-                      border: Border.all(color: Theme.of(context).iconTheme.color!),
+                      border:
+                          Border.all(color: Theme.of(context).iconTheme.color!),
                       borderRadius: const BorderRadius.all(
                         Radius.circular(10.0),
                       ),
@@ -81,7 +86,7 @@ class CommentsScreen extends StatelessWidget {
                           ),
                         ),
                         IconButton(
-                          onPressed: ()async {
+                          onPressed: () async {
                             DateTime now = DateTime.now();
                             String formattedDate =
                                 DateFormat('yyyy-MM-dd – kk:mm').format(now);
@@ -114,7 +119,7 @@ class CommentsScreen extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 25.0,
-            backgroundImage: NetworkImage(comment.userImage),
+            backgroundImage: CachedNetworkImageProvider(comment.userImage),
             onBackgroundImageError: (_, __) =>
                 const NetworkImage(AppConstants.defaultImageUrl),
           ),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,7 +42,9 @@ class ChatsScreen extends StatelessWidget {
           navigateTo(
             context: context,
             screen: ChatDetails(
-              userModel: userModel,
+             userId: userModel.uId,
+              userName: userModel.name,
+              userImage: userModel.image!,
             ),
           );
         },
@@ -50,11 +53,12 @@ class ChatsScreen extends StatelessWidget {
           child: Row(
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage(
+                backgroundImage: CachedNetworkImageProvider(
                   '${userModel.image}',
                 ),
-                onBackgroundImageError: (_, __) =>
-                    const NetworkImage(AppConstants.defaultImageUrl),
+                onBackgroundImageError: (_, __) => CachedNetworkImage(
+                  imageUrl: AppConstants.defaultImageUrl,
+                ),
                 radius: 25.0,
               ),
               const SizedBox(

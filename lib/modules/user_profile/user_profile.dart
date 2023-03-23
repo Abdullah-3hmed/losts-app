@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,7 @@ class UserProfile extends StatelessWidget {
               appBar: AppBar(
                 centerTitle: true,
                 title: Text(
-                LocaleKeys.user_profile.tr(),
+                  LocaleKeys.user_profile.tr(),
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: Colors.white,
                       ),
@@ -66,7 +67,7 @@ class UserProfile extends StatelessWidget {
                                     topRight: Radius.circular(4.0),
                                   ),
                                   image: DecorationImage(
-                                    image: NetworkImage(
+                                    image: CachedNetworkImageProvider(
                                       '${userModel.cover}',
                                     ),
                                     onError: (_, __) => const NetworkImage(
@@ -77,15 +78,17 @@ class UserProfile extends StatelessWidget {
                               ),
                             ),
                             CircleAvatar(
-                              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                              backgroundColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
                               radius: 64.0,
                               child: CircleAvatar(
-                                backgroundImage: NetworkImage(
+                                backgroundImage: CachedNetworkImageProvider(
                                   '${userModel.image}',
                                 ),
                                 onBackgroundImageError: (_, __) =>
-                                    const NetworkImage(
-                                        AppConstants.defaultImageUrl),
+                                    CachedNetworkImage(
+                                  imageUrl: AppConstants.defaultImageUrl,
+                                ),
                                 radius: 60.0,
                               ),
                             ),
@@ -122,21 +125,22 @@ class UserProfile extends StatelessWidget {
                             navigateTo(
                               context: context,
                               screen: ChatDetails(
-                                userModel: userModel,
+                               userId: userModel.uId,
+                               userName: userModel.name,
+                               userImage: userModel.image!,
                               ),
                             );
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-
                               const Icon(
                                 Icons.arrow_forward_ios_outlined,
                                 color: Colors.white,
                                 size: 16.0,
                               ),
                               Text(
-                              LocaleKeys.chat.tr(),
+                                LocaleKeys.chat.tr(),
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyLarge!
@@ -145,11 +149,10 @@ class UserProfile extends StatelessWidget {
                                       fontSize: 22.0,
                                     ),
                               ),
-
                               const CircleAvatar(
                                 backgroundColor: Colors.blue,
                                 child: Icon(
-                                 IconBroken.Chat,
+                                  IconBroken.Chat,
                                   size: 30.0,
                                   color: Colors.white,
                                 ),

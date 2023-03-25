@@ -1,6 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:social_app/cubit/app_cubit/app_cubit.dart';
 import 'package:social_app/modules/chat_details/chat_details.dart';
 import 'package:social_app/modules/commented_post/commented_post.dart';
 import 'package:social_app/shared/components/components.dart';
@@ -63,8 +64,8 @@ class FCMInitHelper {
           context: context,
           screen: ChatDetails(
             userId: event.data['user_id'],
-            userName: event.data['user_name'] ,
-            userImage:  event.data['user_image'],
+            userName: event.data['user_name'],
+            userImage: event.data['user_image'],
           ),
         );
       }
@@ -74,29 +75,34 @@ class FCMInitHelper {
       );
     });
 
-    FirebaseMessaging.instance.getInitialMessage().then((event) {
+    FirebaseMessaging.instance.getInitialMessage().then((event) async {
       if (event == null) {
         return;
       } else if (event.data['type'] == 'comment') {
-        navigateTo(
-          context: context,
-          screen: CommentedPost(
-            postId: event.data['post_id'],
-          ),
-        );
+        await AppCubit.get(context).getPosts().then((value) {
+          navigateTo(
+            context: context,
+            screen: CommentedPost(
+              postId: event.data['post_id'],
+            ),
+          );
+        });
+
         //navigateTo(context: context, screen: CommentsScreen(),);
         // ensure to get posts data first
         // navigate to post comment screen
         // ..
       } else {
-        navigateTo(
-          context: context,
-          screen: ChatDetails(
-            userId: event.data['user_id'],
-            userName: event.data['user_name'] ,
-            userImage:  event.data['user_image'],
-          ),
-        );
+        await AppCubit.get(context).getAllUsers().then((value) {
+          navigateTo(
+            context: context,
+            screen: ChatDetails(
+              userId: event.data['user_id'],
+              userName: event.data['user_name'],
+              userImage: event.data['user_image'],
+            ),
+          );
+        });
       }
       showToast(
         message: 'terminated state',

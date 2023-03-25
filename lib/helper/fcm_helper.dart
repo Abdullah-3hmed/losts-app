@@ -15,7 +15,8 @@ class FCMHelper {
     required String userToken,
     required String postId,
   }) async {
-    // check if user is not current user
+    /// check if user is not current user
+    /// check if the post belong to me and i commented on it it will send me nothing
     if (userId == uId) {
       return;
     }
@@ -54,10 +55,10 @@ class FCMHelper {
     required String userId,
     required String userToken,
   }) async {
-    // check if user is not current user
-    if (userId != uId) {
-      return;
-    }
+    // // check if user is not current user
+    // if (userId != uId) {
+    //   return;
+    // }
     // POST METHOD
     await DioHelper.postData(
       baseUrl: 'https://fcm.googleapis.com',

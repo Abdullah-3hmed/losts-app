@@ -1,21 +1,23 @@
+import 'package:social_app/helper/date_time_converter.dart';
+
 class MessageModel {
-  String? senderId;
-  String? receiverId;
-  String? dateTime;
-  String? text;
+  late String senderId;
+  late String receiverId;
+  late DateTime dateTime;
+  late String text;
 
 
   MessageModel({
-    this.senderId,
-    this.receiverId,
-    this.dateTime,
-    this.text,
+    required this.senderId,
+    required this.receiverId,
+    required this.dateTime,
+    required this.text,
   });
 
   MessageModel.fromJson(Map<String, dynamic>? json) {
     senderId = json!['senderId'];
     receiverId = json['receiverId'];
-    dateTime = json['dateTime'];
+    dateTime = DateTimeConverter.getDateTimeFromStamp(json['dateTime']);
     text = json['text'];
   }
 
@@ -23,7 +25,7 @@ class MessageModel {
     return {
       'senderId': senderId,
       'receiverId': receiverId,
-      'dateTime': dateTime,
+      'dateTime': dateTime.toUtc().millisecondsSinceEpoch,
       'text': text,
     };
   }

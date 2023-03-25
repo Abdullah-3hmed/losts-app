@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/cubit/app_cubit/app_states.dart';
+import 'package:social_app/helper/date_time_converter.dart';
 import 'package:social_app/models/comment_model/comment.dart';
 import 'package:social_app/models/post_model/post.dart';
 import 'package:social_app/modules/edit_comment/edit_comment_screen.dart';
@@ -88,12 +89,10 @@ class CommentsScreen extends StatelessWidget {
                         IconButton(
                           onPressed: () async {
                             DateTime now = DateTime.now();
-                            String formattedDate =
-                                DateFormat('yyyy-MM-dd – kk:mm').format(now);
                             await AppCubit.get(context).commentOnPost(
                               comment: commentController.text,
                               post: postModel,
-                              dateTime: formattedDate,
+                              dateTime: now,
                             );
                             commentController.clear();
                           },
@@ -168,7 +167,7 @@ class CommentsScreen extends StatelessWidget {
                   height: 5.0,
                 ),
                 Text(
-                  comment.dateTime,
+                DateTimeConverter.getDateTime(startDate:comment.dateTime),
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],

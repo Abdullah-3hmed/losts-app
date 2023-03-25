@@ -1,7 +1,9 @@
+import 'package:social_app/helper/date_time_converter.dart';
+
 class CommentModel {
   late final String userImage;
   late String text;
-  late final String dateTime;
+  late final DateTime dateTime;
   late final String userName;
   late final String userId;
 
@@ -16,7 +18,7 @@ class CommentModel {
   CommentModel.fromJson(Map<String, dynamic> json) {
     userImage = json['user_image'];
     text = json['text'];
-    dateTime = json['date_time'];
+    dateTime = DateTimeConverter.getDateTimeFromStamp(json['date_time']);
     userName = json['user_name'];
     userId = json['user_id'];
   }
@@ -25,7 +27,7 @@ class CommentModel {
     return {
       'text': text,
       'user_image': userImage,
-      'date_time': dateTime,
+      'date_time': dateTime.toUtc().millisecondsSinceEpoch,
       'user_id': userId,
       'user_name':userName,
     };

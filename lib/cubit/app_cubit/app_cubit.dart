@@ -544,7 +544,7 @@ class AppCubit extends Cubit<AppStates> {
 
   Future<void> commentOnPost({
     required String comment,
-    required String dateTime,
+    required DateTime dateTime,
     required Post post,
   }) async {
     var model = CommentModel(
@@ -607,10 +607,10 @@ class AppCubit extends Cubit<AppStates> {
     }
   }
 
-  Future<void> sendMessage({
+  void sendMessage({
     required String text,
     required String receiverId,
-    required String dateTime,
+    required DateTime dateTime,
   }) async {
     MessageModel messageModel = MessageModel(
       dateTime: dateTime,
@@ -627,22 +627,12 @@ class AppCubit extends Cubit<AppStates> {
         .doc(receiverId)
         .collection('messages')
         .add(messageModel.toMap())
-        .then((value) async {
-      final userToken = users.firstWhere((user) => user.uId == receiverId).token;
-
-      await FCMHelper.pushChatMessageFCM(
-        title: '${userModel!.name} sent you a message',
-        userName: userModel!.name,
-        userImage: userModel!.image!,
-        description: '',
-        userId: userModel!.uId,
-        userToken: userToken,
-      );
+        .then((value) {
       emit(AppSendMessageSuccessState());
     }).catchError((error) {
       emit(AppSendMessageErrorState());
     });
-    await FirebaseFirestore.instance
+    FirebaseFirestore.instance
         .collection('users')
         .doc(receiverId)
         .collection('chats')
@@ -650,6 +640,17 @@ class AppCubit extends Cubit<AppStates> {
         .collection('messages')
         .add(messageModel.toMap())
         .then((value) {
+      final userToken =
+          users.firstWhere((user) => user.uId == receiverId).token;
+
+      FCMHelper.pushChatMessageFCM(
+        title: '${userModel!.name} sent you a message',
+        userName: userModel!.name,
+        userImage: userModel!.image!,
+        description: '',
+        userId: userModel!.uId,
+        userToken: userToken,
+      );
       emit(AppSendMessageSuccessState());
     }).catchError((error) {
       emit(AppSendMessageErrorState());
@@ -667,7 +668,10 @@ class AppCubit extends Cubit<AppStates> {
         .collection('chats')
         .doc(receiverId)
         .collection('messages')
-        .orderBy('dateTime')
+        .orderBy(
+          'dateTime',
+          descending: true,
+        )
         .snapshots()
         .listen((event) {
       messages = [];

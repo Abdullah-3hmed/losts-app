@@ -230,7 +230,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                       ),
                     ),
                     Text(
-                      DateTimeConverter.getFormattedDate(postModel.dateTime),
+                      DateTimeConverter.getDateTime(startDate:postModel.dateTime),
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
                             fontSize: 14.0,
                             height: 1.4,

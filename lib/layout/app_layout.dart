@@ -132,12 +132,6 @@ class _AppLayoutState extends State<AppLayout> {
               ],
             ),
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              LocalNotificationService.requestPermissions();
-            },
-            child: const Icon(Icons.add),
-          ),
         );
       },
     );

@@ -122,6 +122,7 @@ class ChatDetails extends StatelessWidget {
                               onPressed: () {
                                 if (messageController.text.isNotEmpty) {
                                   AppCubit.get(context).sendMessage(
+                                    context: context,
                                     text: messageController.text,
                                     receiverId: userId,
                                     dateTime: DateTime.now(),

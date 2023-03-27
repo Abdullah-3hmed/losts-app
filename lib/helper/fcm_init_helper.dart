@@ -15,6 +15,7 @@ class FCMInitHelper {
 
   Future<void> initListeners() async {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      AppCubit.get(context).notificationsCounter++;
       if (message.data['type'] == 'message') {
         AwesomeNotifications().createNotification(
           content: NotificationContent(
@@ -48,6 +49,7 @@ class FCMInitHelper {
       );
     });
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      AppCubit.get(context).notificationsCounter++;
       if (event.data['type'] == 'comment') {
         navigateTo(
           context: context,
@@ -79,6 +81,7 @@ class FCMInitHelper {
       if (event == null) {
         return;
       } else if (event.data['type'] == 'comment') {
+        AppCubit.get(context).notificationsCounter++;
         await AppCubit.get(context).getPosts().then((value) {
           navigateTo(
             context: context,
@@ -93,6 +96,7 @@ class FCMInitHelper {
         // navigate to post comment screen
         // ..
       } else {
+        AppCubit.get(context).notificationsCounter++;
         await AppCubit.get(context).getAllUsers().then((value) {
           navigateTo(
             context: context,

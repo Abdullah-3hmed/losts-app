@@ -90,6 +90,8 @@ class CommentsScreen extends StatelessWidget {
                           onPressed: () async {
                             DateTime now = DateTime.now();
                             await AppCubit.get(context).commentOnPost(
+                              type: 'comment',
+                              context: context,
                               comment: commentController.text,
                               post: postModel,
                               dateTime: now,

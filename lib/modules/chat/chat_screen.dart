@@ -24,13 +24,8 @@ class ChatsScreen extends StatelessWidget {
           builder: (context) => ListView.separated(
             physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) {
-              AppCubit.get(context).getMessages(
-                  receiverId: AppCubit.get(context).users[index].uId);
-              if (AppCubit.get(context).messages.isNotEmpty) {
-                return buildChatItem(
-                    AppCubit.get(context).users[index], context);
-              }
-              return null;
+              return buildChatItem(AppCubit.get(context).users[index], context,
+                  AppCubit.get(context).users[index].uId);
             },
             separatorBuilder: (context, index) => const SizedBox(
               height: 5.0,
@@ -45,63 +40,73 @@ class ChatsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildChatItem(AppUserModel userModel, BuildContext context) => InkWell(
-        onTap: () {
-          navigateTo(
-            context: context,
-            screen: ChatDetails(
-              userId: userModel.uId,
-              userName: userModel.name,
-              userImage: userModel.image!,
+  Widget buildChatItem(
+      AppUserModel userModel, BuildContext context, String receiverId) {
+    return Builder(builder: (context) {
+      AppCubit.get(context).getMessages(receiverId: receiverId);
+      if (AppCubit.get(context).messages.isNotEmpty) {
+        return InkWell(
+          onTap: () {
+            navigateTo(
+              context: context,
+              screen: ChatDetails(
+                userId: userModel.uId,
+                userName: userModel.name,
+                userImage: userModel.image!,
+              ),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundImage: CachedNetworkImageProvider(
+                    '${userModel.image}',
+                  ),
+                  onBackgroundImageError: (_, __) => CachedNetworkImage(
+                    imageUrl: AppConstants.defaultImageUrl,
+                  ),
+                  radius: 25.0,
+                ),
+                const SizedBox(
+                  width: 15.0,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        userModel.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      Text(
+                        AppCubit.get(context).messages.first.text,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style:
+                            Theme.of(context).textTheme.titleMedium!.copyWith(
+                                  color: AppCubit.get(context).isDark
+                                      ? Colors.grey[300]
+                                      : Colors.grey[600],
+                                ),
+                      ),
+                    ],
+                  ),
+                ),
+                Text(
+                  DateTimeConverter.getDateTime(
+                      startDate: AppCubit.get(context).messages.first.dateTime),
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
             ),
-          );
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-          child: Row(
-            children: [
-              CircleAvatar(
-                backgroundImage: CachedNetworkImageProvider(
-                  '${userModel.image}',
-                ),
-                onBackgroundImageError: (_, __) => CachedNetworkImage(
-                  imageUrl: AppConstants.defaultImageUrl,
-                ),
-                radius: 25.0,
-              ),
-              const SizedBox(
-                width: 15.0,
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      userModel.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    Text(
-                      AppCubit.get(context).messages.first.text,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            color: AppCubit.get(context).isDark
-                                ? Colors.grey[300]
-                                : Colors.grey[600],
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-              Text(
-                DateTimeConverter.getDateTime(
-                    startDate: AppCubit.get(context).messages.first.dateTime),
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
           ),
-        ),
-      );
+        );
+      }
+      return const SizedBox();
+    });
+  }
 }

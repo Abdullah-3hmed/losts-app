@@ -140,10 +140,18 @@ class AppSearchOnChangeState extends AppStates {}
 
 class AppSearchOnTapState extends AppStates {}
 
-class ChangeAppThemeModeState extends AppStates {}
+class AppChangeAppThemeModeState extends AppStates {}
 
 class AppChangeLanguageState extends AppStates {}
 
 class AppResetPasswordSuccessState extends AppStates {}
 
 class AppResetPasswordErrorState extends AppStates {}
+
+class AppResetNotificationsCounterState extends AppStates {}
+
+class AppStoreNotificationsSuccessState extends AppStates {}
+
+class AppStoreNotificationsErrorState extends AppStates {}
+
+class AppGetNotificationsSuccessState extends AppStates {}

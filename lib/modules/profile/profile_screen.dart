@@ -225,13 +225,12 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     child: InkWell(
                       onTap: () {
-                        AppCubit.get(context).logout(context).then((value) {
-                          navigateAndFinish(
-                            context,
-                            const AppLoginScreen(),
-                          );
-                          AppCubit.get(context).currentIndex = 0;
-                        });
+                        navigateAndFinish(
+                          context,
+                          const AppLoginScreen(),
+                        );
+                        AppCubit.get(context).currentIndex = 0;
+                        AppCubit.get(context).logout(context);
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,

@@ -11,6 +11,8 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:social_app/helper/fcm_helper.dart';
 import 'package:social_app/models/comment_model/comment.dart';
 import 'package:social_app/models/comment_model/comment_model.dart';
+import 'package:social_app/models/notification_model/main_notification.dart';
+import 'package:social_app/models/notification_model/notification_model.dart';
 import 'package:social_app/models/post_model/post.dart';
 import 'package:social_app/network/local/cache_helper.dart';
 
@@ -30,6 +32,13 @@ class AppCubit extends Cubit<AppStates> {
   static AppCubit get(context) => BlocProvider.of(context);
   AppUserModel? userModel;
   bool isEnglish = true;
+  List<MainNotification> notifications = [];
+  int notificationsCounter = 0;
+
+  void resetNotificationCounter() {
+    notificationsCounter = 0;
+    emit(AppResetNotificationsCounterState());
+  }
 
   Future<void> getUserData() async {
     if (userModel == null) {
@@ -544,7 +553,9 @@ class AppCubit extends Cubit<AppStates> {
 
   Future<void> commentOnPost({
     required String comment,
+    required String type,
     required DateTime dateTime,
+    required BuildContext context,
     required Post post,
   }) async {
     var model = CommentModel(
@@ -574,12 +585,17 @@ class AppCubit extends Cubit<AppStates> {
       await FCMHelper.pushCommentFCM(
         title: '${model.userName} commented on your post',
         description: '',
+        userImage: model.userImage,
+        userName: model.userName,
         postId: post.id,
+        ownerId: post.uId,
         userId: post.uId,
         userToken: userToken,
-      );
-
-      emit(AppCommentOnPostSuccessState());
+        context: context,
+        dateTime: dateTime,
+      ).then((value) async {
+        emit(AppCommentOnPostSuccessState());
+      });
     }).catchError((error) {
       debugPrint('error when commentPost: ${error.toString()}');
       emit(AppCommentOnPostErrorState(error.toString()));
@@ -611,6 +627,7 @@ class AppCubit extends Cubit<AppStates> {
     required String text,
     required String receiverId,
     required DateTime dateTime,
+    required BuildContext context,
   }) async {
     MessageModel messageModel = MessageModel(
       dateTime: dateTime,
@@ -646,9 +663,12 @@ class AppCubit extends Cubit<AppStates> {
       FCMHelper.pushChatMessageFCM(
         title: '${userModel!.name} sent you a message',
         userName: userModel!.name,
+        context: context,
+        dateTime: dateTime,
         userImage: userModel!.image!,
         description: '',
         userId: userModel!.uId,
+        receiverId: receiverId,
         userToken: userToken,
       );
       emit(AppSendMessageSuccessState());
@@ -701,14 +721,13 @@ class AppCubit extends Cubit<AppStates> {
     emit(AppSearchOnChangeState());
   }
 
-  Future<void> logout(BuildContext context) async {
+  void logout(BuildContext context) {
     FirebaseFirestore.instance.collection('users').doc(uId).update(
       {'token': ''},
     );
-    await CacheHelper.removeData(key: 'uId');
+    CacheHelper.removeData(key: 'uId');
     uId = null;
     users = [];
-    posts = [];
     userModel = null;
     emit(AppLogOutSuccessState());
   }
@@ -718,10 +737,10 @@ class AppCubit extends Cubit<AppStates> {
   void changeAppMode({bool? fromShared}) {
     if (fromShared != null) {
       isDark = fromShared;
-      emit(ChangeAppThemeModeState());
+      emit(AppChangeAppThemeModeState());
     } else {
       CacheHelper.saveData(key: 'isDark', value: isDark).then((value) {
-        emit(ChangeAppThemeModeState());
+        emit(AppChangeAppThemeModeState());
       });
     }
   }
@@ -751,6 +770,57 @@ class AppCubit extends Cubit<AppStates> {
       emit(AppResetPasswordSuccessState());
     }).catchError((error) {
       emit(AppResetPasswordErrorState());
+    });
+  }
+
+  Future<void> storeNotifications({
+    required String userId,
+    required String type,
+    required String postId,
+    required String title,
+    required String ownerId,
+    required String userName,
+    required String userImage,
+    required DateTime dateTime,
+  }) async {
+    NotificationDataModel model = NotificationDataModel(
+      userId: userId,
+      userName: userName,
+      ownerId: ownerId,
+      type: type,
+      postId: postId,
+      dateTime: dateTime,
+      userImage: userImage,
+      title: title,
+    );
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(ownerId)
+        .collection('notifications')
+        .add(model.toJson())
+        .then((value) {
+      emit(AppStoreNotificationsSuccessState());
+    }).catchError((error) {
+      emit(AppStoreNotificationsErrorState());
+    });
+  }
+
+  void getNotifications() {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(uId)
+        .collection('notifications')
+        .orderBy('date_time', descending: true)
+        .snapshots()
+        .listen((event) {
+      notifications = [];
+      for (var element in event.docs) {
+        notifications.add(
+          MainNotification.fromJson(id: element.id, json: element.data()),
+        );
+      }
+
+      emit(AppGetNotificationsSuccessState());
     });
   }
 }

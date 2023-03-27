@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:social_app/cubit/app_cubit/app_cubit.dart';
 import 'package:social_app/network/remote/dio_helper.dart';
 import 'package:social_app/shared/components/constants.dart';
 
@@ -12,12 +14,17 @@ class FCMHelper {
     /// notification description
     required String description,
     required String userId,
+    required String ownerId,
     required String userToken,
+    required String userName,
+    required String userImage,
     required String postId,
+    required DateTime dateTime,
+    required BuildContext context,
   }) async {
     /// check if user is not current user
     /// check if the post belong to me and i commented on it it will send me nothing
-    if (userId == uId) {
+    if(uId == userId){
       return;
     }
     // POST METHOD
@@ -39,9 +46,25 @@ class FCMHelper {
             "default_sound": true
           }
         },
-        "data": _commentData(postId),
+        "data": _commentData(
+          postId: postId,
+          userName: userName,
+          userImage: userImage,
+          title: title,
+        ),
       },
-    );
+    ).then((value) async{
+      await AppCubit.get(context).storeNotifications(
+        type: 'comment',
+        postId: postId,
+        userName: userName,
+        userId: '',
+        ownerId: ownerId,
+        title: title,
+        userImage: userImage,
+        dateTime: dateTime,
+      );
+    });
   }
 
   static Future<void> pushChatMessageFCM({
@@ -53,12 +76,14 @@ class FCMHelper {
     required String userName,
     required String userImage,
     required String userId,
+    required String receiverId,
+    required DateTime dateTime,
+    required BuildContext context,
     required String userToken,
   }) async {
-    // // check if user is not current user
-    // if (userId != uId) {
-    //   return;
-    // }
+    if(uId == receiverId){
+      return;
+    }
     // POST METHOD
     await DioHelper.postData(
       baseUrl: 'https://fcm.googleapis.com',
@@ -81,16 +106,35 @@ class FCMHelper {
         "data": _messageData(
           userId: userId,
           userName: userName,
+          title: title,
           userImage: userImage,
         ),
       },
-    );
+    ).then((value)async{
+      await AppCubit.get(context).storeNotifications(
+          userId: userId,
+          type: 'message',
+          userName: userName,
+          ownerId: receiverId,
+          postId: '',
+          title: title,
+          userImage: userImage,
+          dateTime: dateTime,);
+    });
   }
 
-  static Map<String, dynamic> _commentData(String postId) {
+  static Map<String, dynamic> _commentData({
+    required String postId,
+    required String userName,
+    required String userImage,
+    required String title,
+  }) {
     return {
       "type": "comment",
       "post_id": postId,
+      "user_name": userName,
+      "title": title,
+      "user_image": userImage,
       "click_action": "FLUTTER_NOTIFICATION_CLICK"
     };
   }
@@ -99,11 +143,13 @@ class FCMHelper {
     required String userId,
     required String userName,
     required String userImage,
+    required String title,
   }) {
     return {
       "type": "message",
       "user_id": userId,
       "user_name": userName,
+      "title": title,
       "user_image": userImage,
       "click_action": "FLUTTER_NOTIFICATION_CLICK"
     };

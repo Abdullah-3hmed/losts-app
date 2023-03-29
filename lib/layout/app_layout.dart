@@ -30,10 +30,12 @@ class _AppLayoutState extends State<AppLayout> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     AppCubit.get(context).getUserData();
     AppCubit.get(context).getAllUsers();
     AppCubit.get(context).getPosts();
     AppCubit.get(context).getNotifications();
+
     FCMInitHelper(context: context).initListeners();
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
       if (!isAllowed) {
@@ -87,7 +89,6 @@ class _AppLayoutState extends State<AppLayout> {
                     context: context,
                     screen: const NotificationsDisplayScreen(),
                   );
-                  AppCubit.get(context).resetNotificationCounter();
                 },
                 child: Stack(
                   children: [
@@ -101,23 +102,24 @@ class _AppLayoutState extends State<AppLayout> {
                         size: 28.0,
                       ),
                     ),
-                     if (AppCubit.get(context).notificationsCounter != 0)
-                    Positioned(
-                      left: 15.0,
-                      top: 12.0,
-                      child: Container(
-                        padding: const EdgeInsets.only(
-                          top: 3.0,
-                          left: 5.0,
-                          right: 5.0,
+                    if (AppCubit.get(context).notifications.isNotEmpty)
+                      Positioned(
+                        left: 15.0,
+                        top: 12.0,
+                        child: Container(
+                          padding: const EdgeInsets.only(
+                            top: 3.0,
+                            left: 5.0,
+                            right: 5.0,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Text(
+                              '${AppCubit.get(context).notifications.length}'),
                         ),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Text('${AppCubit.get(context).notificationsCounter}'),
                       ),
-                    ),
                   ],
                 ),
               ),

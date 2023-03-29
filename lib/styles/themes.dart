@@ -19,7 +19,6 @@ ThemeData lightTheme = ThemeData(
       fontFamily: 'Tajawal',
       color: Colors.black,
       fontSize: 20.0,
-      fontWeight: FontWeight.bold,
     ),
     iconTheme: IconThemeData(
       color: Colors.white,
@@ -39,13 +38,11 @@ ThemeData lightTheme = ThemeData(
     bodyLarge: TextStyle(
       fontFamily: 'Tajawal',
       fontSize: 18.0,
-      fontWeight: FontWeight.w600,
       color: Colors.black,
     ),
     titleMedium: TextStyle(
       fontFamily: 'Tajawal',
       fontSize: 16.0,
-      fontWeight: FontWeight.w600,
       color: Colors.black,
       height: 1.3,
     ),
@@ -69,7 +66,6 @@ ThemeData darkTheme = ThemeData(
       fontFamily: 'Tajawal',
       color: Colors.white,
       fontSize: 20.0,
-      fontWeight: FontWeight.bold,
     ),
     iconTheme: const IconThemeData(
       color: Colors.white,
@@ -88,12 +84,10 @@ ThemeData darkTheme = ThemeData(
   textTheme: const TextTheme(
     bodyLarge: TextStyle(
       fontSize: 18.0,
-      fontWeight: FontWeight.w600,
       color: Colors.white,
     ),
     titleMedium: TextStyle(
       fontSize: 16.0,
-      fontWeight: FontWeight.w600,
       color: Colors.white,
       height: 1.3,
     ),

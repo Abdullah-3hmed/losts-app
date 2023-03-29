@@ -119,6 +119,7 @@ class ProfileScreen extends StatelessWidget {
                             style:
                                 Theme.of(context).textTheme.bodyLarge!.copyWith(
                                       color: Colors.black,
+                                      fontWeight: FontWeight.bold,
                                       fontSize: 18.0,
                                     ),
                           ),
@@ -154,13 +155,13 @@ class ProfileScreen extends StatelessWidget {
                           style:
                               Theme.of(context).textTheme.bodyLarge!.copyWith(
                                     color: Colors.black,
+                                    fontWeight: FontWeight.bold,
                                     fontSize: 18.0,
                                   ),
                         ),
                         Switch(
                           value: AppCubit.get(context).isDark,
                           onChanged: (bool newValue) {
-                            debugPrint(AppCubit.get(context).isDark.toString());
                             AppCubit.get(context).isDark = newValue;
                             AppCubit.get(context).changeAppMode();
                           },
@@ -199,6 +200,7 @@ class ProfileScreen extends StatelessWidget {
                             style:
                                 Theme.of(context).textTheme.bodyLarge!.copyWith(
                                       color: Colors.black,
+                                      fontWeight: FontWeight.bold,
                                       fontSize: 18.0,
                                     ),
                           ),
@@ -207,6 +209,7 @@ class ProfileScreen extends StatelessWidget {
                             style:
                                 Theme.of(context).textTheme.bodyLarge!.copyWith(
                                       color: Colors.black,
+                                      fontWeight: FontWeight.bold,
                                       fontSize: 16.0,
                                     ),
                           ),
@@ -245,6 +248,7 @@ class ProfileScreen extends StatelessWidget {
                             style:
                                 Theme.of(context).textTheme.bodyLarge!.copyWith(
                                       color: Colors.black,
+                                      fontWeight: FontWeight.bold,
                                       fontSize: 18.0,
                                     ),
                           ),

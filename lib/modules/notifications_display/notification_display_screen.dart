@@ -72,7 +72,8 @@ class NotificationsDisplayScreen extends StatelessWidget {
               ),
             );
           }
-        },
+          AppCubit.get(context).deleteNotification(notificationId: model.id);
+         },
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Row(

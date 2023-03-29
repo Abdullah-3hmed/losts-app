@@ -21,13 +21,6 @@ class ChatDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (AppCubit.get(context).users.isEmpty) {
-      AppCubit.get(context).getAllUsers().then((_) {});
-    }
-    // ScrollController scrollController = ScrollController();
-    // void scrollDown() {
-    //   scrollController.jumpTo(scrollController.position.maxScrollExtent);
-    // }
     return Builder(
       builder: (BuildContext context) {
         AppCubit.get(context).getMessages(

@@ -148,10 +148,16 @@ class AppResetPasswordSuccessState extends AppStates {}
 
 class AppResetPasswordErrorState extends AppStates {}
 
-class AppResetNotificationsCounterState extends AppStates {}
-
 class AppStoreNotificationsSuccessState extends AppStates {}
 
 class AppStoreNotificationsErrorState extends AppStates {}
 
 class AppGetNotificationsSuccessState extends AppStates {}
+
+class AppDeleteNotificationsSuccessState extends AppStates {}
+
+class AppDeleteNotificationsErrorState extends AppStates {}
+
+class AppGetChatsSuccessState extends AppStates {}
+
+class AppGetChatsErrorState extends AppStates {}

@@ -16,35 +16,43 @@ class ChatsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AppCubit, AppStates>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        return ConditionalBuilder(
-          condition: AppCubit.get(context).users.isNotEmpty,
-          builder: (context) => ListView.separated(
-            physics: const BouncingScrollPhysics(),
-            itemBuilder: (context, index) {
-              return buildChatItem(AppCubit.get(context).users[index], context,
-                  AppCubit.get(context).users[index].uId);
-            },
-            separatorBuilder: (context, index) => const SizedBox(
-              height: 5.0,
+    return Builder(builder: (context) {
+      AppCubit.get(context)
+          .getMessages(receiverId: 'wNwtIJUnp9RiQAq1HhbKj9lUAx33');
+      return BlocConsumer<AppCubit, AppStates>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          return ConditionalBuilder(
+            condition: AppCubit.get(context).messages.isNotEmpty &&
+                AppCubit.get(context).chats.isNotEmpty,
+            builder: (context) => ListView.separated(
+              physics: const BouncingScrollPhysics(),
+              itemBuilder: (context, index) => buildChatItem(
+                AppCubit.get(context).users.firstWhere(
+                      (user) => user.uId == AppCubit.get(context).chats[index],
+                    ),
+                context,
+              ),
+              separatorBuilder: (context, index) => const SizedBox(
+                height: 5.0,
+              ),
+              itemCount: AppCubit.get(context).chats.length,
             ),
-            itemCount: AppCubit.get(context).users.length,
-          ),
-          fallback: (context) => const Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
-      },
-    );
+            fallback: (context) => Center(
+              child: Text(
+                'No Chats Yet',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            ),
+          );
+        },
+      );
+    });
   }
 
-  Widget buildChatItem(
-      AppUserModel userModel, BuildContext context, String receiverId) {
-    return Builder(builder: (context) {
-      AppCubit.get(context).getMessages(receiverId: receiverId);
-      if (AppCubit.get(context).messages.isNotEmpty) {
+  Widget buildChatItem(AppUserModel userModel, BuildContext context) =>
+      Builder(builder: (context) {
+        AppCubit.get(context).getMessages(receiverId: userModel.uId);
         return InkWell(
           onTap: () {
             navigateTo(
@@ -105,8 +113,5 @@ class ChatsScreen extends StatelessWidget {
             ),
           ),
         );
-      }
-      return const SizedBox();
-    });
-  }
+      });
 }

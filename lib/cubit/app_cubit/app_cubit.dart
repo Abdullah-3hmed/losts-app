@@ -33,12 +33,7 @@ class AppCubit extends Cubit<AppStates> {
   AppUserModel? userModel;
   bool isEnglish = true;
   List<MainNotification> notifications = [];
-  int notificationsCounter = 0;
-
-  void resetNotificationCounter() {
-    notificationsCounter = 0;
-    emit(AppResetNotificationsCounterState());
-  }
+  List<String> chats = [];
 
   Future<void> getUserData() async {
     if (userModel == null) {
@@ -47,11 +42,15 @@ class AppCubit extends Cubit<AppStates> {
           .collection('users')
           .doc(uId)
           .get()
-          .then((value) {
-        // if (kDebugMode) {
-        //   print(value.data());
-        // }
+          .then((value) async {
         userModel = AppUserModel.fromJson(value.data());
+         value.reference.collection('chats').get().then((value) {
+          for (var element in value.docs) {
+            chats.add(element.id);
+            debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>> ${element.id}');
+          }
+          debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>> ${chats.length}');
+        });
         emit(AppGetUserSuccessState());
       }).catchError((error) {
         if (kDebugMode) {
@@ -387,7 +386,9 @@ class AppCubit extends Cubit<AppStates> {
             for (var commentDoc in commentDocs.docs) {
               posts.last.comments!.add(
                 MainComment.fromJson(
-                    commentId: commentDoc.id, json: commentDoc.data()),
+                  commentId: commentDoc.id,
+                  json: commentDoc.data(),
+                ),
               );
             }
           });
@@ -607,7 +608,10 @@ class AppCubit extends Cubit<AppStates> {
   Future<void> getAllUsers() async {
     if (users.isEmpty) {
       emit(AppGetAllUsersLoadingState());
-      await FirebaseFirestore.instance.collection('users').get().then((value) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .get()
+          .then((value) async {
         for (var element in value.docs) {
           if (element.data()['uId'] != uId) {
             users.add(
@@ -622,6 +626,26 @@ class AppCubit extends Cubit<AppStates> {
       });
     }
   }
+
+  // Future<void> getChats() async {
+  //   await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(uId)
+  //       .collection('chats')
+  //       .get()
+  //       .then((value) {
+  //     for (var element in value.docs) {
+  //       debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${element.id}');
+  //       chats.add(element.id);
+  //       debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> chats length >>>>> ${chats.length.toString()}');
+  //     }
+  //
+  //     emit(AppGetChatsSuccessState());
+  //   }).catchError((error) {
+  //     debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${error.toString()}');
+  //     emit(AppGetChatsErrorState());
+  //   });
+  // }
 
   void sendMessage({
     required String text,
@@ -639,7 +663,7 @@ class AppCubit extends Cubit<AppStates> {
     /// my message
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(userModel!.uId)
+        .doc(uId)
         .collection('chats')
         .doc(receiverId)
         .collection('messages')
@@ -653,7 +677,7 @@ class AppCubit extends Cubit<AppStates> {
         .collection('users')
         .doc(receiverId)
         .collection('chats')
-        .doc(userModel!.uId)
+        .doc(uId)
         .collection('messages')
         .add(messageModel.toMap())
         .then((value) {
@@ -682,17 +706,17 @@ class AppCubit extends Cubit<AppStates> {
   void getMessages({
     required String receiverId,
   }) {
+    messages = [];
     FirebaseFirestore.instance
         .collection('users')
-        .doc(userModel!.uId)
+        .doc(uId)
         .collection('chats')
         .doc(receiverId)
         .collection('messages')
         .orderBy(
           'dateTime',
           descending: true,
-        )
-        .snapshots()
+        ).snapshots()
         .listen((event) {
       messages = [];
       for (var element in event.docs) {
@@ -821,6 +845,20 @@ class AppCubit extends Cubit<AppStates> {
       }
 
       emit(AppGetNotificationsSuccessState());
+    });
+  }
+
+  void deleteNotification({required String notificationId}) {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(uId)
+        .collection('notifications')
+        .doc(notificationId)
+        .delete()
+        .then((value) {
+      emit(AppDeleteNotificationsSuccessState());
+    }).catchError((error) {
+      emit(AppDeleteNotificationsErrorState());
     });
   }
 }

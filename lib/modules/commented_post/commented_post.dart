@@ -13,9 +13,6 @@ class CommentedPost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(AppCubit.get(context).posts.isEmpty){
-      AppCubit.get(context).getPosts().then((_){});
-    }
     return Builder(
       builder: (context) {
         final postModel = AppCubit.get(context).posts.firstWhere(

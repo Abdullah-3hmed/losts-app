@@ -65,6 +65,7 @@ class CommentsScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 10.0,),
                   Container(
                     padding: const EdgeInsets.only(left: 10.0),
                     decoration: BoxDecoration(

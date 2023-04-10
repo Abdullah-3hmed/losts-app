@@ -10,6 +10,7 @@ import 'package:social_app/modules/chat_details/chat_details.dart';
 import 'package:social_app/modules/commented_post/commented_post.dart';
 import 'package:social_app/modules/notifications_display/notification_display_screen.dart';
 import 'package:social_app/modules/search/search_screen.dart';
+import 'package:social_app/network/local/cache_helper.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/styles/icon_broken.dart';
 import 'package:social_app/translations/locale_keys.g.dart';
@@ -30,7 +31,9 @@ class _AppLayoutState extends State<AppLayout> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    AppCubit.get(context).chats = CacheHelper.getData(key: 'chats')?? [];
+    debugPrint('.................. ${AppCubit.get(context).chats.length.toString()}');
+    debugPrint('.................. ${AppCubit.get(context).chats.last}');
     AppCubit.get(context).getUserData();
     AppCubit.get(context).getAllUsers();
     AppCubit.get(context).getPosts();

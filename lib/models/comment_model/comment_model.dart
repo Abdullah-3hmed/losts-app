@@ -6,6 +6,7 @@ class CommentModel {
   late final DateTime dateTime;
   late final String userName;
   late final String userId;
+  late final String postId;
 
   CommentModel({
     required this.userImage,
@@ -13,6 +14,7 @@ class CommentModel {
     required this.dateTime,
     required this.userName,
     required this.userId,
+    required this.postId,
   });
 
   CommentModel.fromJson(Map<String, dynamic> json) {
@@ -21,15 +23,17 @@ class CommentModel {
     dateTime = DateTimeConverter.getDateTimeFromStamp(json['date_time']);
     userName = json['user_name'];
     userId = json['user_id'];
+    postId = json['post_id'];
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'text': text,
       'user_image': userImage,
       'date_time': dateTime.toUtc().millisecondsSinceEpoch,
       'user_id': userId,
       'user_name':userName,
+      'post_id':postId,
     };
   }
 }

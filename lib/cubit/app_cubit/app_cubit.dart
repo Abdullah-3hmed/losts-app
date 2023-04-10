@@ -33,7 +33,7 @@ class AppCubit extends Cubit<AppStates> {
   AppUserModel? userModel;
   bool isEnglish = true;
   List<MainNotification> notifications = [];
-  List<String> chats = [];
+  List<dynamic> chats =[];
 
   Future<void> getUserData() async {
     if (userModel == null) {
@@ -44,13 +44,13 @@ class AppCubit extends Cubit<AppStates> {
           .get()
           .then((value) async {
         userModel = AppUserModel.fromJson(value.data());
-         value.reference.collection('chats').get().then((value) {
-          for (var element in value.docs) {
-            chats.add(element.id);
-            debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>> ${element.id}');
-          }
-          debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>> ${chats.length}');
-        });
+        //  value.reference.collection('chats').get().then((value) {
+        //   for (var element in value.docs) {
+        //     chats.add(element.id);
+        //     debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>> ${element.id}');
+        //   }
+        //   debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>> ${chats.length}');
+        // });
         emit(AppGetUserSuccessState());
       }).catchError((error) {
         if (kDebugMode) {
@@ -384,6 +384,8 @@ class AppCubit extends Cubit<AppStates> {
               .get()
               .then((commentDocs) {
             for (var commentDoc in commentDocs.docs) {
+              // var post = posts.firstWhere((element) => element.id == commentDoc.data()['postId']);
+              // post.comments =[];
               posts.last.comments!.add(
                 MainComment.fromJson(
                   commentId: commentDoc.id,
@@ -392,7 +394,6 @@ class AppCubit extends Cubit<AppStates> {
               );
             }
           });
-          debugPrint(posts.toString());
           emit(AppGetPostsSuccessState());
         }
       }).catchError((error) {
@@ -560,6 +561,7 @@ class AppCubit extends Cubit<AppStates> {
     required Post post,
   }) async {
     var model = CommentModel(
+      postId: post.id,
       text: comment,
       userImage: userModel!.image!,
       dateTime: dateTime,
@@ -572,12 +574,12 @@ class AppCubit extends Cubit<AppStates> {
         .collection('posts')
         .doc(post.id)
         .collection('comments')
-        .add(model.toMap())
+        .add(model.toJson())
         .then((value) async {
       post.comments ??= [];
       // add comment to post model
       post.comments!.add(
-        MainComment.fromJson(json: model.toMap(), commentId: value.id),
+        MainComment.fromJson(json: model.toJson(), commentId: value.id),
       );
       // push fcm to post user
       // get user token
@@ -659,7 +661,10 @@ class AppCubit extends Cubit<AppStates> {
       senderId: userModel!.uId,
       text: text,
     );
-
+    if (!chats.contains(receiverId)) {
+      chats.add(receiverId);
+      await CacheHelper.saveData(key: 'chats', value: chats);
+    }
     /// my message
     await FirebaseFirestore.instance
         .collection('users')
@@ -706,7 +711,6 @@ class AppCubit extends Cubit<AppStates> {
   void getMessages({
     required String receiverId,
   }) {
-    messages = [];
     FirebaseFirestore.instance
         .collection('users')
         .doc(uId)

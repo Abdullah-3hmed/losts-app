@@ -16,102 +16,103 @@ class ChatsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Builder(builder: (context) {
-      AppCubit.get(context)
-          .getMessages(receiverId: 'wNwtIJUnp9RiQAq1HhbKj9lUAx33');
-      return BlocConsumer<AppCubit, AppStates>(
-        listener: (context, state) {},
-        builder: (context, state) {
-          return ConditionalBuilder(
-            condition: AppCubit.get(context).messages.isNotEmpty &&
-                AppCubit.get(context).chats.isNotEmpty,
-            builder: (context) => ListView.separated(
-              physics: const BouncingScrollPhysics(),
-              itemBuilder: (context, index) => buildChatItem(
-                AppCubit.get(context).users.firstWhere(
-                      (user) => user.uId == AppCubit.get(context).chats[index],
-                    ),
+    return BlocConsumer<AppCubit, AppStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return ConditionalBuilder(
+          condition:AppCubit.get(context).chats.isNotEmpty,
+          builder: (context) => ListView.separated(
+            physics: const BouncingScrollPhysics(),
+            itemBuilder: (context, index) {
+              var userModel = AppCubit.get(context).users.firstWhere(
+                  (user) => user.uId == AppCubit.get(context).chats[index]);
+              return buildChatItem(
+                userModel,
                 context,
-              ),
-              separatorBuilder: (context, index) => const SizedBox(
-                height: 5.0,
-              ),
-              itemCount: AppCubit.get(context).chats.length,
+              );
+            },
+            separatorBuilder: (context, index) => const SizedBox(
+              height: 5.0,
             ),
-            fallback: (context) => Center(
-              child: Text(
-                'No Chats Yet',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            ),
-          );
-        },
-      );
-    });
-  }
-
-  Widget buildChatItem(AppUserModel userModel, BuildContext context) =>
-      Builder(builder: (context) {
-        AppCubit.get(context).getMessages(receiverId: userModel.uId);
-        return InkWell(
-          onTap: () {
-            navigateTo(
-              context: context,
-              screen: ChatDetails(
-                userId: userModel.uId,
-                userName: userModel.name,
-                userImage: userModel.image!,
-              ),
-            );
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  backgroundImage: CachedNetworkImageProvider(
-                    '${userModel.image}',
-                  ),
-                  onBackgroundImageError: (_, __) => CachedNetworkImage(
-                    imageUrl: AppConstants.defaultImageUrl,
-                  ),
-                  radius: 25.0,
-                ),
-                const SizedBox(
-                  width: 15.0,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        userModel.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      Text(
-                        AppCubit.get(context).messages.first.text,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style:
-                            Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  color: AppCubit.get(context).isDark
-                                      ? Colors.grey[300]
-                                      : Colors.grey[600],
-                                ),
-                      ),
-                    ],
-                  ),
-                ),
-                Text(
-                  DateTimeConverter.getDateTime(
-                      startDate: AppCubit.get(context).messages.first.dateTime),
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ],
+            itemCount: AppCubit.get(context).chats.length,
+          ),
+          fallback: (context) => Center(
+            child: Text(
+              'No Chats Yet',
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
           ),
         );
-      });
+      },
+    );
+  }
+
+  Widget? buildChatItem(AppUserModel userModel, BuildContext context) {
+    AppCubit.get(context).getMessages(receiverId: userModel.uId);
+    if(AppCubit.get(context).messages.isNotEmpty) {
+      return InkWell(
+      onTap: () {
+        navigateTo(
+          context: context,
+          screen: ChatDetails(
+            userId: userModel.uId,
+            userName: userModel.name,
+            userImage: userModel.image!,
+          ),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+        child: Row(
+          children: [
+            CircleAvatar(
+              backgroundImage: CachedNetworkImageProvider(
+                '${userModel.image}',
+              ),
+              onBackgroundImageError: (_, __) => CachedNetworkImage(
+                imageUrl: AppConstants.defaultImageUrl,
+              ),
+              radius: 25.0,
+            ),
+            const SizedBox(
+              width: 15.0,
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    userModel.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  Text(
+                    AppCubit.get(context).messages.first.text,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style:
+                    Theme.of(context).textTheme.titleMedium!.copyWith(
+                      color: AppCubit.get(context).isDark
+                          ? Colors.grey[300]
+                          : Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Text(
+              DateTimeConverter.getDateTime(
+                  startDate: AppCubit.get(context).messages.first.dateTime),
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
+        ),
+      ),
+    );
+    }
+    AppCubit.get(context).messages = [];
+    return null;
+  }
+
 }

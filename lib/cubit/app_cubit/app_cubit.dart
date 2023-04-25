@@ -33,7 +33,7 @@ class AppCubit extends Cubit<AppStates> {
   AppUserModel? userModel;
   bool isEnglish = true;
   List<MainNotification> notifications = [];
-  List<dynamic> chats =[];
+  List<String> chats = [];
 
   Future<void> getUserData() async {
     if (userModel == null) {
@@ -629,6 +629,8 @@ class AppCubit extends Cubit<AppStates> {
     }
   }
 
+  List<String> test = [];
+
   // Future<void> getChats() async {
   //   await FirebaseFirestore.instance
   //       .collection('users')
@@ -638,9 +640,10 @@ class AppCubit extends Cubit<AppStates> {
   //       .then((value) {
   //     for (var element in value.docs) {
   //       debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${element.id}');
-  //       chats.add(element.id);
-  //       debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> chats length >>>>> ${chats.length.toString()}');
+  //       test.add(element.id);
   //     }
+  //     debugPrint(
+  //         '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> chats length >>>>> ${test.length.toString()}');
   //
   //     emit(AppGetChatsSuccessState());
   //   }).catchError((error) {
@@ -661,10 +664,7 @@ class AppCubit extends Cubit<AppStates> {
       senderId: userModel!.uId,
       text: text,
     );
-    if (!chats.contains(receiverId)) {
-      chats.add(receiverId);
-      await CacheHelper.saveData(key: 'chats', value: chats);
-    }
+
     /// my message
     await FirebaseFirestore.instance
         .collection('users')
@@ -673,7 +673,14 @@ class AppCubit extends Cubit<AppStates> {
         .doc(receiverId)
         .collection('messages')
         .add(messageModel.toMap())
-        .then((value) {
+        .then((value) async {
+      if (!chats.contains(receiverId)) {
+        chats.add(receiverId);
+        await CacheHelper.saveData(key: 'chats', value: chats).then((value) {
+          chats = [];
+          chats.addAll(CacheHelper.getListString(key: 'chats'));
+        });
+      }
       emit(AppSendMessageSuccessState());
     }).catchError((error) {
       emit(AppSendMessageErrorState());
@@ -720,7 +727,8 @@ class AppCubit extends Cubit<AppStates> {
         .orderBy(
           'dateTime',
           descending: true,
-        ).snapshots()
+        )
+        .snapshots()
         .listen((event) {
       messages = [];
       for (var element in event.docs) {

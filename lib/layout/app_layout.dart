@@ -31,12 +31,13 @@ class _AppLayoutState extends State<AppLayout> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    AppCubit.get(context).chats = CacheHelper.getData(key: 'chats')?? [];
+    //AppCubit.get(context).chats = CacheHelper.getListString(key: 'chats');
+    AppCubit.get(context).chats.addAll(CacheHelper.getListString(key: 'chats'));
     debugPrint('.................. ${AppCubit.get(context).chats.length.toString()}');
-    debugPrint('.................. ${AppCubit.get(context).chats.last}');
     AppCubit.get(context).getUserData();
     AppCubit.get(context).getAllUsers();
     AppCubit.get(context).getPosts();
+    // AppCubit.get(context).getChats();
     AppCubit.get(context).getNotifications();
 
     FCMInitHelper(context: context).initListeners();

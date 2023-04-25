@@ -12,6 +12,11 @@ class CacheHelper {
   }) {
     return sharedPreferences.get(key);
   }
+  static List<String> getListString({
+    required dynamic key,
+  }){
+    return sharedPreferences.getStringList(key)??[];
+  }
 
   static Future<bool> saveData({
     required String key,

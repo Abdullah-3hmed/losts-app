@@ -402,6 +402,40 @@ class AppCubit extends Cubit<AppStates> {
     }
   }
 
+  Stream<List<MainComment>?> streamComments(Post post) {
+    // FirebaseFirestore.instance
+    // .collection('posts')
+    // .doc(post.id)
+    // .collection('comments')
+    // .snapshots()
+    // .listen((event) {
+    //   post.comments = [];
+    //   for(var comment in event.docs){
+    //     post.comments?.add(MainComment.fromJson(json: comment.data(), commentId: comment.id));
+    //   }
+    // });
+
+    debugPrint('start streaming ..');
+    final snaps = FirebaseFirestore.instance
+        .collection('posts')
+        .doc(post.id)
+        .collection('comments')
+        .snapshots()
+        .map((event) {
+      post.comments = [];
+      for(var comment in event.docs){
+        post.comments?.add(MainComment.fromJson(json: comment.data(), commentId: comment.id));
+      }
+      return post.comments;
+    });
+
+    return snaps;
+  }
+
+  void reloadComments() {
+    emit(AppGetCommentReloadState());
+  }
+
   Future<void> editPost({
     required BuildContext context,
     required String text,
@@ -519,8 +553,6 @@ class AppCubit extends Cubit<AppStates> {
         .doc(commentId)
         .delete()
         .then((value) {
-      //posts.removeWhere((post) => post.comments.(comment) =>commentId.commentId = commentId );
-      /// todo: handle remove comment from local posts
       emit(AppDeleteCommentSuccessState());
     }).catchError((error) {
       emit(AppDeleteCommentErrorState(error.toString()));
@@ -578,9 +610,9 @@ class AppCubit extends Cubit<AppStates> {
         .then((value) async {
       post.comments ??= [];
       // add comment to post model
-      post.comments!.add(
-        MainComment.fromJson(json: model.toJson(), commentId: value.id),
-      );
+      // post.comments!.add(
+      //   MainComment.fromJson(json: model.toJson(), commentId: value.id),
+      // );
       // push fcm to post user
       // get user token
       final userToken = users.firstWhere((user) => user.uId == post.uId).token;
@@ -631,26 +663,40 @@ class AppCubit extends Cubit<AppStates> {
 
   List<String> test = [];
 
-  // Future<void> getChats() async {
-  //   await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(uId)
-  //       .collection('chats')
-  //       .get()
-  //       .then((value) {
-  //     for (var element in value.docs) {
-  //       debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${element.id}');
-  //       test.add(element.id);
-  //     }
-  //     debugPrint(
-  //         '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> chats length >>>>> ${test.length.toString()}');
-  //
-  //     emit(AppGetChatsSuccessState());
-  //   }).catchError((error) {
-  //     debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${error.toString()}');
-  //     emit(AppGetChatsErrorState());
-  //   });
-  // }
+  Future<void> getChats() async {
+    debugPrint('getChats');
+    debugPrint('uId: "$uId"');
+
+    final size = await FirebaseFirestore.instance
+        .collection('users')
+        // .doc('SXnDjxIFXFdTOCPn17yS')
+        .doc(uId)
+        .collection('chats')
+        .count()
+        .get();
+
+    debugPrint('count: ${size.count}');
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uId)
+        .collection('chats')
+        .get()
+        .then((value) {
+          debugPrint('chats docs length: ${value.docs.length}');
+      for (var element in value.docs) {
+        debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${element.id}');
+        test.add(element.id);
+      }
+      debugPrint(
+          '- chats length from test list: ${test.length}');
+
+      emit(AppGetChatsSuccessState());
+    }).catchError((error) {
+      debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${error.toString()}');
+      emit(AppGetChatsErrorState());
+    });
+  }
 
   void sendMessage({
     required String text,

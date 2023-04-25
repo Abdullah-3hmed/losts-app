@@ -37,7 +37,7 @@ class _AppLayoutState extends State<AppLayout> {
     AppCubit.get(context).getUserData();
     AppCubit.get(context).getAllUsers();
     AppCubit.get(context).getPosts();
-    // AppCubit.get(context).getChats();
+    //AppCubit.get(context).getChats();
     AppCubit.get(context).getNotifications();
 
     FCMInitHelper(context: context).initListeners();
@@ -136,6 +136,7 @@ class _AppLayoutState extends State<AppLayout> {
                 },
                 icon: const Icon(IconBroken.Search),
               ),
+
             ],
           ),
           body: cubit.screens[cubit.currentIndex],

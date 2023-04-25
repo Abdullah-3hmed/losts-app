@@ -161,3 +161,5 @@ class AppDeleteNotificationsErrorState extends AppStates {}
 class AppGetChatsSuccessState extends AppStates {}
 
 class AppGetChatsErrorState extends AppStates {}
+
+class AppGetCommentReloadState extends AppStates {}

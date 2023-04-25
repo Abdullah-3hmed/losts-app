@@ -17,13 +17,19 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -46,31 +52,11 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyA1inmaXPlhucYJTdhIDvNHRwnDyaK4GSs',
-    appId: '1:305119674171:web:2f1ea5c912f3def3ef011e',
-    messagingSenderId: '305119674171',
-    projectId: 'myapp-2bcc2',
-    authDomain: 'myapp-2bcc2.firebaseapp.com',
-    storageBucket: 'myapp-2bcc2.appspot.com',
-    measurementId: 'G-MZH4BTY6B7',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDaLLsskwB6uhpmC8FQv7e7bSjRoRxKvng',
     appId: '1:305119674171:android:ca39a3d1d46b4081ef011e',
     messagingSenderId: '305119674171',
     projectId: 'myapp-2bcc2',
     storageBucket: 'myapp-2bcc2.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAw5a7HtoHq1WsYPFkh_vhsv5HdCvJjaWU',
-    appId: '1:305119674171:ios:78d7ef1544c0cb59ef011e',
-    messagingSenderId: '305119674171',
-    projectId: 'myapp-2bcc2',
-    storageBucket: 'myapp-2bcc2.appspot.com',
-    iosClientId: '305119674171-4jmgkv6fc012r7khs3vqd4f2t7u04s6f.apps.googleusercontent.com',
-    iosBundleId: 'com.example.myApp',
   );
 }

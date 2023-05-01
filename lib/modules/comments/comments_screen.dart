@@ -14,7 +14,7 @@ import 'package:social_app/translations/locale_keys.g.dart';
 
 import '../../cubit/app_cubit/app_cubit.dart';
 
-class CommentsScreen extends StatelessWidget {
+class CommentsScreen extends StatefulWidget {
   const CommentsScreen({
     Key? key,
     required this.postModel,
@@ -22,6 +22,18 @@ class CommentsScreen extends StatelessWidget {
 
   final Post postModel;
 
+  @override
+  State<CommentsScreen> createState() => _CommentsScreenState();
+}
+
+class _CommentsScreenState extends State<CommentsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // TODO: implement initState
+    widget.postModel.comments = [];
+    AppCubit.get(context).streamComments(widget.postModel);
+  }
   @override
   Widget build(BuildContext context) {
     var commentController = TextEditingController();
@@ -45,17 +57,17 @@ class CommentsScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ConditionalBuilder(
-                      condition: postModel.comments?.isNotEmpty ?? false,
+                      condition: widget.postModel.comments?.isNotEmpty ?? false,
                       builder: (context) => ListView.separated(
                         physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
-                          final comment = postModel.comments![index];
+                          final comment = widget.postModel.comments![index];
                           return buildCommentItem(comment, context);
                         },
                         separatorBuilder: (context, index) => const SizedBox(
                           height: 20.0,
                         ),
-                        itemCount: postModel.comments?.length ?? 0,
+                        itemCount: widget.postModel.comments?.length ?? 0,
                       ),
                       fallback: (context) => Center(
                         child: Text(
@@ -94,7 +106,7 @@ class CommentsScreen extends StatelessWidget {
                               type: 'comment',
                               context: context,
                               comment: commentController.text,
-                              post: postModel,
+                              post: widget.postModel,
                               dateTime: now,
                             );
                             commentController.clear();
@@ -187,11 +199,13 @@ class CommentsScreen extends StatelessWidget {
                   navigateTo(
                     context: context,
                     screen: EditComment(
-                      postId: postModel.id,
+                      postId: widget.postModel.id,
                       commentModel: comment,
                     ),
                   );
-                } else if (value == 'Delete') {}
+                } else if (value == 'Delete') {
+                  AppCubit.get(context).deleteComment(commentId: comment.commentId, postModel: widget.postModel);
+                }
               },
               itemBuilder: (context) => [
                 PopupMenuItem(

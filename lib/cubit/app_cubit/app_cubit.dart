@@ -402,34 +402,39 @@ class AppCubit extends Cubit<AppStates> {
     }
   }
 
-  Stream<List<MainComment>?> streamComments(Post post) {
-    // FirebaseFirestore.instance
-    // .collection('posts')
-    // .doc(post.id)
-    // .collection('comments')
-    // .snapshots()
-    // .listen((event) {
+  void streamComments(Post post) {
+    FirebaseFirestore.instance
+        .collection('posts')
+        .doc(post.id)
+        .collection('comments')
+        .orderBy('date_time')
+        .snapshots()
+        .listen((event) {
+      post.comments = [];
+      for (var comment in event.docs) {
+        debugPrint('stream comments ');
+        post.comments?.add(
+            MainComment.fromJson(json: comment.data(), commentId: comment.id));
+      }
+      debugPrint(post.comments!.length.toString());
+      emit(AppGetCommentSuccessState());
+    });
+
+    // debugPrint('start streaming ..');
+    // final snaps = FirebaseFirestore.instance
+    //     .collection('posts')
+    //     .doc(post.id)
+    //     .collection('comments')
+    //     .snapshots()
+    //     .map((event) {
     //   post.comments = [];
     //   for(var comment in event.docs){
     //     post.comments?.add(MainComment.fromJson(json: comment.data(), commentId: comment.id));
     //   }
-    // });
+    //   return post.comments;
+    //  });
 
-    debugPrint('start streaming ..');
-    final snaps = FirebaseFirestore.instance
-        .collection('posts')
-        .doc(post.id)
-        .collection('comments')
-        .snapshots()
-        .map((event) {
-      post.comments = [];
-      for(var comment in event.docs){
-        post.comments?.add(MainComment.fromJson(json: comment.data(), commentId: comment.id));
-      }
-      return post.comments;
-    });
-
-    return snaps;
+    // return snaps;
   }
 
   void reloadComments() {
@@ -664,18 +669,18 @@ class AppCubit extends Cubit<AppStates> {
   List<String> test = [];
 
   Future<void> getChats() async {
-    debugPrint('getChats');
-    debugPrint('uId: "$uId"');
+    // debugPrint('getChats');
+    // debugPrint('uId: "$uId"');
+    //
+    // final size = await FirebaseFirestore.instance
+    //     .collection('users')
+    //     // .doc('SXnDjxIFXFdTOCPn17yS')
+    //     .doc(uId)
+    //     .collection('chats')
+    //     .count()
+    //     .get();
 
-    final size = await FirebaseFirestore.instance
-        .collection('users')
-        // .doc('SXnDjxIFXFdTOCPn17yS')
-        .doc(uId)
-        .collection('chats')
-        .count()
-        .get();
-
-    debugPrint('count: ${size.count}');
+    //debugPrint('count: ${size.count}');
 
     await FirebaseFirestore.instance
         .collection('users')
@@ -683,13 +688,12 @@ class AppCubit extends Cubit<AppStates> {
         .collection('chats')
         .get()
         .then((value) {
-          debugPrint('chats docs length: ${value.docs.length}');
+      debugPrint('chats docs length: ${value.docs.length}');
       for (var element in value.docs) {
         debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${element.id}');
-        test.add(element.id);
+        chats.add(element.id);
       }
-      debugPrint(
-          '- chats length from test list: ${test.length}');
+      debugPrint('- chats length from test list: ${chats.length}');
 
       emit(AppGetChatsSuccessState());
     }).catchError((error) {

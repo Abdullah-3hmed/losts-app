@@ -590,7 +590,7 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  Future<void> commentOnPost({
+  void commentOnPost({
     required String comment,
     required String type,
     required DateTime dateTime,
@@ -607,13 +607,14 @@ class AppCubit extends Cubit<AppStates> {
     );
 
     // upload comment in Firebase
-    await FirebaseFirestore.instance
+     FirebaseFirestore.instance
         .collection('posts')
         .doc(post.id)
         .collection('comments')
         .add(model.toJson())
-        .then((value) async {
-      post.comments ??= [];
+        .then((value) {
+      emit(AppCommentOnPostSuccessState());
+      //post.comments ??= [];
       // add comment to post model
       // post.comments!.add(
       //   MainComment.fromJson(json: model.toJson(), commentId: value.id),
@@ -622,7 +623,7 @@ class AppCubit extends Cubit<AppStates> {
       // get user token
       final userToken = users.firstWhere((user) => user.uId == post.uId).token;
 
-      await FCMHelper.pushCommentFCM(
+       FCMHelper.pushCommentFCM(
         title: '${model.userName} commented on your post',
         description: '',
         userImage: model.userImage,
@@ -633,8 +634,8 @@ class AppCubit extends Cubit<AppStates> {
         userToken: userToken,
         context: context,
         dateTime: dateTime,
-      ).then((value) async {
-        emit(AppCommentOnPostSuccessState());
+      ).then((_) {
+         debugPrint('push notification on comment');
       });
     }).catchError((error) {
       debugPrint('error when commentPost: ${error.toString()}');

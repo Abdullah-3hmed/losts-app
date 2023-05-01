@@ -18,7 +18,6 @@ class CommentedPost extends StatefulWidget {
 class _CommentedPostState extends State<CommentedPost> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     AppCubit.get(context).getPosts();
   }

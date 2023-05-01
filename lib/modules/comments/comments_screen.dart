@@ -30,7 +30,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
   @override
   void initState() {
     super.initState();
-    // TODO: implement initState
     widget.postModel.comments = [];
     AppCubit.get(context).streamComments(widget.postModel);
   }
@@ -100,9 +99,9 @@ class _CommentsScreenState extends State<CommentsScreen> {
                           ),
                         ),
                         IconButton(
-                          onPressed: () async {
+                          onPressed: ()  {
                             DateTime now = DateTime.now();
-                            await AppCubit.get(context).commentOnPost(
+                             AppCubit.get(context).commentOnPost(
                               type: 'comment',
                               context: context,
                               comment: commentController.text,

@@ -29,7 +29,6 @@ class AppLayout extends StatefulWidget {
 class _AppLayoutState extends State<AppLayout> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     AppCubit.get(context).chats.addAll(CacheHelper.getListString(key: 'chats'));
     debugPrint('.................. ${AppCubit.get(context).chats.length.toString()}');

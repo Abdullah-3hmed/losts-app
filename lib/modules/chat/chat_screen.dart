@@ -26,7 +26,7 @@ class ChatsScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               var userModel = AppCubit.get(context).users.firstWhere(
                   (user) => user.uId == AppCubit.get(context).chats[index]);
-              AppCubit.get(context).getMessages(receiverId: userModel.uId);
+              // AppCubit.get(context).getMessages(receiverId: userModel.uId);
               return buildChatItem(
                 userModel,
                 context,

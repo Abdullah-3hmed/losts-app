@@ -607,7 +607,7 @@ class AppCubit extends Cubit<AppStates> {
     );
 
     // upload comment in Firebase
-     FirebaseFirestore.instance
+    FirebaseFirestore.instance
         .collection('posts')
         .doc(post.id)
         .collection('comments')
@@ -623,7 +623,7 @@ class AppCubit extends Cubit<AppStates> {
       // get user token
       final userToken = users.firstWhere((user) => user.uId == post.uId).token;
 
-       FCMHelper.pushCommentFCM(
+      FCMHelper.pushCommentFCM(
         title: '${model.userName} commented on your post',
         description: '',
         userImage: model.userImage,
@@ -635,7 +635,7 @@ class AppCubit extends Cubit<AppStates> {
         context: context,
         dateTime: dateTime,
       ).then((_) {
-         debugPrint('push notification on comment');
+        debugPrint('push notification on comment');
       });
     }).catchError((error) {
       debugPrint('error when commentPost: ${error.toString()}');
@@ -669,37 +669,22 @@ class AppCubit extends Cubit<AppStates> {
 
   List<String> test = [];
 
-  Future<void> getChats() async {
-    // debugPrint('getChats');
-    // debugPrint('uId: "$uId"');
-    //
-    // final size = await FirebaseFirestore.instance
-    //     .collection('users')
-    //     // .doc('SXnDjxIFXFdTOCPn17yS')
-    //     .doc(uId)
-    //     .collection('chats')
-    //     .count()
-    //     .get();
-
-    //debugPrint('count: ${size.count}');
-
-    await FirebaseFirestore.instance
+ void getChats()  {
+     FirebaseFirestore.instance
         .collection('users')
         .doc(uId)
         .collection('chats')
-        .get()
-        .then((value) {
+        .snapshots()
+        .listen((value) {
+          chats =[];
       debugPrint('chats docs length: ${value.docs.length}');
       for (var element in value.docs) {
         debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${element.id}');
         chats.add(element.id);
       }
-      debugPrint('- chats length from test list: ${chats.length}');
+      debugPrint('- chats length : ${chats.length}');
 
       emit(AppGetChatsSuccessState());
-    }).catchError((error) {
-      debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${error.toString()}');
-      emit(AppGetChatsErrorState());
     });
   }
 
@@ -712,38 +697,43 @@ class AppCubit extends Cubit<AppStates> {
     MessageModel messageModel = MessageModel(
       dateTime: dateTime,
       receiverId: receiverId,
-      senderId: userModel!.uId,
+      senderId: uId!,
       text: text,
     );
-
-    /// my message
-    await FirebaseFirestore.instance
+    var firestoreRef = FirebaseFirestore.instance;
+    var myMessageRef = firestoreRef
         .collection('users')
         .doc(uId)
         .collection('chats')
+        .doc(receiverId);
+    var otherMessageRef = firestoreRef
+        .collection('users')
         .doc(receiverId)
+        .collection('chats')
+        .doc(uId);
+    firestoreRef.runTransaction(
+      (transaction) async {
+        return transaction.set(myMessageRef, {'exist': true});
+      },
+    );
+    await myMessageRef
         .collection('messages')
-        .add(messageModel.toMap())
-        .then((value) async {
-      if (!chats.contains(receiverId)) {
-        chats.add(receiverId);
-        await CacheHelper.saveData(key: 'chats', value: chats).then((value) {
-          chats = [];
-          chats.addAll(CacheHelper.getListString(key: 'chats'));
-        });
-      }
+        .add(messageModel.toJson())
+        .then((value) {
       emit(AppSendMessageSuccessState());
     }).catchError((error) {
       emit(AppSendMessageErrorState());
     });
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(receiverId)
-        .collection('chats')
-        .doc(uId)
+    firestoreRef.runTransaction(
+          (transaction) async {
+        return transaction.set(myMessageRef, {'exist': true});
+      },
+    );
+    await otherMessageRef
         .collection('messages')
-        .add(messageModel.toMap())
+        .add(messageModel.toJson())
         .then((value) {
+
       final userToken =
           users.firstWhere((user) => user.uId == receiverId).token;
 
@@ -762,6 +752,52 @@ class AppCubit extends Cubit<AppStates> {
     }).catchError((error) {
       emit(AppSendMessageErrorState());
     });
+    // /// my message
+    //      FirebaseFirestore.instance
+    //     .collection('users')
+    //     .doc(uId)
+    //     .collection('chats')
+    //     .doc(receiverId)
+    //     .collection('messages')
+    //     .add(messageModel.toJson())
+    //     .then((value) async {
+    //   if (!chats.contains(receiverId)) {
+    //     chats.add(receiverId);
+    //     await CacheHelper.saveData(key: 'chats', value: chats).then((value) {
+    //       chats = [];
+    //       chats.addAll(CacheHelper.getListString(key: 'chats'));
+    //     });
+    //   }
+    //   emit(AppSendMessageSuccessState());
+    // }).catchError((error) {
+    //   emit(AppSendMessageErrorState());
+    // });
+    // FirebaseFirestore.instance
+    //     .collection('users')
+    //     .doc(receiverId)
+    //     .collection('chats')
+    //     .doc(uId)
+    //     .collection('messages')
+    //     .add(messageModel.toJson())
+    //     .then((value) {
+    //   final userToken =
+    //       users.firstWhere((user) => user.uId == receiverId).token;
+    //
+    //   FCMHelper.pushChatMessageFCM(
+    //     title: '${userModel!.name} sent you a message',
+    //     userName: userModel!.name,
+    //     context: context,
+    //     dateTime: dateTime,
+    //     userImage: userModel!.image!,
+    //     description: '',
+    //     userId: userModel!.uId,
+    //     receiverId: receiverId,
+    //     userToken: userToken,
+    //   );
+    //   emit(AppSendMessageSuccessState());
+    // }).catchError((error) {
+    //   emit(AppSendMessageErrorState());
+    // });
   }
 
   List<MessageModel> messages = [];

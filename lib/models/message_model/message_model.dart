@@ -21,7 +21,7 @@ class MessageModel {
     text = json['text'];
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'senderId': senderId,
       'receiverId': receiverId,

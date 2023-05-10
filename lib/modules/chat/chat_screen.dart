@@ -8,6 +8,7 @@ import 'package:social_app/shared/components/constants.dart';
 
 import '../../cubit/app_cubit/app_cubit.dart';
 import '../../cubit/app_cubit/app_states.dart';
+import '../../models/message_model/message_model.dart';
 import '../../models/user_model/user_model.dart';
 import '../chat_details/chat_details.dart';
 
@@ -26,10 +27,12 @@ class ChatsScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               var userModel = AppCubit.get(context).users.firstWhere(
                   (user) => user.uId == AppCubit.get(context).chats[index]);
-              // AppCubit.get(context).getMessages(receiverId: userModel.uId);
+              var lastMessage = AppCubit.get(context)
+                  .getLastMessage(receiverId: userModel.uId);
               return buildChatItem(
                 userModel,
                 context,
+                lastMessage,
               );
             },
             separatorBuilder: (context, index) => const SizedBox(
@@ -48,9 +51,9 @@ class ChatsScreen extends StatelessWidget {
     );
   }
 
-  Widget? buildChatItem(AppUserModel userModel, BuildContext context) {
-    AppCubit.get(context).getMessages(receiverId: userModel.uId);
-    if (AppCubit.get(context).messages.isNotEmpty) {
+  Widget buildChatItem(
+      AppUserModel userModel, BuildContext context, MessageModel? message) {
+    if (message != null) {
       return InkWell(
         onTap: () {
           navigateTo(
@@ -89,7 +92,7 @@ class ChatsScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     Text(
-                      AppCubit.get(context).messages.first.text,
+                      message.text,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
@@ -103,7 +106,8 @@ class ChatsScreen extends StatelessWidget {
               ),
               Text(
                 DateTimeConverter.getDateTime(
-                    startDate: AppCubit.get(context).messages.first.dateTime),
+                  startDate: message.dateTime,
+                ),
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
@@ -111,6 +115,6 @@ class ChatsScreen extends StatelessWidget {
         ),
       );
     }
-    return null;
+    return Container();
   }
 }

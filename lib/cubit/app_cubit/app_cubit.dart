@@ -669,14 +669,14 @@ class AppCubit extends Cubit<AppStates> {
 
   List<String> test = [];
 
- void getChats()  {
-     FirebaseFirestore.instance
+  void getChats() {
+    FirebaseFirestore.instance
         .collection('users')
         .doc(uId)
         .collection('chats')
         .snapshots()
         .listen((value) {
-          chats =[];
+      chats = [];
       debugPrint('chats docs length: ${value.docs.length}');
       for (var element in value.docs) {
         debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${element.id}');
@@ -725,7 +725,7 @@ class AppCubit extends Cubit<AppStates> {
       emit(AppSendMessageErrorState());
     });
     firestoreRef.runTransaction(
-          (transaction) async {
+      (transaction) async {
         return transaction.set(myMessageRef, {'exist': true});
       },
     );
@@ -733,7 +733,6 @@ class AppCubit extends Cubit<AppStates> {
         .collection('messages')
         .add(messageModel.toJson())
         .then((value) {
-
       final userToken =
           users.firstWhere((user) => user.uId == receiverId).token;
 
@@ -825,6 +824,32 @@ class AppCubit extends Cubit<AppStates> {
       }
       emit(AppGetMessageSuccessState());
     });
+  }
+
+  MessageModel? message;
+
+  MessageModel? getLastMessage({
+    required String receiverId,
+  })  {
+     FirebaseFirestore.instance
+        .collection('users')
+        .doc(uId)
+        .collection('chats')
+        .doc(receiverId)
+        .collection('messages')
+        .orderBy(
+          'dateTime',
+        )
+        .get()
+        .then((value) {
+      message = MessageModel.fromJson(value.docs.last.data());
+
+      emit(AppGetMessageSuccessState());
+    }).catchError((error) {
+      debugPrint('Error when get last message : $error');
+      emit(AppGetMessageErrorState());
+    });
+    return message;
   }
 
   bool typing = true;

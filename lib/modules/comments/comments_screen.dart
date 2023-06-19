@@ -3,7 +3,9 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/cubit/app_cubit/app_states.dart';
+import 'package:social_app/cubit/post_cubit/post_cubit.dart';
+import 'package:social_app/cubit/post_cubit/post_states.dart';
+import 'package:social_app/cubit/user_cubit/user_cubit.dart';
 import 'package:social_app/helper/date_time_converter.dart';
 import 'package:social_app/models/comment_model/comment.dart';
 import 'package:social_app/models/post_model/post.dart';
@@ -11,8 +13,6 @@ import 'package:social_app/modules/edit_comment/edit_comment_screen.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/translations/locale_keys.g.dart';
-
-import '../../cubit/app_cubit/app_cubit.dart';
 
 class CommentsScreen extends StatefulWidget {
   const CommentsScreen({
@@ -31,13 +31,14 @@ class _CommentsScreenState extends State<CommentsScreen> {
   void initState() {
     super.initState();
     widget.postModel.comments = [];
-    AppCubit.get(context).streamComments(widget.postModel);
+    PostCubit.get(context).streamComments(widget.postModel);
   }
+
   @override
   Widget build(BuildContext context) {
     var commentController = TextEditingController();
     return Builder(builder: (context) {
-      return BlocConsumer<AppCubit, AppStates>(
+      return BlocConsumer<PostCubit, PostStates>(
         listener: (context, state) {},
         builder: (context, state) {
           return Scaffold(
@@ -76,7 +77,9 @@ class _CommentsScreenState extends State<CommentsScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10.0,),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
                   Container(
                     padding: const EdgeInsets.only(left: 10.0),
                     decoration: BoxDecoration(
@@ -99,9 +102,9 @@ class _CommentsScreenState extends State<CommentsScreen> {
                           ),
                         ),
                         IconButton(
-                          onPressed: ()  {
+                          onPressed: () {
                             DateTime now = DateTime.now();
-                             AppCubit.get(context).commentOnPost(
+                            PostCubit.get(context).commentOnPost(
                               type: 'comment',
                               context: context,
                               comment: commentController.text,
@@ -149,11 +152,9 @@ class _CommentsScreenState extends State<CommentsScreen> {
                     vertical: 5.0,
                     horizontal: 10.0,
                   ),
-                  decoration: BoxDecoration(
-                    color: AppCubit.get(context).isDark
-                        ? Colors.grey[700]
-                        : Colors.grey[200],
-                    borderRadius: const BorderRadiusDirectional.only(
+                  decoration: const BoxDecoration(
+                    color: Colors.blueGrey,
+                    borderRadius: BorderRadiusDirectional.only(
                       bottomStart: Radius.circular(15.0),
                       bottomEnd: Radius.circular(15.0),
                       topEnd: Radius.circular(15.0),
@@ -181,13 +182,13 @@ class _CommentsScreenState extends State<CommentsScreen> {
                   height: 5.0,
                 ),
                 Text(
-                DateTimeConverter.getDateTime(startDate:comment.dateTime),
+                  DateTimeConverter.getDateTime(startDate: comment.dateTime),
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
             ),
           ),
-          if (comment.userId == AppCubit.get(context).userModel!.uId)
+          if (comment.userId == UserCubit.get(context).userModel!.uId)
             PopupMenuButton(
               icon: const Icon(
                 Icons.more_horiz_rounded,
@@ -203,7 +204,9 @@ class _CommentsScreenState extends State<CommentsScreen> {
                     ),
                   );
                 } else if (value == 'Delete') {
-                  AppCubit.get(context).deleteComment(commentId: comment.commentId, postModel: widget.postModel);
+                  PostCubit.get(context).deleteComment(
+                      commentId: comment.commentId,
+                      postModel: widget.postModel);
                 }
               },
               itemBuilder: (context) => [

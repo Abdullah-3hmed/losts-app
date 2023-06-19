@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/cubit/app_cubit/app_cubit.dart';
-import 'package:social_app/cubit/app_cubit/app_states.dart';
+import 'package:social_app/cubit/user_cubit/user_cubit.dart';
+import 'package:social_app/cubit/user_cubit/user_states.dart';
 import 'package:social_app/translations/locale_keys.g.dart';
 
 class LanguageScreen extends StatelessWidget {
@@ -11,7 +11,7 @@ class LanguageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AppCubit, AppStates>(
+    return BlocConsumer<UserCubit, UserStates>(
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
@@ -44,7 +44,7 @@ class LanguageScreen extends StatelessWidget {
                   ),
                   child: InkWell(
                     onTap: () {
-                      AppCubit.get(context).setEnglish(context: context);
+                      UserCubit.get(context).setEnglish(context: context);
                     },
                     child: Row(
                       children: [
@@ -62,7 +62,7 @@ class LanguageScreen extends StatelessWidget {
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                         const Spacer(),
-                        AppCubit.get(context).isEnglish
+                        UserCubit.get(context).isEnglish
                             ? const CircleAvatar(
                                 radius: 15.0,
                                 backgroundColor: Colors.white,
@@ -88,7 +88,7 @@ class LanguageScreen extends StatelessWidget {
                   ),
                   child: InkWell(
                     onTap: () {
-                      AppCubit.get(context).setArabic(context: context);
+                      UserCubit.get(context).setArabic(context: context);
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -107,7 +107,7 @@ class LanguageScreen extends StatelessWidget {
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                         const Spacer(),
-                        AppCubit.get(context).isEnglish
+                        UserCubit.get(context).isEnglish
                             ? const SizedBox()
                             : const CircleAvatar(
                                 radius: 15.0,

@@ -3,8 +3,9 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/cubit/app_cubit/app_cubit.dart';
-import 'package:social_app/cubit/app_cubit/app_states.dart';
+import 'package:social_app/cubit/post_cubit/post_cubit.dart';
+import 'package:social_app/cubit/user_cubit/user_cubit.dart';
+import 'package:social_app/cubit/user_cubit/user_states.dart';
 import 'package:social_app/modules/chat_details/chat_details.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
@@ -23,16 +24,16 @@ class UserProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        final userModel = AppCubit.get(context).users.firstWhere(
+        final userModel = UserCubit.get(context).users.firstWhere(
               (user) => user.uId == uId,
             );
-        final userPosts = AppCubit.get(context)
+        final userPosts = PostCubit.get(context)
             .posts
             .where(
               (post) => post.uId == uId,
             )
             .toList();
-        return BlocConsumer<AppCubit, AppStates>(
+        return BlocConsumer<UserCubit, UserStates>(
           listener: (context, state) {},
           builder: (context, state) {
             return Scaffold(
@@ -125,9 +126,9 @@ class UserProfile extends StatelessWidget {
                             navigateTo(
                               context: context,
                               screen: ChatDetails(
-                               userId: userModel.uId,
-                               userName: userModel.name,
-                               userImage: userModel.image!,
+                                userId: userModel.uId,
+                                userName: userModel.name,
+                                userImage: userModel.image!,
                               ),
                             );
                           },

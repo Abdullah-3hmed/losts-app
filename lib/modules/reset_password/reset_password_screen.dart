@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/cubit/app_cubit/app_cubit.dart';
-import 'package:social_app/cubit/app_cubit/app_states.dart';
+import 'package:social_app/cubit/user_cubit/user_cubit.dart';
+import 'package:social_app/cubit/user_cubit/user_states.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/translations/locale_keys.g.dart';
 
@@ -13,14 +13,14 @@ class ResetPassword extends StatelessWidget {
   Widget build(BuildContext context) {
     var formKey = GlobalKey<FormState>();
     var emailController = TextEditingController();
-    return BlocConsumer<AppCubit, AppStates>(
+    return BlocConsumer<UserCubit, UserStates>(
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
             title: Text(
-             LocaleKeys.reset_password.tr(),
+              LocaleKeys.reset_password.tr(),
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge!
@@ -48,7 +48,7 @@ class ResetPassword extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        AppCubit.get(context).resetPassword(
+                        UserCubit.get(context).resetPassword(
                           email: emailController.text,
                         );
                         showToast(
@@ -58,7 +58,7 @@ class ResetPassword extends StatelessWidget {
                       }
                     },
                     child: Text(
-                     LocaleKeys.confirm.tr(),
+                      LocaleKeys.confirm.tr(),
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
                             color: Colors.white,
                           ),

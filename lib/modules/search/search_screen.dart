@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/cubit/app_cubit/app_cubit.dart';
-import 'package:social_app/cubit/app_cubit/app_states.dart';
+import 'package:social_app/cubit/post_cubit/post_cubit.dart';
+import 'package:social_app/cubit/post_cubit/post_states.dart';
 import 'package:social_app/models/post_model/post.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/translations/locale_keys.g.dart';
@@ -13,10 +13,10 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var searchController = TextEditingController();
-    AppCubit.get(context).typing = true;
+    PostCubit.get(context).typing = true;
 
     List<Post> posts = [];
-    return BlocConsumer<AppCubit, AppStates>(
+    return BlocConsumer<PostCubit, PostStates>(
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
@@ -58,23 +58,24 @@ class SearchScreen extends StatelessWidget {
                   ),
                   keyboardType: TextInputType.text,
                   onFieldSubmitted: (value) {
-                    posts = AppCubit.get(context)
+                    posts = PostCubit.get(context)
                         .posts
                         .where(
                           (element) => element.postText.contains(value),
-                        ).toList();
+                        )
+                        .toList();
 
-                    AppCubit.get(context).searchOnSubmit();
+                    PostCubit.get(context).searchOnSubmit();
                   },
                   onChanged: (value) {
-                    AppCubit.get(context).searchOnchange();
+                    PostCubit.get(context).searchOnchange();
                   },
                   onTap: () {
-                    AppCubit.get(context).searchOnTap();
+                    PostCubit.get(context).searchOnTap();
                   },
                 ),
               ),
-              AppCubit.get(context).typing
+              PostCubit.get(context).typing
                   ? Expanded(
                       child: Center(
                         child: Text(

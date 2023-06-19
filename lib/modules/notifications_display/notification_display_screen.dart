@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/cubit/app_cubit/app_cubit.dart';
-import 'package:social_app/cubit/app_cubit/app_states.dart';
+import 'package:social_app/cubit/notification_cubit/notification_cubit.dart';
+import 'package:social_app/cubit/notification_cubit/notification_states.dart';
 import 'package:social_app/helper/date_time_converter.dart';
 import 'package:social_app/models/notification_model/main_notification.dart';
 import 'package:social_app/modules/chat_details/chat_details.dart';
@@ -15,7 +15,7 @@ class NotificationsDisplayScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AppCubit, AppStates>(
+    return BlocConsumer<NotificationCubit, NotificationStates>(
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
@@ -29,18 +29,18 @@ class NotificationsDisplayScreen extends StatelessWidget {
             ),
           ),
           body: ConditionalBuilder(
-            condition: AppCubit.get(context).notifications.isNotEmpty,
+            condition: NotificationCubit.get(context).notifications.isNotEmpty,
             builder: (context) => ListView.separated(
               physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) => buildNotificationItem(
-                  context, AppCubit.get(context).notifications[index]),
+                  context, NotificationCubit.get(context).notifications[index]),
               separatorBuilder: (context, index) => Divider(
                 thickness: .5,
                 indent: 20.0,
                 endIndent: 20.0,
                 color: Theme.of(context).iconTheme.color,
               ),
-              itemCount: AppCubit.get(context).notifications.length,
+              itemCount: NotificationCubit.get(context).notifications.length,
             ),
             fallback: (context) => Center(
               child: Text(
@@ -72,8 +72,9 @@ class NotificationsDisplayScreen extends StatelessWidget {
               ),
             );
           }
-          AppCubit.get(context).deleteNotification(notificationId: model.id);
-         },
+          NotificationCubit.get(context)
+              .deleteNotification(notificationId: model.id);
+        },
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Row(

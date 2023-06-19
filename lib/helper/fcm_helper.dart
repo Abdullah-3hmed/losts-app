@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:social_app/cubit/app_cubit/app_cubit.dart';
+import 'package:social_app/cubit/notification_cubit/notification_cubit.dart';
 import 'package:social_app/network/remote/dio_helper.dart';
 import 'package:social_app/shared/components/constants.dart';
 
@@ -54,7 +54,7 @@ class FCMHelper {
         ),
       },
     ).then((value) async {
-      await AppCubit.get(context).storeNotifications(
+      await NotificationCubit.get(context).storeNotifications(
         type: 'comment',
         postId: postId,
         userName: userName,
@@ -111,7 +111,7 @@ class FCMHelper {
         ),
       },
     ).then((value) async {
-      await AppCubit.get(context).storeNotifications(
+      await NotificationCubit.get(context).storeNotifications(
         userId: userId,
         type: 'message',
         userName: userName,

@@ -2,7 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:social_app/cubit/app_cubit/app_cubit.dart';
+import 'package:social_app/cubit/post_cubit/post_cubit.dart';
+import 'package:social_app/cubit/user_cubit/user_cubit.dart';
 import 'package:social_app/helper/date_time_converter.dart';
 import 'package:social_app/models/post_model/post.dart';
 import 'package:social_app/modules/comments/comments_screen.dart';
@@ -217,7 +218,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                                   ),
                                 );
                               } else {
-                                AppCubit.get(context).changeBottomNavBar(3);
+                                PostCubit.get(context).changeBottomNavBar(3);
                               }
                             }
                           : null,
@@ -240,7 +241,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                   ],
                 ),
                 const Spacer(),
-                if (postModel.uId == AppCubit.get(context).userModel!.uId)
+                if (postModel.uId == UserCubit.get(context).userModel!.uId)
                   PopupMenuButton(
                     icon: const Icon(Icons.more_horiz_rounded),
                     onSelected: (String value) {
@@ -252,7 +253,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                           ),
                         );
                       } else if (value == 'Delete') {
-                        AppCubit.get(context).deletePost(
+                        PostCubit.get(context).deletePost(
                           postModel: postModel,
                         );
                       }
@@ -365,7 +366,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                   // like button
                   InkWell(
                     onTap: () {
-                      AppCubit.get(context).likePost(post: postModel);
+                      PostCubit.get(context).likePost(post: postModel);
                     },
                     child: Row(
                       children: [

@@ -2,8 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/cubit/app_cubit/app_cubit.dart';
-import 'package:social_app/cubit/app_cubit/app_states.dart';
+import 'package:social_app/cubit/post_cubit/post_cubit.dart';
+import 'package:social_app/cubit/post_cubit/post_states.dart';
+import 'package:social_app/cubit/user_cubit/user_cubit.dart';
 import 'package:social_app/models/post_model/post.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/translations/locale_keys.g.dart';
@@ -23,10 +24,10 @@ class EditPost extends StatelessWidget {
 
     return Builder(
       builder: (context) {
-        return BlocConsumer<AppCubit, AppStates>(
+        return BlocConsumer<PostCubit, PostStates>(
           listener: (context, state) {},
           builder: (context, state) {
-            var model = AppCubit.get(context).userModel;
+            var model = UserCubit.get(context).userModel;
 
             return Scaffold(
               appBar: AppBar(
@@ -40,8 +41,8 @@ class EditPost extends StatelessWidget {
                 actions: [
                   TextButton(
                     onPressed: () {
-                      if (AppCubit.get(context).pickedPostImage == null) {
-                        AppCubit.get(context).editPost(
+                      if (PostCubit.get(context).pickedPostImage == null) {
+                        PostCubit.get(context).editPost(
                           context: context,
                           text: postTextController.text,
                           postId: postModel.id,
@@ -49,7 +50,7 @@ class EditPost extends StatelessWidget {
                         );
                         postModel.image = temp;
                       } else {
-                        AppCubit.get(context).editPostWithImage(
+                        PostCubit.get(context).editPostWithImage(
                           context: context,
                           text: postTextController.text,
                           postId: postModel.id,
@@ -70,18 +71,19 @@ class EditPost extends StatelessWidget {
                 padding: const EdgeInsets.all(15.0),
                 child: Column(
                   children: [
-                    if (state is AppEditPostLoadingState)
+                    if (state is PostEditPostLoadingState)
                       const LinearProgressIndicator(),
-                    if (state is AppEditPostLoadingState)
+                    if (state is PostEditPostLoadingState)
                       const SizedBox(
                         height: 10.0,
                       ),
                     Row(
                       children: [
                         CircleAvatar(
-                          backgroundImage: CachedNetworkImageProvider('${model!.image}'),
-                          onBackgroundImageError: (_, __) =>
-                               CachedNetworkImage(imageUrl:AppConstants.defaultImageUrl),
+                          backgroundImage:
+                              CachedNetworkImageProvider('${model!.image}'),
+                          onBackgroundImageError: (_, __) => CachedNetworkImage(
+                              imageUrl: AppConstants.defaultImageUrl),
                           radius: 25.0,
                         ),
                         const SizedBox(
@@ -108,7 +110,7 @@ class EditPost extends StatelessWidget {
                       height: 20.0,
                     ),
                     if (temp != '' &&
-                        AppCubit.get(context).pickedPostImage == null)
+                        PostCubit.get(context).pickedPostImage == null)
                       Expanded(
                         flex: 7,
                         child: Stack(
@@ -133,7 +135,7 @@ class EditPost extends StatelessWidget {
                               child: IconButton(
                                 onPressed: () {
                                   temp = '';
-                                  AppCubit.get(context)
+                                  PostCubit.get(context)
                                       .removeUploadedPostImage();
                                   // debugPrint('>>>>>>>>>>>> $temp');
                                 },
@@ -148,7 +150,7 @@ class EditPost extends StatelessWidget {
                     const SizedBox(
                       height: 20.0,
                     ),
-                    if (AppCubit.get(context).pickedPostImage != null)
+                    if (PostCubit.get(context).pickedPostImage != null)
                       Expanded(
                         flex: 4,
                         child: Stack(
@@ -161,7 +163,7 @@ class EditPost extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(4.0),
                                 image: DecorationImage(
                                   image: FileImage(
-                                      AppCubit.get(context).pickedPostImage!),
+                                      PostCubit.get(context).pickedPostImage!),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -170,7 +172,7 @@ class EditPost extends StatelessWidget {
                               radius: 20.0,
                               child: IconButton(
                                 onPressed: () {
-                                  AppCubit.get(context).removePostImage();
+                                  PostCubit.get(context).removePostImage();
                                 },
                                 icon: const Icon(
                                   Icons.close_outlined,
@@ -212,9 +214,9 @@ class EditPost extends StatelessWidget {
                         ),
                         onSelected: (String value) {
                           if (value == 'Camera') {
-                            AppCubit.get(context).getPostImageByCamera();
+                            PostCubit.get(context).getPostImageByCamera();
                           } else if (value == 'Gallery') {
-                            AppCubit.get(context).getPostImage();
+                            PostCubit.get(context).getPostImage();
                           }
                         },
                         itemBuilder: (context) => [

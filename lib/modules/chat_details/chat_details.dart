@@ -2,11 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/cubit/chat_cubit/chat_cubit.dart';
+import 'package:social_app/cubit/chat_cubit/chat_states.dart';
+import 'package:social_app/cubit/user_cubit/user_cubit.dart';
 import 'package:social_app/models/message_model/message_model.dart';
 import 'package:social_app/shared/components/constants.dart';
-
-import '../../cubit/app_cubit/app_cubit.dart';
-import '../../cubit/app_cubit/app_states.dart';
 
 class ChatDetails extends StatelessWidget {
   const ChatDetails({
@@ -23,11 +23,11 @@ class ChatDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(
       builder: (BuildContext context) {
-        AppCubit.get(context).getMessages(
+        ChatCubit.get(context).getMessages(
           receiverId: userId,
         );
         var messageController = TextEditingController();
-        return BlocConsumer<AppCubit, AppStates>(
+        return BlocConsumer<ChatCubit, ChatStates>(
           listener: (context, state) {},
           builder: (context, state) {
             return Scaffold(
@@ -47,14 +47,14 @@ class ChatDetails extends StatelessWidget {
                   children: [
                     Expanded(
                       child: ConditionalBuilder(
-                        condition: AppCubit.get(context).messages.isNotEmpty,
+                        condition: ChatCubit.get(context).messages.isNotEmpty,
                         builder: (context) => ListView.separated(
                           reverse: true,
                           physics: const BouncingScrollPhysics(),
                           itemBuilder: (context, index) {
-                            var message = AppCubit.get(context).messages[index];
-                            if (AppCubit.get(context).userModel!.uId ==
-                                message.senderId) {
+                            var message =
+                                ChatCubit.get(context).messages[index];
+                            if (uId == message.senderId) {
                               return buildMyMessageItem(message, context);
                             } else {
                               return buildMessageItem(
@@ -64,7 +64,7 @@ class ChatDetails extends StatelessWidget {
                           separatorBuilder: (context, index) => const SizedBox(
                             height: 15.0,
                           ),
-                          itemCount: AppCubit.get(context).messages.length,
+                          itemCount: ChatCubit.get(context).messages.length,
                         ),
                         fallback: (context) => Center(
                           /// todo : add this to localization
@@ -114,7 +114,7 @@ class ChatDetails extends StatelessWidget {
                               minWidth: 1.0,
                               onPressed: () {
                                 if (messageController.text.isNotEmpty) {
-                                  AppCubit.get(context).sendMessage(
+                                  ChatCubit.get(context).sendMessage(
                                     context: context,
                                     text: messageController.text,
                                     receiverId: userId,
@@ -163,11 +163,9 @@ class ChatDetails extends StatelessWidget {
                 vertical: 5.0,
                 horizontal: 10.0,
               ),
-              decoration: BoxDecoration(
-                color: AppCubit.get(context).isDark
-                    ? Colors.grey[700]
-                    : Colors.grey[300],
-                borderRadius: const BorderRadiusDirectional.only(
+              decoration: const BoxDecoration(
+                color: Colors.blueGrey,
+                borderRadius: BorderRadiusDirectional.only(
                   bottomEnd: Radius.circular(10.0),
                   topEnd: Radius.circular(10.0),
                   topStart: Radius.circular(10.0),
@@ -198,11 +196,9 @@ class ChatDetails extends StatelessWidget {
                   vertical: 5.0,
                   horizontal: 10.0,
                 ),
-                decoration: BoxDecoration(
-                  color: AppCubit.get(context).isDark
-                      ? Colors.blue
-                      : Colors.blue.withOpacity(.3),
-                  borderRadius: const BorderRadiusDirectional.only(
+                decoration: const BoxDecoration(
+                  color: Colors.blueGrey,
+                  borderRadius: BorderRadiusDirectional.only(
                     bottomStart: Radius.circular(10.0),
                     topEnd: Radius.circular(10.0),
                     topStart: Radius.circular(10.0),
@@ -220,7 +216,7 @@ class ChatDetails extends StatelessWidget {
             CircleAvatar(
               radius: 20.0,
               backgroundImage: CachedNetworkImageProvider(
-                  '${AppCubit.get(context).userModel!.image}'),
+                  '${UserCubit.get(context).userModel!.image}'),
               onBackgroundImageError: (_, __) =>
                   const NetworkImage(AppConstants.defaultImageUrl),
             ),

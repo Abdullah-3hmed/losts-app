@@ -2,12 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/cubit/post_cubit/post_cubit.dart';
+import 'package:social_app/cubit/post_cubit/post_states.dart';
+import 'package:social_app/cubit/user_cubit/user_cubit.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/translations/locale_keys.g.dart';
-
-import '../../cubit/app_cubit/app_cubit.dart';
-import '../../cubit/app_cubit/app_states.dart';
 
 class NewPostScreen extends StatelessWidget {
   const NewPostScreen({Key? key}) : super(key: key);
@@ -17,26 +17,26 @@ class NewPostScreen extends StatelessWidget {
     return Builder(
       builder: (context) {
         var textController = TextEditingController();
-        var model = AppCubit.get(context).userModel;
-        return BlocConsumer<AppCubit, AppStates>(
+        var model = UserCubit.get(context).userModel;
+        return BlocConsumer<PostCubit, PostStates>(
           listener: (context, state) {},
           builder: (context, state) {
             return Scaffold(
               appBar: defaultAppBar(
                 context: context,
-                title:LocaleKeys.create_post.tr(),
+                title: LocaleKeys.create_post.tr(),
                 actions: [
                   TextButton(
-                    onPressed: () async{
+                    onPressed: () async {
                       DateTime now = DateTime.now();
-                      if (AppCubit.get(context).pickedPostImage == null) {
-                        AppCubit.get(context).createPost(
+                      if (PostCubit.get(context).pickedPostImage == null) {
+                        PostCubit.get(context).createPost(
                           context: context,
                           postText: textController.text,
                           dateTime: now,
                         );
                       } else {
-                        await AppCubit.get(context).uploadPostImage(
+                        await PostCubit.get(context).uploadPostImage(
                           postText: textController.text,
                           postDateTime: now,
                           context: context,
@@ -56,21 +56,21 @@ class NewPostScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
-                    if (state is AppCreatePostLoadingState)
+                    if (state is PostCreatePostLoadingState)
                       const LinearProgressIndicator(),
-                    if (state is AppCreatePostLoadingState)
+                    if (state is PostCreatePostLoadingState)
                       const SizedBox(
                         height: 10.0,
                       ),
                     Row(
                       children: [
                         CircleAvatar(
-                          backgroundImage: CachedNetworkImageProvider('${model!.image}'),
-                          onBackgroundImageError: (_, __) =>
-                           CachedNetworkImage(imageUrl:AppConstants.defaultImageUrl),
+                          backgroundImage:
+                              CachedNetworkImageProvider('${model!.image}'),
+                          onBackgroundImageError: (_, __) => CachedNetworkImage(
+                              imageUrl: AppConstants.defaultImageUrl),
                           radius: 25.0,
                         ),
-
                         const SizedBox(
                           width: 15.0,
                         ),
@@ -78,14 +78,13 @@ class NewPostScreen extends StatelessWidget {
                           model.name,
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
-
                       ],
                     ),
                     Expanded(
                       child: TextFormField(
                         controller: textController,
                         decoration: InputDecoration(
-                          hintText:LocaleKeys.what_is_in_your_mind.tr(),
+                          hintText: LocaleKeys.what_is_in_your_mind.tr(),
                           hintStyle: Theme.of(context).textTheme.titleMedium,
                           border: InputBorder.none,
                         ),
@@ -94,7 +93,7 @@ class NewPostScreen extends StatelessWidget {
                     const SizedBox(
                       height: 20.0,
                     ),
-                    if (AppCubit.get(context).pickedPostImage != null)
+                    if (PostCubit.get(context).pickedPostImage != null)
                       Expanded(
                         flex: 4,
                         child: Stack(
@@ -106,7 +105,7 @@ class NewPostScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(4.0),
                                 image: DecorationImage(
                                   image: FileImage(
-                                      AppCubit.get(context).pickedPostImage!),
+                                      PostCubit.get(context).pickedPostImage!),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -115,7 +114,7 @@ class NewPostScreen extends StatelessWidget {
                               radius: 20.0,
                               child: IconButton(
                                 onPressed: () {
-                                  AppCubit.get(context).removePostImage();
+                                  PostCubit.get(context).removePostImage();
                                 },
                                 icon: const Icon(
                                   Icons.close_outlined,
@@ -150,24 +149,24 @@ class NewPostScreen extends StatelessWidget {
                               width: 10.0,
                             ),
                             Text(
-                            LocaleKeys.add_photo.tr(),
+                              LocaleKeys.add_photo.tr(),
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ],
                         ),
                         onSelected: (String value) {
                           if (value == 'Camera') {
-                            AppCubit.get(context).getPostImageByCamera();
+                            PostCubit.get(context).getPostImageByCamera();
                           } else if (value == 'Gallery') {
-                            AppCubit.get(context).getPostImage();
+                            PostCubit.get(context).getPostImage();
                           }
                         },
                         itemBuilder: (context) => [
-                           PopupMenuItem(
+                          PopupMenuItem(
                             value: 'Camera',
                             child: Text(LocaleKeys.camera.tr()),
                           ),
-                           PopupMenuItem(
+                          PopupMenuItem(
                             value: 'Gallery',
                             child: Text(LocaleKeys.gallery.tr()),
                           ),

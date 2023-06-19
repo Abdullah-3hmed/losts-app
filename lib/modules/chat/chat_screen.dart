@@ -2,12 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/cubit/chat_cubit/chat_cubit.dart';
+import 'package:social_app/cubit/chat_cubit/chat_states.dart';
+import 'package:social_app/cubit/user_cubit/user_cubit.dart';
 import 'package:social_app/helper/date_time_converter.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 
-import '../../cubit/app_cubit/app_cubit.dart';
-import '../../cubit/app_cubit/app_states.dart';
 import '../../models/message_model/message_model.dart';
 import '../../models/user_model/user_model.dart';
 import '../chat_details/chat_details.dart';
@@ -17,17 +18,17 @@ class ChatsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AppCubit, AppStates>(
+    return BlocConsumer<ChatCubit, ChatStates>(
       listener: (context, state) {},
       builder: (context, state) {
         return ConditionalBuilder(
-          condition: AppCubit.get(context).chats.isNotEmpty,
+          condition: ChatCubit.get(context).chats.isNotEmpty,
           builder: (context) => ListView.separated(
             physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) {
-              var userModel = AppCubit.get(context).users.firstWhere(
-                  (user) => user.uId == AppCubit.get(context).chats[index]);
-              var lastMessage = AppCubit.get(context)
+              var userModel = UserCubit.get(context).users.firstWhere(
+                  (user) => user.uId == ChatCubit.get(context).chats[index]);
+              var lastMessage = ChatCubit.get(context)
                   .getLastMessage(receiverId: userModel.uId);
               return buildChatItem(
                 userModel,
@@ -38,7 +39,7 @@ class ChatsScreen extends StatelessWidget {
             separatorBuilder: (context, index) => const SizedBox(
               height: 5.0,
             ),
-            itemCount: AppCubit.get(context).chats.length,
+            itemCount: ChatCubit.get(context).chats.length,
           ),
           fallback: (context) => Center(
             child: Text(
@@ -96,9 +97,7 @@ class ChatsScreen extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            color: AppCubit.get(context).isDark
-                                ? Colors.grey[300]
-                                : Colors.grey[600],
+                            color: Colors.green,
                           ),
                     ),
                   ],

@@ -60,8 +60,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             child: Text(
               'SKIP',
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                color: Colors.white,
-              ),
+                    color: Colors.white,
+                  ),
             ),
           ),
         ],

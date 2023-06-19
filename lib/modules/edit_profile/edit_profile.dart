@@ -1,11 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/cubit/post_cubit/post_states.dart';
+import 'package:social_app/cubit/user_cubit/user_cubit.dart';
+import 'package:social_app/cubit/user_cubit/user_states.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/translations/locale_keys.g.dart';
-
-import '../../cubit/app_cubit/app_cubit.dart';
-import '../../cubit/app_cubit/app_states.dart';
 
 class EditProfile extends StatelessWidget {
   const EditProfile({Key? key}) : super(key: key);
@@ -16,10 +16,10 @@ class EditProfile extends StatelessWidget {
     var bioController = TextEditingController();
     var phoneController = TextEditingController();
 
-    return BlocConsumer<AppCubit, AppStates>(
+    return BlocConsumer<UserCubit, UserStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        var model = AppCubit.get(context).userModel;
+        var model = UserCubit.get(context).userModel;
         nameController.text = model!.name;
         bioController.text = model.bio!;
         phoneController.text = model.phone!;
@@ -30,14 +30,14 @@ class EditProfile extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () async {
-                  await AppCubit.get(context).updateUser(
+                  await UserCubit.get(context).updateUser(
                     name: nameController.text,
                     phone: phoneController.text,
                     bio: bioController.text,
                   );
                 },
                 child: Text(
-                 LocaleKeys.update.tr(),
+                  LocaleKeys.update.tr(),
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: Colors.white,
                       ),
@@ -53,9 +53,9 @@ class EditProfile extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  if (state is AppUpdateUserLoadingState)
+                  if (state is PostUpdateUserLoadingState)
                     const LinearProgressIndicator(),
-                  if (state is AppUpdateUserLoadingState)
+                  if (state is PostUpdateUserLoadingState)
                     const SizedBox(
                       height: 20.0,
                     ),
@@ -78,11 +78,11 @@ class EditProfile extends StatelessWidget {
                                     topRight: Radius.circular(4.0),
                                   ),
                                   image: DecorationImage(
-                                    image: AppCubit.get(context).coverImage ==
+                                    image: UserCubit.get(context).coverImage ==
                                             null
                                         ? Image.network('${model.cover}').image
                                         : FileImage(
-                                            AppCubit.get(context).coverImage!),
+                                            UserCubit.get(context).coverImage!),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -93,18 +93,18 @@ class EditProfile extends StatelessWidget {
                                   icon: const Icon(Icons.camera_alt_outlined),
                                   onSelected: (String value) {
                                     if (value == 'Camera') {
-                                      AppCubit.get(context)
+                                      UserCubit.get(context)
                                           .getCoverImageByCamera();
                                     } else if (value == 'Gallery') {
-                                      AppCubit.get(context).getCoverImage();
+                                      UserCubit.get(context).getCoverImage();
                                     }
                                   },
                                   itemBuilder: (context) => [
-                                     PopupMenuItem(
+                                    PopupMenuItem(
                                       value: 'Camera',
                                       child: Text(LocaleKeys.camera.tr()),
                                     ),
-                                     PopupMenuItem(
+                                    PopupMenuItem(
                                       value: 'Gallery',
                                       child: Text(LocaleKeys.gallery.tr()),
                                     ),
@@ -118,40 +118,41 @@ class EditProfile extends StatelessWidget {
                           alignment: AlignmentDirectional.bottomEnd,
                           children: [
                             CircleAvatar(
-                              backgroundColor:Theme.of(context).scaffoldBackgroundColor,
+                              backgroundColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
                               radius: 64.0,
                               child: CircleAvatar(
-                                backgroundImage: AppCubit.get(context)
+                                backgroundImage: UserCubit.get(context)
                                             .profileImage ==
                                         null
                                     ? Image.network('${model.image}').image
                                     : FileImage(
-                                        AppCubit.get(context).profileImage!),
+                                        UserCubit.get(context).profileImage!),
                                 radius: 60.0,
                               ),
                             ),
                             CircleAvatar(
                               radius: 20.0,
-                              backgroundColor:Colors.blue,
+                              backgroundColor: Colors.blue,
                               child: PopupMenuButton(
-                                icon:  const Icon(
+                                icon: const Icon(
                                   Icons.edit,
                                   color: Colors.white,
                                 ),
                                 onSelected: (String value) {
                                   if (value == 'Camera') {
-                                    AppCubit.get(context)
+                                    UserCubit.get(context)
                                         .getProfileImageByCamera();
                                   } else if (value == 'Gallery') {
-                                    AppCubit.get(context).getProfileImage();
+                                    UserCubit.get(context).getProfileImage();
                                   }
                                 },
                                 itemBuilder: (context) => [
-                                   PopupMenuItem(
+                                  PopupMenuItem(
                                     value: 'Camera',
                                     child: Text(LocaleKeys.camera.tr()),
                                   ),
-                                   PopupMenuItem(
+                                  PopupMenuItem(
                                     value: 'Gallery',
                                     child: Text(LocaleKeys.gallery.tr()),
                                   ),
@@ -166,29 +167,29 @@ class EditProfile extends StatelessWidget {
                   const SizedBox(
                     height: 30.0,
                   ),
-                  if (AppCubit.get(context).profileImage != null ||
-                      AppCubit.get(context).coverImage != null)
+                  if (UserCubit.get(context).profileImage != null ||
+                      UserCubit.get(context).coverImage != null)
                     Row(
                       children: [
-                        if (AppCubit.get(context).profileImage != null)
+                        if (UserCubit.get(context).profileImage != null)
                           Expanded(
                             child: Column(
                               children: [
                                 defaultMaterialButton(
                                   function: () {
-                                    AppCubit.get(context).updateProfileImage(
+                                    UserCubit.get(context).updateProfileImage(
                                       name: nameController.text,
                                       phone: phoneController.text,
                                       bio: bioController.text,
                                     );
                                   },
-                                  text:LocaleKeys.upload_profile.tr(),
+                                  text: LocaleKeys.upload_profile.tr(),
                                 ),
-                                if (state is AppUpdateUserLoadingState)
+                                if (state is PostUpdateUserLoadingState)
                                   const SizedBox(
                                     height: 5.0,
                                   ),
-                                if (state is AppUpdateUserLoadingState)
+                                if (state is PostUpdateUserLoadingState)
                                   const LinearProgressIndicator(),
                               ],
                             ),
@@ -196,13 +197,13 @@ class EditProfile extends StatelessWidget {
                         const SizedBox(
                           width: 5.0,
                         ),
-                        if (AppCubit.get(context).coverImage != null)
+                        if (UserCubit.get(context).coverImage != null)
                           Expanded(
                             child: Column(
                               children: [
                                 defaultMaterialButton(
                                   function: () {
-                                    AppCubit.get(context).updateCoverImage(
+                                    UserCubit.get(context).updateCoverImage(
                                       name: nameController.text,
                                       phone: phoneController.text,
                                       bio: bioController.text,
@@ -210,19 +211,19 @@ class EditProfile extends StatelessWidget {
                                   },
                                   text: LocaleKeys.upload_cover.tr(),
                                 ),
-                                if (state is AppUpdateUserLoadingState)
+                                if (state is PostUpdateUserLoadingState)
                                   const SizedBox(
                                     height: 5.0,
                                   ),
-                                if (state is AppUpdateUserLoadingState)
+                                if (state is PostUpdateUserLoadingState)
                                   const LinearProgressIndicator(),
                               ],
                             ),
                           ),
                       ],
                     ),
-                  if (AppCubit.get(context).profileImage != null ||
-                      AppCubit.get(context).coverImage != null)
+                  if (UserCubit.get(context).profileImage != null ||
+                      UserCubit.get(context).coverImage != null)
                     const SizedBox(
                       height: 20.0,
                     ),
@@ -233,8 +234,7 @@ class EditProfile extends StatelessWidget {
                     prefixIcon: Icons.person,
                     obscureText: false,
                     label: LocaleKeys.user_name.tr(),
-                    hintText:LocaleKeys.update_your_name.tr(),
-
+                    hintText: LocaleKeys.update_your_name.tr(),
                   ),
                   const SizedBox(
                     height: 15.0,
@@ -257,8 +257,8 @@ class EditProfile extends StatelessWidget {
                     type: TextInputType.number,
                     prefixIcon: Icons.call,
                     obscureText: false,
-                    label:LocaleKeys.phone.tr(),
-                    hintText:LocaleKeys.update_your_phone.tr(),
+                    label: LocaleKeys.phone.tr(),
+                    hintText: LocaleKeys.update_your_phone.tr(),
                   ),
                 ],
               ),

@@ -3,14 +3,14 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/cubit/user_cubit/user_cubit.dart';
+import 'package:social_app/cubit/user_cubit/user_states.dart';
 import 'package:social_app/modules/language/language_screen.dart';
 import 'package:social_app/modules/login/login_screen.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/translations/locale_keys.g.dart';
 
-import '../../cubit/app_cubit/app_cubit.dart';
-import '../../cubit/app_cubit/app_states.dart';
 import '../edit_profile/edit_profile.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -18,10 +18,10 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AppCubit, AppStates>(
+    return BlocConsumer<UserCubit, UserStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        var model = AppCubit.get(context).userModel;
+        var model = UserCubit.get(context).userModel;
         return ConditionalBuilder(
           condition: model != null,
           builder: (context) => Padding(
@@ -160,10 +160,10 @@ class ProfileScreen extends StatelessWidget {
                                   ),
                         ),
                         Switch(
-                          value: AppCubit.get(context).isDark,
+                          value: UserCubit.get(context).isDark,
                           onChanged: (bool newValue) {
-                            AppCubit.get(context).isDark = newValue;
-                            AppCubit.get(context).changeAppMode();
+                            UserCubit.get(context).isDark = newValue;
+                            UserCubit.get(context).changeAppMode();
                           },
                         ),
                       ],
@@ -232,8 +232,7 @@ class ProfileScreen extends StatelessWidget {
                           context,
                           const AppLoginScreen(),
                         );
-                        AppCubit.get(context).currentIndex = 0;
-                        AppCubit.get(context).logout(context);
+                        UserCubit.get(context).logout(context);
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,

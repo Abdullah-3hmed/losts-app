@@ -61,7 +61,7 @@ class AppRegister extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   child: Text(
-                   LocaleKeys.back.tr(),
+                    LocaleKeys.back.tr(),
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
@@ -83,16 +83,15 @@ class AppRegister extends StatelessWidget {
                           height: 20,
                         ),
                         Text(
-                           LocaleKeys.register.tr(),
+                          LocaleKeys.register.tr(),
                           style:
                               Theme.of(context).textTheme.bodyLarge!.copyWith(
                                     fontSize: 32.0,
                                   ),
                         ),
                         Text(
-                         LocaleKeys.hi_register.tr(),
-                          style:
-                              Theme.of(context).textTheme.bodyLarge,
+                          LocaleKeys.hi_register.tr(),
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
                         const SizedBox(
                           height: 30.0,
@@ -177,7 +176,7 @@ class AppRegister extends StatelessWidget {
                                 }
                               },
                               child: Text(
-                               LocaleKeys.register.tr(),
+                                LocaleKeys.register.tr(),
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyLarge!

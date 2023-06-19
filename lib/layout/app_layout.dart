@@ -3,6 +3,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/cubit/chat_cubit/chat_cubit.dart';
+import 'package:social_app/cubit/notification_cubit/notification_cubit.dart';
+import 'package:social_app/cubit/post_cubit/post_cubit.dart';
+import 'package:social_app/cubit/post_cubit/post_states.dart';
+import 'package:social_app/cubit/user_cubit/user_cubit.dart';
 import 'package:social_app/helper/fcm_init_helper.dart';
 import 'package:social_app/local_notification_service/notification_service.dart';
 import 'package:social_app/main.dart';
@@ -14,8 +19,6 @@ import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/styles/icon_broken.dart';
 import 'package:social_app/translations/locale_keys.g.dart';
 
-import '../cubit/app_cubit/app_cubit.dart';
-import '../cubit/app_cubit/app_states.dart';
 import '../modules/new_post/new_post_screen.dart';
 
 class AppLayout extends StatefulWidget {
@@ -29,11 +32,11 @@ class _AppLayoutState extends State<AppLayout> {
   @override
   void initState() {
     super.initState();
-    AppCubit.get(context).getUserData();
-    AppCubit.get(context).getAllUsers();
-    AppCubit.get(context).getPosts();
-    AppCubit.get(context).getChats();
-    AppCubit.get(context).getNotifications();
+    UserCubit.get(context).getUserData();
+    UserCubit.get(context).getAllUsers();
+    PostCubit.get(context).getPosts();
+    ChatCubit.get(context).getChats();
+    NotificationCubit.get(context).getNotifications();
 
     FCMInitHelper(context: context).initListeners();
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
@@ -54,9 +57,9 @@ class _AppLayoutState extends State<AppLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AppCubit, AppStates>(
+    return BlocConsumer<PostCubit, PostStates>(
       listener: (context, state) {
-        if (state is AppNewPostState) {
+        if (state is PostNewPostState) {
           navigateTo(
             context: context,
             screen: const NewPostScreen(),
@@ -64,7 +67,7 @@ class _AppLayoutState extends State<AppLayout> {
         }
       },
       builder: (context, state) {
-        var cubit = AppCubit.get(context);
+        var cubit = PostCubit.get(context);
         List<String> titles = [
           LocaleKeys.home.tr(),
           LocaleKeys.chats.tr(),
@@ -101,7 +104,7 @@ class _AppLayoutState extends State<AppLayout> {
                         size: 28.0,
                       ),
                     ),
-                    if (AppCubit.get(context).notifications.isNotEmpty)
+                    if (NotificationCubit.get(context).notifications.isNotEmpty)
                       Positioned(
                         left: 15.0,
                         top: 12.0,
@@ -116,7 +119,7 @@ class _AppLayoutState extends State<AppLayout> {
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           child: Text(
-                              '${AppCubit.get(context).notifications.length}'),
+                              '${NotificationCubit.get(context).notifications.length}'),
                         ),
                       ),
                   ],

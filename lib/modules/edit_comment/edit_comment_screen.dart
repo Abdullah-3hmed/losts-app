@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/cubit/app_cubit/app_cubit.dart';
-import 'package:social_app/cubit/app_cubit/app_states.dart';
+import 'package:social_app/cubit/post_cubit/post_cubit.dart';
+import 'package:social_app/cubit/post_cubit/post_states.dart';
 import 'package:social_app/models/comment_model/comment.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/translations/locale_keys.g.dart';
@@ -23,7 +23,7 @@ class EditComment extends StatelessWidget {
     var commentController = TextEditingController();
     commentController.text = commentModel.text;
 
-    return BlocConsumer<AppCubit, AppStates>(
+    return BlocConsumer<PostCubit, PostStates>(
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
@@ -38,7 +38,7 @@ class EditComment extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () async {
-                  await AppCubit.get(context).editComment(
+                  await PostCubit.get(context).editComment(
                     postId: postId,
                     commentId: commentModel.commentId,
                     text: commentController.text,
@@ -59,9 +59,9 @@ class EditComment extends StatelessWidget {
             padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
-                if (state is AppEditCommentLoadingState)
+                if (state is PostEditCommentLoadingState)
                   const LinearProgressIndicator(),
-                if (state is AppEditCommentLoadingState)
+                if (state is PostEditCommentLoadingState)
                   const SizedBox(
                     height: 20.0,
                   ),
@@ -69,9 +69,10 @@ class EditComment extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 25.0,
-                      backgroundImage: CachedNetworkImageProvider(commentModel.userImage),
-                      onBackgroundImageError: (_, __) =>
-                           CachedNetworkImage(imageUrl: AppConstants.defaultImageUrl),
+                      backgroundImage:
+                          CachedNetworkImageProvider(commentModel.userImage),
+                      onBackgroundImageError: (_, __) => CachedNetworkImage(
+                          imageUrl: AppConstants.defaultImageUrl),
                     ),
                     const SizedBox(
                       width: 10.0,

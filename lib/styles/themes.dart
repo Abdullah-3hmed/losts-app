@@ -9,7 +9,6 @@ ThemeData lightTheme = ThemeData(
     backgroundColor: Colors.blue,
     elevation: 0.0,
     // ignore: deprecated_member_use
-    backwardsCompatibility: false,
     systemOverlayStyle: SystemUiOverlayStyle(
       statusBarColor: Colors.blue,
       statusBarBrightness: Brightness.dark,
@@ -56,7 +55,6 @@ ThemeData darkTheme = ThemeData(
     backgroundColor: HexColor('333739'),
     elevation: 0.0,
     // ignore: deprecated_member_use
-    backwardsCompatibility: false,
     systemOverlayStyle: SystemUiOverlayStyle(
       statusBarColor: HexColor('333739'),
       statusBarBrightness: Brightness.light,

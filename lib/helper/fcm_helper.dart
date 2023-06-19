@@ -24,7 +24,7 @@ class FCMHelper {
   }) async {
     /// check if user is not current user
     /// check if the post belong to me and i commented on it it will send me nothing
-    if(uId == userId){
+    if (uId == userId) {
       return;
     }
     // POST METHOD
@@ -53,7 +53,7 @@ class FCMHelper {
           title: title,
         ),
       },
-    ).then((value) async{
+    ).then((value) async {
       await AppCubit.get(context).storeNotifications(
         type: 'comment',
         postId: postId,
@@ -81,7 +81,7 @@ class FCMHelper {
     required BuildContext context,
     required String userToken,
   }) async {
-    if(uId == receiverId){
+    if (uId == receiverId) {
       return;
     }
     // POST METHOD
@@ -110,16 +110,17 @@ class FCMHelper {
           userImage: userImage,
         ),
       },
-    ).then((value)async{
+    ).then((value) async {
       await AppCubit.get(context).storeNotifications(
-          userId: userId,
-          type: 'message',
-          userName: userName,
-          ownerId: receiverId,
-          postId: '',
-          title: title,
-          userImage: userImage,
-          dateTime: dateTime,);
+        userId: userId,
+        type: 'message',
+        userName: userName,
+        ownerId: receiverId,
+        postId: '',
+        title: title,
+        userImage: userImage,
+        dateTime: dateTime,
+      );
     });
   }
 

@@ -12,10 +12,10 @@ class NotificationCubit extends Cubit<NotificationStates> {
   List<MainNotification> notifications = [];
   Future<void> storeNotifications({
     required String userId,
+    required String receiverId,
     required String type,
-    required String postId,
+    String? postId,
     required String title,
-    required String ownerId,
     required String userName,
     required String userImage,
     required DateTime dateTime,
@@ -23,16 +23,15 @@ class NotificationCubit extends Cubit<NotificationStates> {
     NotificationDataModel model = NotificationDataModel(
       userId: userId,
       userName: userName,
-      ownerId: ownerId,
       type: type,
-      postId: postId,
+      postId: postId ?? '',
       dateTime: dateTime,
       userImage: userImage,
       title: title,
     );
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(ownerId)
+        .doc(receiverId)
         .collection('notifications')
         .add(model.toJson())
         .then((value) {

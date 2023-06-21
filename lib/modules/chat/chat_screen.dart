@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/cubit/chat_cubit/chat_cubit.dart';
 import 'package:social_app/cubit/chat_cubit/chat_states.dart';
 import 'package:social_app/cubit/user_cubit/user_cubit.dart';
+import 'package:social_app/cubit/user_cubit/user_states.dart';
 import 'package:social_app/helper/date_time_converter.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
@@ -63,6 +64,7 @@ class ChatsScreen extends StatelessWidget {
               userId: userModel.uId,
               userName: userModel.name,
               userImage: userModel.image!,
+              userToken: userModel.token,
             ),
           );
         },
@@ -92,13 +94,21 @@ class ChatsScreen extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                    Text(
-                      message.text,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            color: Colors.green,
-                          ),
+                    BlocConsumer<UserCubit, UserStates>(
+                      listener: (context, state) {},
+                      builder: (context, state) {
+                        return Text(
+                          message.text,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style:
+                              Theme.of(context).textTheme.titleMedium!.copyWith(
+                                    color: UserCubit.get(context).isDark
+                                        ? Colors.white
+                                        : defaultColor.withOpacity(.9),
+                                  ),
+                        );
+                      },
                     ),
                   ],
                 ),

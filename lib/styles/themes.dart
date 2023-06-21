@@ -1,33 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:social_app/shared/components/constants.dart';
 
 ThemeData lightTheme = ThemeData(
-  primarySwatch: Colors.blue,
+  primarySwatch: MaterialColor(
+    defaultColor.value,
+    <int, Color>{
+      50: defaultColor.withOpacity(0.1),
+      100: defaultColor.withOpacity(0.2),
+      200: defaultColor.withOpacity(0.3),
+      300: defaultColor.withOpacity(0.4),
+      400: defaultColor.withOpacity(0.5),
+      500: defaultColor.withOpacity(0.6),
+      600: defaultColor.withOpacity(0.7),
+      700: defaultColor.withOpacity(0.8),
+      800: defaultColor.withOpacity(0.9),
+      900: defaultColor.withOpacity(1.0),
+    },
+  ),
   scaffoldBackgroundColor: Colors.white,
-  appBarTheme: const AppBarTheme(
-    backgroundColor: Colors.blue,
+  appBarTheme: AppBarTheme(
+    backgroundColor: defaultColor,
     elevation: 0.0,
     // ignore: deprecated_member_use
     systemOverlayStyle: SystemUiOverlayStyle(
-      statusBarColor: Colors.blue,
+      statusBarColor: defaultColor,
       statusBarBrightness: Brightness.dark,
       statusBarIconBrightness: Brightness.light,
     ),
-    titleTextStyle: TextStyle(
+    titleTextStyle: const TextStyle(
       fontFamily: 'Tajawal',
       color: Colors.black,
       fontSize: 20.0,
     ),
-    iconTheme: IconThemeData(
+    iconTheme: const IconThemeData(
       color: Colors.white,
     ),
   ),
   iconTheme: const IconThemeData(
     color: Colors.black45,
   ),
-  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-    backgroundColor: Colors.blue,
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: defaultColor,
+  ),
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    backgroundColor: defaultColor,
     type: BottomNavigationBarType.fixed,
     selectedItemColor: Colors.red,
     unselectedItemColor: Colors.white,

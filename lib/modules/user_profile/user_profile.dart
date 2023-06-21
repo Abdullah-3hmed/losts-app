@@ -115,9 +115,9 @@ class UserProfile extends StatelessWidget {
                       ),
                       Container(
                         margin: const EdgeInsets.all(20.0),
-                        decoration: const BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.all(
+                        decoration: BoxDecoration(
+                          color: defaultColor,
+                          borderRadius: const BorderRadius.all(
                             Radius.circular(10.0),
                           ),
                         ),
@@ -129,6 +129,7 @@ class UserProfile extends StatelessWidget {
                                 userId: userModel.uId,
                                 userName: userModel.name,
                                 userImage: userModel.image!,
+                                userToken: userModel.token,
                               ),
                             );
                           },
@@ -150,9 +151,9 @@ class UserProfile extends StatelessWidget {
                                       fontSize: 22.0,
                                     ),
                               ),
-                              const CircleAvatar(
-                                backgroundColor: Colors.blue,
-                                child: Icon(
+                              CircleAvatar(
+                                backgroundColor: defaultColor,
+                                child: const Icon(
                                   IconBroken.Chat,
                                   size: 30.0,
                                   color: Colors.white,

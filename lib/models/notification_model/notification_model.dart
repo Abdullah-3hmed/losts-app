@@ -6,7 +6,6 @@ class NotificationDataModel {
   late String type;
   late String userId;
   late String userName;
-  late String ownerId;
   late String postId;
   late DateTime dateTime;
 
@@ -18,7 +17,6 @@ class NotificationDataModel {
     required this.dateTime,
     required this.userImage,
     required this.title,
-    required this.ownerId,
   });
 
   NotificationDataModel.fromJson(Map<String, dynamic> json) {
@@ -41,7 +39,6 @@ class NotificationDataModel {
       "user_id": userId,
       "user_name": userName,
       "post_id": postId,
-      "owner_id": ownerId,
     };
   }
 }

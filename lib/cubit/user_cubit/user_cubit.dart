@@ -216,8 +216,8 @@ class UserCubit extends Cubit<UserStates> {
       isDark = fromShared;
       emit(UserChangeAppThemeModeState());
     } else {
+      emit(UserChangeAppThemeModeState());
       CacheHelper.saveData(key: 'isDark', value: isDark).then((_) {
-        emit(UserChangeAppThemeModeState());
         debugPrint('Change App mode ...........');
       });
     }

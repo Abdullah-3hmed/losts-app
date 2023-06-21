@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/cubit/chat_cubit/chat_cubit.dart';
 import 'package:social_app/cubit/chat_cubit/chat_states.dart';
 import 'package:social_app/cubit/user_cubit/user_cubit.dart';
+import 'package:social_app/cubit/user_cubit/user_states.dart';
 import 'package:social_app/models/message_model/message_model.dart';
 import 'package:social_app/shared/components/constants.dart';
 
@@ -14,10 +15,12 @@ class ChatDetails extends StatelessWidget {
     required this.userId,
     required this.userName,
     required this.userImage,
+    this.userToken,
   }) : super(key: key);
   final String userId;
   final String userName;
   final String userImage;
+  final String? userToken;
 
   @override
   Widget build(BuildContext context) {
@@ -103,9 +106,9 @@ class ChatDetails extends StatelessWidget {
                           ),
                           Container(
                             height: 48.0,
-                            decoration: const BoxDecoration(
-                              color: Colors.blue,
-                              borderRadius: BorderRadius.only(
+                            decoration: BoxDecoration(
+                              color: defaultColor,
+                              borderRadius: const BorderRadius.only(
                                 bottomRight: Radius.circular(15.0),
                                 topRight: Radius.circular(15.0),
                               ),
@@ -118,8 +121,23 @@ class ChatDetails extends StatelessWidget {
                                     context: context,
                                     text: messageController.text,
                                     receiverId: userId,
+                                    userToken: userToken ?? '',
                                     dateTime: DateTime.now(),
                                   );
+                                  // final userToken =
+                                  //     users.firstWhere((user) => user.uId == receiverId).token;
+
+                                  // FCMHelper.pushChatMessageFCM(
+                                  //   title: '${userModel!.name} sent you a message',
+                                  //   userName: userModel!.name,
+                                  //   context: context,
+                                  //   dateTime: dateTime,
+                                  //   userImage: userModel!.image!,
+                                  //   description: '',
+                                  //   userId: userModel!.uId,
+                                  //   receiverId: receiverId,
+                                  //   userToken: userToken,
+                                  // );
                                 }
                                 messageController.clear();
                               },
@@ -158,23 +176,35 @@ class ChatDetails extends StatelessWidget {
             const SizedBox(
               width: 10.0,
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                vertical: 5.0,
-                horizontal: 10.0,
-              ),
-              decoration: const BoxDecoration(
-                color: Colors.blueGrey,
-                borderRadius: BorderRadiusDirectional.only(
-                  bottomEnd: Radius.circular(10.0),
-                  topEnd: Radius.circular(10.0),
-                  topStart: Radius.circular(10.0),
-                ),
-              ),
-              child: Text(
-                messageModel.text,
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
+            BlocConsumer<UserCubit, UserStates>(
+              listener: (context, state) {},
+              builder: (context, state) {
+                return Flexible(
+                  fit: FlexFit.loose,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 5.0,
+                      horizontal: 10.0,
+                    ),
+                    decoration: BoxDecoration(
+                      color: UserCubit.get(context).isDark
+                          ? Colors.grey.withOpacity(.3)
+                          : Colors.grey[300],
+                      borderRadius: const BorderRadiusDirectional.only(
+                        bottomEnd: Radius.circular(10.0),
+                        topEnd: Radius.circular(10.0),
+                        topStart: Radius.circular(10.0),
+                      ),
+                    ),
+                    child: Text(
+                      messageModel.text,
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            fontSize: 20.0,
+                          ),
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),
@@ -189,26 +219,35 @@ class ChatDetails extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Flexible(
-              fit: FlexFit.loose,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 5.0,
-                  horizontal: 10.0,
-                ),
-                decoration: const BoxDecoration(
-                  color: Colors.blueGrey,
-                  borderRadius: BorderRadiusDirectional.only(
-                    bottomStart: Radius.circular(10.0),
-                    topEnd: Radius.circular(10.0),
-                    topStart: Radius.circular(10.0),
+            BlocConsumer<UserCubit, UserStates>(
+              listener: (context, state) {},
+              builder: (context, state) {
+                return Flexible(
+                  fit: FlexFit.loose,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 5.0,
+                      horizontal: 10.0,
+                    ),
+                    decoration: BoxDecoration(
+                      color: UserCubit.get(context).isDark
+                          ? Colors.blue
+                          : Colors.lightBlueAccent.withOpacity(.3),
+                      borderRadius: const BorderRadiusDirectional.only(
+                        bottomStart: Radius.circular(10.0),
+                        topEnd: Radius.circular(10.0),
+                        topStart: Radius.circular(10.0),
+                      ),
+                    ),
+                    child: Text(
+                      messageModel.text,
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            fontSize: 20.0,
+                          ),
+                    ),
                   ),
-                ),
-                child: Text(
-                  messageModel.text,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ),
+                );
+              },
             ),
             const SizedBox(
               width: 10.0,

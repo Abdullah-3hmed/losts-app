@@ -76,8 +76,15 @@ class AppRegister extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Image(
-                          image: AssetImage('assets/images/logo.jpg'),
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image(
+                              image: AssetImage('assets/images/logo.jpg'),
+                              height: 200.0,
+                              width: 200.0,
+                            ),
+                          ],
                         ),
                         const SizedBox(
                           height: 20,
@@ -161,7 +168,7 @@ class AppRegister extends StatelessWidget {
                             height: 60.0,
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              color: Colors.blue,
+                              color: defaultColor,
                               borderRadius: BorderRadius.circular(7.0),
                             ),
                             child: MaterialButton(

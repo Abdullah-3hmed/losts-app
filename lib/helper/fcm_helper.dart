@@ -14,11 +14,11 @@ class FCMHelper {
     /// notification description
     required String description,
     required String userId,
-    required String ownerId,
     required String userToken,
     required String userName,
     required String userImage,
     required String postId,
+    required String receiverId,
     required DateTime dateTime,
     required BuildContext context,
   }) async {
@@ -58,8 +58,8 @@ class FCMHelper {
         type: 'comment',
         postId: postId,
         userName: userName,
-        userId: '',
-        ownerId: ownerId,
+        userId: userId,
+        receiverId: receiverId,
         title: title,
         userImage: userImage,
         dateTime: dateTime,
@@ -108,6 +108,7 @@ class FCMHelper {
           userName: userName,
           title: title,
           userImage: userImage,
+          userToken: userToken,
         ),
       },
     ).then((value) async {
@@ -115,8 +116,7 @@ class FCMHelper {
         userId: userId,
         type: 'message',
         userName: userName,
-        ownerId: receiverId,
-        postId: '',
+        receiverId: receiverId,
         title: title,
         userImage: userImage,
         dateTime: dateTime,
@@ -145,6 +145,7 @@ class FCMHelper {
     required String userName,
     required String userImage,
     required String title,
+    required String userToken,
   }) {
     return {
       "type": "message",

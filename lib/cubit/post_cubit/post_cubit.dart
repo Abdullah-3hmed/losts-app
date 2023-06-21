@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:social_app/cubit/user_cubit/user_cubit.dart';
+import 'package:social_app/helper/fcm_helper.dart';
 import 'package:social_app/models/comment_model/comment.dart';
 import 'package:social_app/models/comment_model/comment_model.dart';
 import 'package:social_app/models/post_model/post.dart';
@@ -48,35 +49,35 @@ class PostCubit extends Cubit<PostStates> {
 
   Future<void> getPostImage() async {
     pickedPostImage = null;
-    emit(PostPostImagePickedLoadingState());
+    emit(PostImagePickedLoadingState());
     final pickedFile = await picker.pickImage(
       source: ImageSource.gallery,
     );
     if (pickedFile != null) {
       pickedPostImage = File(pickedFile.path);
-      emit(PostPostImagePickedSuccessState());
+      emit(PostImagePickedSuccessState());
     } else {
       if (kDebugMode) {
         print('no image selected');
       }
-      emit(PostPostImagePickedErrorState());
+      emit(PostImagePickedErrorState());
     }
   }
 
   Future<void> getPostImageByCamera() async {
     pickedPostImage = null;
-    emit(PostPostImagePickedLoadingState());
+    emit(PostImagePickedLoadingState());
     final pickedFile = await picker.pickImage(
       source: ImageSource.camera,
     );
     if (pickedFile != null) {
       pickedPostImage = File(pickedFile.path);
-      emit(PostPostImagePickedSuccessState());
+      emit(PostImagePickedSuccessState());
     } else {
       if (kDebugMode) {
         print('no image selected');
       }
-      emit(PostPostImagePickedErrorState());
+      emit(PostImagePickedErrorState());
     }
   }
 
@@ -401,7 +402,7 @@ class PostCubit extends Cubit<PostStates> {
     required DateTime dateTime,
     required BuildContext context,
     required Post post,
-  }) async {
+  }) {
     var model = CommentModel(
       postId: post.id,
       text: comment,
@@ -419,26 +420,32 @@ class PostCubit extends Cubit<PostStates> {
         .add(model.toJson())
         .then((value) {
       emit(PostCommentOnPostSuccessState());
-      // final userToken = users.firstWhere((user) => user.uId == post.uId).token;
-      //
-      // FCMHelper.pushCommentFCM(
-      //   title: '${model.userName} commented on your post',
-      //   description: '',
-      //   userImage: model.userImage,
-      //   userName: model.userName,
-      //   postId: post.id,
-      //   ownerId: post.uId,
-      //   userId: post.uId,
-      //   userToken: userToken,
-      //   context: context,
-      //   dateTime: dateTime,
-      // ).then((_) {
-      //   debugPrint('push notification on comment');
-      // });
     }).catchError((error) {
       debugPrint('error when commentPost: ${error.toString()}');
       emit(PostCommentOnPostErrorState(error.toString()));
     });
+    if (uId != post.uId) {
+      final userToken = UserCubit.get(context)
+          .users
+          .firstWhere((user) => user.uId == post.uId)
+          .token;
+
+      FCMHelper.pushCommentFCM(
+        title: '${model.userName} commented on your post',
+        description: '',
+        userImage: model.userImage,
+        userName: model.userName,
+        postId: post.id,
+        userId: post.uId,
+        receiverId: post.uId,
+        userToken: userToken,
+        context: context,
+        dateTime: dateTime,
+      ).then((_) {
+        debugPrint('push notification on comment');
+        debugPrint('userToken >>>>>>>>$userToken');
+      });
+    }
   }
 
   bool typing = true;

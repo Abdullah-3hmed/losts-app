@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/cubit/post_cubit/post_states.dart';
 import 'package:social_app/cubit/user_cubit/user_cubit.dart';
 import 'package:social_app/cubit/user_cubit/user_states.dart';
 import 'package:social_app/shared/components/components.dart';
+import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/translations/locale_keys.g.dart';
 
 class EditProfile extends StatelessWidget {
@@ -53,9 +53,9 @@ class EditProfile extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  if (state is PostUpdateUserLoadingState)
+                  if (state is UserUpdateUserLoadingState)
                     const LinearProgressIndicator(),
-                  if (state is PostUpdateUserLoadingState)
+                  if (state is UserUpdateUserLoadingState)
                     const SizedBox(
                       height: 20.0,
                     ),
@@ -133,7 +133,7 @@ class EditProfile extends StatelessWidget {
                             ),
                             CircleAvatar(
                               radius: 20.0,
-                              backgroundColor: Colors.blue,
+                              backgroundColor: defaultColor,
                               child: PopupMenuButton(
                                 icon: const Icon(
                                   Icons.edit,
@@ -185,11 +185,11 @@ class EditProfile extends StatelessWidget {
                                   },
                                   text: LocaleKeys.upload_profile.tr(),
                                 ),
-                                if (state is PostUpdateUserLoadingState)
+                                if (state is UserUpdateUserLoadingState)
                                   const SizedBox(
                                     height: 5.0,
                                   ),
-                                if (state is PostUpdateUserLoadingState)
+                                if (state is UserUpdateUserLoadingState)
                                   const LinearProgressIndicator(),
                               ],
                             ),
@@ -211,11 +211,11 @@ class EditProfile extends StatelessWidget {
                                   },
                                   text: LocaleKeys.upload_cover.tr(),
                                 ),
-                                if (state is PostUpdateUserLoadingState)
+                                if (state is UserUpdateUserLoadingState)
                                   const SizedBox(
                                     height: 5.0,
                                   ),
-                                if (state is PostUpdateUserLoadingState)
+                                if (state is UserUpdateUserLoadingState)
                                   const LinearProgressIndicator(),
                               ],
                             ),

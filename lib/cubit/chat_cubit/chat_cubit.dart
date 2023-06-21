@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/cubit/chat_cubit/chat_states.dart';
+import 'package:social_app/cubit/user_cubit/user_cubit.dart';
+import 'package:social_app/helper/fcm_helper.dart';
 import 'package:social_app/models/message_model/message_model.dart';
 import 'package:social_app/shared/components/constants.dart';
 
@@ -35,9 +37,10 @@ class ChatCubit extends Cubit<ChatStates> {
   void sendMessage({
     required String text,
     required String receiverId,
+    required String userToken,
     required DateTime dateTime,
     required BuildContext context,
-  }) async {
+  }) {
     MessageModel messageModel = MessageModel(
       dateTime: dateTime,
       receiverId: receiverId,
@@ -60,7 +63,7 @@ class ChatCubit extends Cubit<ChatStates> {
         return transaction.set(myMessageRef, {'exist': true});
       },
     );
-    await myMessageRef
+    myMessageRef
         .collection('messages')
         .add(messageModel.toJson())
         .then((value) {
@@ -73,28 +76,28 @@ class ChatCubit extends Cubit<ChatStates> {
         return transaction.set(myMessageRef, {'exist': true});
       },
     );
-    await otherMessageRef
+    otherMessageRef
         .collection('messages')
         .add(messageModel.toJson())
         .then((value) {
-      // final userToken =
-      //     users.firstWhere((user) => user.uId == receiverId).token;
-
-      // FCMHelper.pushChatMessageFCM(
-      //   title: '${userModel!.name} sent you a message',
-      //   userName: userModel!.name,
-      //   context: context,
-      //   dateTime: dateTime,
-      //   userImage: userModel!.image!,
-      //   description: '',
-      //   userId: userModel!.uId,
-      //   receiverId: receiverId,
-      //   userToken: userToken,
-      // );
       emit(ChatSendMessageSuccessState());
     }).catchError((error) {
       emit(ChatSendMessageErrorState());
     });
+    // final userToken =
+    //     users.firstWhere((user) => user.uId == receiverId).token;
+
+    FCMHelper.pushChatMessageFCM(
+      title: '${UserCubit.get(context).userModel!.name} sent you a message',
+      userName: UserCubit.get(context).userModel!.name,
+      context: context,
+      dateTime: dateTime,
+      userImage: UserCubit.get(context).userModel!.image!,
+      description: '',
+      userId: uId!,
+      receiverId: receiverId,
+      userToken: userToken,
+    );
     // /// my message
     //      FirebaseFirestore.instance
     //     .collection('users')

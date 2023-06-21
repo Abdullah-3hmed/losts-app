@@ -4,21 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/cubit/post_cubit/post_cubit.dart';
 import 'package:social_app/cubit/post_cubit/post_states.dart';
 import 'package:social_app/cubit/user_cubit/user_cubit.dart';
+import 'package:social_app/cubit/user_cubit/user_states.dart';
 import 'package:social_app/shared/components/components.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    PostCubit.get(context).currentIndex = 0;
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,23 +18,28 @@ class _HomeScreenState extends State<HomeScreen> {
         return Column(
           children: [
             Expanded(
-              child: ConditionalBuilder(
-                condition: PostCubit.get(context).posts.isNotEmpty &&
-                    UserCubit.get(context).userModel != null,
-                builder: (context) => ListView.separated(
-                  physics: const BouncingScrollPhysics(),
-                  itemBuilder: (context, index) => buildPostItem(
-                    context,
-                    PostCubit.get(context).posts[index],
-                    isUserProfile: false,
-                  ),
-                  separatorBuilder: (context, index) => const SizedBox(
-                    height: 10.0,
-                  ),
-                  itemCount: PostCubit.get(context).posts.length,
-                ),
-                fallback: (context) =>
-                    const Center(child: CircularProgressIndicator()),
+              child: BlocConsumer<UserCubit, UserStates>(
+                listener: (context, state) {},
+                builder: (context, state) {
+                  return ConditionalBuilder(
+                    condition: PostCubit.get(context).posts.isNotEmpty &&
+                        UserCubit.get(context).userModel != null,
+                    builder: (context) => ListView.separated(
+                      physics: const BouncingScrollPhysics(),
+                      itemBuilder: (context, index) => buildPostItem(
+                        context,
+                        PostCubit.get(context).posts[index],
+                        isUserProfile: false,
+                      ),
+                      separatorBuilder: (context, index) => const SizedBox(
+                        height: 10.0,
+                      ),
+                      itemCount: PostCubit.get(context).posts.length,
+                    ),
+                    fallback: (context) =>
+                        const Center(child: CircularProgressIndicator()),
+                  );
+                },
               ),
             ),
           ],

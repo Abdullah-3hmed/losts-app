@@ -91,8 +91,8 @@ Widget defaultTextFormField({
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
-          borderSide: const BorderSide(
-            color: Colors.blue,
+          borderSide: BorderSide(
+            color: defaultColor,
           ),
         ),
         prefixIconColor: Theme.of(context).iconTheme.color,
@@ -345,9 +345,11 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                       const SizedBox(
                         width: 5.0,
                       ),
-                      const Icon(
+                      Icon(
                         Icons.comment_sharp,
-                        color: Colors.amber,
+                        color: UserCubit.get(context).isDark
+                            ? Colors.white
+                            : defaultColor.withOpacity(0.8),
                       ),
                     ],
                   ),

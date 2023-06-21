@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:social_app/shared/components/constants.dart';
 
 import '../../network/local/cache_helper.dart';
 import '../../shared/components/components.dart';
@@ -68,7 +69,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(
-          30.0,
+          22.0,
         ),
         child: Column(
           children: [
@@ -99,9 +100,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 SmoothPageIndicator(
                   controller: boardController,
                   count: boarding.length,
-                  effect: const ExpandingDotsEffect(
+                  effect: ExpandingDotsEffect(
                     dotColor: Colors.grey,
-                    activeDotColor: Colors.blue,
+                    activeDotColor: defaultColor,
                     dotHeight: 10,
                     dotWidth: 10,
                     spacing: 5.0,
@@ -139,28 +140,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             child: Image(
               height: double.infinity,
               width: double.infinity,
-              fit: BoxFit.fitWidth,
+              fit: BoxFit.cover,
               image: AssetImage(model.image),
             ),
           ),
-          // Text(
-          //   model.title,
-          //   style: const TextStyle(
-          //     fontSize: 24.0,
-          //   ),
-          // ),
-          // const SizedBox(
-          //   height: 10.0,
-          // ),
-          // Text(
-          //   model.body,
-          //   style: const TextStyle(
-          //     fontSize: 14.0,
-          //   ),
-          // ),
-          // const SizedBox(
-          //   height: 20.0,
-          // ),
         ],
       );
 }

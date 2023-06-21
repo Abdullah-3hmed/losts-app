@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/cubit/post_cubit/post_cubit.dart';
 import 'package:social_app/cubit/post_cubit/post_states.dart';
 import 'package:social_app/cubit/user_cubit/user_cubit.dart';
+import 'package:social_app/cubit/user_cubit/user_states.dart';
 import 'package:social_app/helper/date_time_converter.dart';
 import 'package:social_app/models/comment_model/comment.dart';
 import 'package:social_app/models/post_model/post.dart';
@@ -113,9 +114,16 @@ class _CommentsScreenState extends State<CommentsScreen> {
                             );
                             commentController.clear();
                           },
-                          icon: const Icon(
-                            Icons.send,
-                            color: Colors.blue,
+                          icon: BlocConsumer<UserCubit, UserStates>(
+                            listener: (context, state) {},
+                            builder: (context, state) {
+                              return Icon(
+                                Icons.send,
+                                color: UserCubit.get(context).isDark
+                                    ? Colors.grey[300]
+                                    : defaultColor,
+                              );
+                            },
                           ),
                         ),
                       ],
@@ -147,36 +155,45 @@ class _CommentsScreenState extends State<CommentsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 5.0,
-                    horizontal: 10.0,
-                  ),
-                  decoration: const BoxDecoration(
-                    color: Colors.blueGrey,
-                    borderRadius: BorderRadiusDirectional.only(
-                      bottomStart: Radius.circular(15.0),
-                      bottomEnd: Radius.circular(15.0),
-                      topEnd: Radius.circular(15.0),
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${comment.userName} ',
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                              fontSize: 14.0,
-                            ),
+                BlocConsumer<UserCubit, UserStates>(
+                  listener: (context, state) {},
+                  builder: (context, state) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 5.0,
+                        horizontal: 10.0,
                       ),
-                      Text(
-                        '${comment.text} ',
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                              fontSize: 16.0,
-                            ),
+                      decoration: BoxDecoration(
+                        color: UserCubit.get(context).isDark
+                            ? Colors.grey[700]
+                            : defaultColor.withOpacity(.2),
+                        borderRadius: const BorderRadiusDirectional.only(
+                          bottomStart: Radius.circular(15.0),
+                          bottomEnd: Radius.circular(15.0),
+                          topEnd: Radius.circular(15.0),
+                        ),
                       ),
-                    ],
-                  ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${comment.userName} ',
+                            style:
+                                Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                      fontSize: 14.0,
+                                    ),
+                          ),
+                          Text(
+                            '${comment.text} ',
+                            style:
+                                Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                      fontSize: 16.0,
+                                    ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(
                   height: 5.0,

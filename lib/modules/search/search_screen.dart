@@ -5,6 +5,7 @@ import 'package:social_app/cubit/post_cubit/post_cubit.dart';
 import 'package:social_app/cubit/post_cubit/post_states.dart';
 import 'package:social_app/models/post_model/post.dart';
 import 'package:social_app/shared/components/components.dart';
+import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/translations/locale_keys.g.dart';
 
 class SearchScreen extends StatelessWidget {
@@ -45,8 +46,8 @@ class SearchScreen extends StatelessWidget {
                     contentPadding: const EdgeInsets.all(20.0),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
-                      borderSide: const BorderSide(
-                        color: Colors.blue,
+                      borderSide: BorderSide(
+                        color: defaultColor,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(

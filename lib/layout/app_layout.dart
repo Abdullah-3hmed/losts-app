@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/cubit/chat_cubit/chat_cubit.dart';
 import 'package:social_app/cubit/notification_cubit/notification_cubit.dart';
+import 'package:social_app/cubit/notification_cubit/notification_states.dart';
 import 'package:social_app/cubit/post_cubit/post_cubit.dart';
 import 'package:social_app/cubit/post_cubit/post_states.dart';
 import 'package:social_app/cubit/user_cubit/user_cubit.dart';
+import 'package:social_app/cubit/user_cubit/user_states.dart';
 import 'package:social_app/helper/fcm_init_helper.dart';
 import 'package:social_app/local_notification_service/notification_service.dart';
 import 'package:social_app/main.dart';
@@ -32,9 +34,9 @@ class _AppLayoutState extends State<AppLayout> {
   @override
   void initState() {
     super.initState();
+    PostCubit.get(context).getPosts();
     UserCubit.get(context).getUserData();
     UserCubit.get(context).getAllUsers();
-    PostCubit.get(context).getPosts();
     ChatCubit.get(context).getChats();
     NotificationCubit.get(context).getNotifications();
 
@@ -74,103 +76,117 @@ class _AppLayoutState extends State<AppLayout> {
           LocaleKeys.post.tr(),
           LocaleKeys.profile.tr(),
         ];
-        return Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text(
-              titles[cubit.currentIndex],
-              style: const TextStyle(
-                fontSize: 24.0,
-                color: Colors.white,
-              ),
-            ),
-            actions: [
-              InkWell(
-                onTap: () {
-                  navigateTo(
-                    context: context,
-                    screen: const NotificationsDisplayScreen(),
-                  );
-                },
-                child: Stack(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(
-                        top: 16.0,
-                        right: 12.0,
-                      ),
-                      child: Icon(
-                        IconBroken.Notification,
-                        size: 28.0,
-                      ),
-                    ),
-                    if (NotificationCubit.get(context).notifications.isNotEmpty)
-                      Positioned(
-                        left: 15.0,
-                        top: 12.0,
-                        child: Container(
-                          padding: const EdgeInsets.only(
-                            top: 3.0,
-                            left: 5.0,
-                            right: 5.0,
+        return BlocConsumer<UserCubit, UserStates>(
+          listener: (context, state) {},
+          builder: (context, state) {
+            return Scaffold(
+              appBar: AppBar(
+                centerTitle: true,
+                title: Text(
+                  titles[cubit.currentIndex],
+                  style: const TextStyle(
+                    fontSize: 24.0,
+                    color: Colors.white,
+                  ),
+                ),
+                actions: [
+                  InkWell(
+                    onTap: () {
+                      navigateTo(
+                        context: context,
+                        screen: const NotificationsDisplayScreen(),
+                      );
+                    },
+                    child: Stack(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(
+                            top: 16.0,
+                            right: 12.0,
                           ),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(10.0),
+                          child: Icon(
+                            IconBroken.Notification,
+                            size: 28.0,
                           ),
-                          child: Text(
-                              '${NotificationCubit.get(context).notifications.length}'),
                         ),
-                      ),
+                        BlocConsumer<NotificationCubit, NotificationStates>(
+                          listener: (context, state) {},
+                          builder: (context, state) {
+                            if (NotificationCubit.get(context)
+                                .notifications
+                                .isNotEmpty) {
+                              return Positioned(
+                                left: 15.0,
+                                top: 12.0,
+                                child: Container(
+                                  padding: const EdgeInsets.only(
+                                    top: 3.0,
+                                    left: 5.0,
+                                    right: 5.0,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: Text(
+                                      '${NotificationCubit.get(context).notifications.length}'),
+                                ),
+                              );
+                            }
+                            return const SizedBox();
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      navigateTo(
+                        context: context,
+                        screen: const SearchScreen(),
+                      );
+                    },
+                    icon: const Icon(IconBroken.Search),
+                  ),
+                ],
+              ),
+              body: cubit.screens[cubit.currentIndex],
+              bottomNavigationBar: Container(
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                decoration: const BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadiusDirectional.only(
+                    topStart: Radius.circular(0.0),
+                    topEnd: Radius.circular(0.0),
+                  ),
+                ),
+                child: BottomNavigationBar(
+                  currentIndex: cubit.currentIndex,
+                  onTap: (int index) {
+                    cubit.changeBottomNavBar(index);
+                  },
+                  items: [
+                    BottomNavigationBarItem(
+                      icon: const Icon(IconBroken.Home),
+                      label: LocaleKeys.home.tr(),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: const Icon(IconBroken.Chat),
+                      label: LocaleKeys.chats.tr(),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: const Icon(IconBroken.Upload),
+                      label: LocaleKeys.post.tr(),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: const Icon(IconBroken.Profile),
+                      label: LocaleKeys.profile.tr(),
+                    ),
                   ],
                 ),
               ),
-              IconButton(
-                onPressed: () {
-                  navigateTo(
-                    context: context,
-                    screen: const SearchScreen(),
-                  );
-                },
-                icon: const Icon(IconBroken.Search),
-              ),
-            ],
-          ),
-          body: cubit.screens[cubit.currentIndex],
-          bottomNavigationBar: Container(
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            decoration: const BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadiusDirectional.only(
-                topStart: Radius.circular(0.0),
-                topEnd: Radius.circular(0.0),
-              ),
-            ),
-            child: BottomNavigationBar(
-              currentIndex: cubit.currentIndex,
-              onTap: (int index) {
-                cubit.changeBottomNavBar(index);
-              },
-              items: [
-                BottomNavigationBarItem(
-                  icon: const Icon(IconBroken.Home),
-                  label: LocaleKeys.home.tr(),
-                ),
-                BottomNavigationBarItem(
-                  icon: const Icon(IconBroken.Chat),
-                  label: LocaleKeys.chats.tr(),
-                ),
-                BottomNavigationBarItem(
-                  icon: const Icon(IconBroken.Upload),
-                  label: LocaleKeys.post.tr(),
-                ),
-                BottomNavigationBarItem(
-                  icon: const Icon(IconBroken.Profile),
-                  label: LocaleKeys.profile.tr(),
-                ),
-              ],
-            ),
-          ),
+            );
+          },
         );
       },
     );

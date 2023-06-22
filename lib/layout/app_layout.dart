@@ -59,26 +59,26 @@ class _AppLayoutState extends State<AppLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<PostCubit, PostStates>(
-      listener: (context, state) {
-        if (state is PostNewPostState) {
-          navigateTo(
-            context: context,
-            screen: const NewPostScreen(),
-          );
-        }
-      },
+    return BlocConsumer<UserCubit, UserStates>(
+      listener: (context, state) {},
       builder: (context, state) {
-        var cubit = PostCubit.get(context);
-        List<String> titles = [
-          LocaleKeys.home.tr(),
-          LocaleKeys.chats.tr(),
-          LocaleKeys.post.tr(),
-          LocaleKeys.profile.tr(),
-        ];
-        return BlocConsumer<UserCubit, UserStates>(
-          listener: (context, state) {},
+        return BlocConsumer<PostCubit, PostStates>(
+          listener: (context, state) {
+            if (state is PostNewPostState) {
+              navigateTo(
+                context: context,
+                screen: const NewPostScreen(),
+              );
+            }
+          },
           builder: (context, state) {
+            var cubit = PostCubit.get(context);
+            List<String> titles = [
+              LocaleKeys.home.tr(),
+              LocaleKeys.chats.tr(),
+              LocaleKeys.post.tr(),
+              LocaleKeys.profile.tr(),
+            ];
             return Scaffold(
               appBar: AppBar(
                 centerTitle: true,

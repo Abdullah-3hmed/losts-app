@@ -104,48 +104,31 @@ class ChatDetails extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Container(
-                            height: 48.0,
-                            decoration: BoxDecoration(
-                              color: defaultColor,
-                              borderRadius: const BorderRadius.only(
-                                bottomRight: Radius.circular(15.0),
-                                topRight: Radius.circular(15.0),
-                              ),
-                            ),
-                            child: MaterialButton(
-                              minWidth: 1.0,
-                              onPressed: () {
-                                if (messageController.text.isNotEmpty) {
-                                  ChatCubit.get(context).sendMessage(
-                                    context: context,
-                                    text: messageController.text,
-                                    receiverId: userId,
-                                    userToken: userToken ?? '',
-                                    dateTime: DateTime.now(),
-                                  );
-                                  // final userToken =
-                                  //     users.firstWhere((user) => user.uId == receiverId).token;
-
-                                  // FCMHelper.pushChatMessageFCM(
-                                  //   title: '${userModel!.name} sent you a message',
-                                  //   userName: userModel!.name,
-                                  //   context: context,
-                                  //   dateTime: dateTime,
-                                  //   userImage: userModel!.image!,
-                                  //   description: '',
-                                  //   userId: userModel!.uId,
-                                  //   receiverId: receiverId,
-                                  //   userToken: userToken,
-                                  // );
-                                }
-                                messageController.clear();
+                          MaterialButton(
+                            minWidth: 1.0,
+                            onPressed: () {
+                              if (messageController.text.isNotEmpty) {
+                                ChatCubit.get(context).sendMessage(
+                                  context: context,
+                                  text: messageController.text,
+                                  receiverId: userId,
+                                  userToken: userToken ?? '',
+                                  dateTime: DateTime.now(),
+                                );
+                              }
+                              messageController.clear();
+                            },
+                            child: BlocConsumer<UserCubit, UserStates>(
+                              listener: (context, state) {},
+                              builder: (context, state) {
+                                return Icon(
+                                  Icons.send,
+                                  size: 26.0,
+                                  color: UserCubit.get(context).isDark
+                                      ? Colors.white
+                                      : defaultColor,
+                                );
                               },
-                              child: const Icon(
-                                Icons.send,
-                                size: 16.0,
-                                color: Colors.white,
-                              ),
                             ),
                           ),
                         ],

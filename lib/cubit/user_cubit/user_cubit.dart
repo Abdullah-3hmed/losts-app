@@ -101,7 +101,7 @@ class UserCubit extends Cubit<UserStates> {
     emit(UserUpdateUserLoadingState());
     firebase_storage.FirebaseStorage.instance
         .ref()
-        .child('users/${userModel!.uId}/profile')
+        .child('users/$uId/profile')
         .putFile(profileImage!)
         .then(((value) {
       value.ref.getDownloadURL().then((value) {
@@ -129,7 +129,7 @@ class UserCubit extends Cubit<UserStates> {
     emit(UserUpdateUserLoadingState());
     firebase_storage.FirebaseStorage.instance
         .ref()
-        .child('users/${userModel!.uId}/cover')
+        .child('users/$uId/cover')
         .putFile(coverImage!)
         .then(((value) {
       value.ref.getDownloadURL().then((value) {

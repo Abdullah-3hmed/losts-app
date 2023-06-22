@@ -63,6 +63,11 @@ class ChatCubit extends Cubit<ChatStates> {
         return transaction.set(myMessageRef, {'exist': true});
       },
     );
+    firestoreRef.runTransaction(
+      (transaction) async {
+        return transaction.set(otherMessageRef, {'exist': true});
+      },
+    );
     myMessageRef
         .collection('messages')
         .add(messageModel.toJson())
@@ -84,8 +89,6 @@ class ChatCubit extends Cubit<ChatStates> {
     }).catchError((error) {
       emit(ChatSendMessageErrorState());
     });
-    // final userToken =
-    //     users.firstWhere((user) => user.uId == receiverId).token;
 
     FCMHelper.pushChatMessageFCM(
       title: '${UserCubit.get(context).userModel!.name} sent you a message',
@@ -186,7 +189,6 @@ class ChatCubit extends Cubit<ChatStates> {
         .get()
         .then((value) {
       message = MessageModel.fromJson(value.docs.last.data());
-
       emit(ChatGetMessageSuccessState());
     }).catchError((error) {
       debugPrint('Error when get last message : $error');

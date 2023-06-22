@@ -57,6 +57,7 @@ dependencies:
   cached_network_image: ^3.2.3
 
 
+
 dependency_overrides:
   intl: ^0.17.0
 

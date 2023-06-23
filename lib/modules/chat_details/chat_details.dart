@@ -9,7 +9,7 @@ import 'package:social_app/cubit/user_cubit/user_states.dart';
 import 'package:social_app/models/message_model/message_model.dart';
 import 'package:social_app/shared/components/constants.dart';
 
-class ChatDetails extends StatelessWidget {
+class ChatDetails extends StatefulWidget {
   const ChatDetails({
     Key? key,
     required this.userId,
@@ -23,138 +23,138 @@ class ChatDetails extends StatelessWidget {
   final String? userToken;
 
   @override
+  State<ChatDetails> createState() => _ChatDetailsState();
+}
+
+class _ChatDetailsState extends State<ChatDetails> {
+  var messageController = TextEditingController();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ChatCubit.get(context).getMessages(
+        receiverId: widget.userId,
+      );
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (BuildContext context) {
-        ChatCubit.get(context).getMessages(
-          receiverId: userId,
-        );
-        var messageController = TextEditingController();
-        return BlocConsumer<ChatCubit, ChatStates>(
-          listener: (context, state) {},
-          builder: (context, state) {
-            return Scaffold(
-              appBar: AppBar(
-                centerTitle: true,
-                titleSpacing: 0.0,
-                title: Text(
-                  userName,
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: Colors.white,
+    return BlocConsumer<ChatCubit, ChatStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            titleSpacing: 0.0,
+            title: Text(
+              widget.userName,
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    color: Colors.white,
+                  ),
+            ),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                Expanded(
+                  child: ConditionalBuilder(
+                    condition: ChatCubit.get(context).messages.isNotEmpty,
+                    builder: (context) => ListView.separated(
+                      reverse: true,
+                      physics: const BouncingScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        var message = ChatCubit.get(context).messages[index];
+                        if (uId == message.senderId) {
+                          return buildMyMessageItem(message, context);
+                        } else {
+                          return buildMessageItem(message, context, widget.userImage);
+                        }
+                      },
+                      separatorBuilder: (context, index) => const SizedBox(
+                        height: 15.0,
                       ),
+                      itemCount: ChatCubit.get(context).messages.length,
+                    ),
+                    fallback: (context) => Center(
+                      child: Text(
+                        'Not Messages Yet',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-              body: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: ConditionalBuilder(
-                        condition: ChatCubit.get(context).messages.isNotEmpty,
-                        builder: (context) => ListView.separated(
-                          reverse: true,
-                          physics: const BouncingScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            var message =
-                                ChatCubit.get(context).messages[index];
-                            if (uId == message.senderId) {
-                              return buildMyMessageItem(message, context);
-                            } else {
-                              return buildMessageItem(
-                                  message, context, userImage);
-                            }
+                const SizedBox(height: 5.0),
+                Container(
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey[300]!,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(
+                      15.0,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: messageController,
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.all(10.0),
+                            border: InputBorder.none,
+                            hintText: 'Write your message here...',
+                            hintStyle: Theme.of(context).textTheme.titleMedium,
+                          ),
+                        ),
+                      ),
+                      MaterialButton(
+                        minWidth: 1.0,
+                        onPressed: () {
+                          if (messageController.text.isNotEmpty) {
+                            ChatCubit.get(context).sendMessage(
+                              context: context,
+                              text: messageController.text,
+                              receiverId: widget.userId,
+                              userToken: widget.userToken ?? '',
+                              dateTime: DateTime.now(),
+                            );
+                          }
+                          messageController.clear();
+                        },
+                        child: BlocConsumer<UserCubit, UserStates>(
+                          listener: (context, state) {},
+                          builder: (context, state) {
+                            return Icon(
+                              Icons.send,
+                              size: 26.0,
+                              color: UserCubit.get(context).isDark ? Colors.white : defaultColor,
+                            );
                           },
-                          separatorBuilder: (context, index) => const SizedBox(
-                            height: 15.0,
-                          ),
-                          itemCount: ChatCubit.get(context).messages.length,
-                        ),
-                        fallback: (context) => Center(
-                          /// todo : add this to localization
-                          child: Text(
-                            'Not Messages Yet',
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 5.0),
-                    Container(
-                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey[300]!,
-                          width: 1.0,
-                        ),
-                        borderRadius: BorderRadius.circular(
-                          15.0,
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: messageController,
-                              decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.all(10.0),
-                                border: InputBorder.none,
-                                hintText: 'Write your message here...',
-                                hintStyle:
-                                    Theme.of(context).textTheme.titleMedium,
-                              ),
-                            ),
-                          ),
-                          MaterialButton(
-                            minWidth: 1.0,
-                            onPressed: () {
-                              if (messageController.text.isNotEmpty) {
-                                ChatCubit.get(context).sendMessage(
-                                  context: context,
-                                  text: messageController.text,
-                                  receiverId: userId,
-                                  userToken: userToken ?? '',
-                                  dateTime: DateTime.now(),
-                                );
-                              }
-                              messageController.clear();
-                            },
-                            child: BlocConsumer<UserCubit, UserStates>(
-                              listener: (context, state) {},
-                              builder: (context, state) {
-                                return Icon(
-                                  Icons.send,
-                                  size: 26.0,
-                                  color: UserCubit.get(context).isDark
-                                      ? Colors.white
-                                      : defaultColor,
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
+              ],
+            ),
+          ),
         );
       },
     );
   }
 
-  Widget buildMessageItem(
-          MessageModel messageModel, BuildContext context, String userImage) =>
-      Align(
+  Widget buildMessageItem(MessageModel messageModel, BuildContext context, String userImage) => Align(
         alignment: AlignmentDirectional.centerStart,
         child: Row(
           children: [
             CircleAvatar(
               radius: 20.0,
               backgroundImage: CachedNetworkImageProvider(userImage),
-              onBackgroundImageError: (_, __) =>
-                  CachedNetworkImage(imageUrl: AppConstants.defaultImageUrl),
+              onBackgroundImageError: (_, __) => CachedNetworkImage(imageUrl: AppConstants.defaultImageUrl),
             ),
             const SizedBox(
               width: 10.0,
@@ -170,9 +170,7 @@ class ChatDetails extends StatelessWidget {
                       horizontal: 10.0,
                     ),
                     decoration: BoxDecoration(
-                      color: UserCubit.get(context).isDark
-                          ? Colors.grey.withOpacity(.3)
-                          : Colors.grey[300],
+                      color: UserCubit.get(context).isDark ? Colors.grey.withOpacity(.3) : Colors.grey[300],
                       borderRadius: const BorderRadiusDirectional.only(
                         bottomEnd: Radius.circular(10.0),
                         topEnd: Radius.circular(10.0),
@@ -213,9 +211,7 @@ class ChatDetails extends StatelessWidget {
                       horizontal: 10.0,
                     ),
                     decoration: BoxDecoration(
-                      color: UserCubit.get(context).isDark
-                          ? Colors.blue
-                          : Colors.lightBlueAccent.withOpacity(.3),
+                      color: UserCubit.get(context).isDark ? Colors.blue : Colors.lightBlueAccent.withOpacity(.3),
                       borderRadius: const BorderRadiusDirectional.only(
                         bottomStart: Radius.circular(10.0),
                         topEnd: Radius.circular(10.0),
@@ -237,10 +233,8 @@ class ChatDetails extends StatelessWidget {
             ),
             CircleAvatar(
               radius: 20.0,
-              backgroundImage: CachedNetworkImageProvider(
-                  '${UserCubit.get(context).userModel!.image}'),
-              onBackgroundImageError: (_, __) =>
-                  const NetworkImage(AppConstants.defaultImageUrl),
+              backgroundImage: CachedNetworkImageProvider('${UserCubit.get(context).userModel!.image}'),
+              onBackgroundImageError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
             ),
           ],
         ),

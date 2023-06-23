@@ -57,6 +57,32 @@ class _CommentsScreenState extends State<CommentsScreen> {
               child: Column(
                 children: [
                   Expanded(
+                    // child: Builder(
+                    //   builder: (context){
+                    //     if (cubit.isLoading){
+                    //       return CircularProgressIndicator();
+                    //     } else if(widget.postModel.comments?.isNotEmpty != true){
+                    //       return Center(
+                    //         child: Text(
+                    //           LocaleKeys.no_commens_yet.tr(),
+                    //           style: Theme.of(context).textTheme.bodyLarge,
+                    //         ),
+                    //       );
+                    //     }
+                    //
+                    //     return ListView.separated(
+                    //       physics: const BouncingScrollPhysics(),
+                    //       itemBuilder: (context, index) {
+                    //         final comment = widget.postModel.comments![index];
+                    //         return buildCommentItem(comment, context);
+                    //       },
+                    //       separatorBuilder: (context, index) => const SizedBox(
+                    //         height: 20.0,
+                    //       ),
+                    //       itemCount: widget.postModel.comments?.length ?? 0,
+                    //     );
+                    //   },
+                    // ),
                     child: ConditionalBuilder(
                       condition: widget.postModel.comments?.isNotEmpty ?? false,
                       builder: (context) => ListView.separated(
@@ -84,8 +110,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                   Container(
                     padding: const EdgeInsets.only(left: 10.0),
                     decoration: BoxDecoration(
-                      border:
-                          Border.all(color: Theme.of(context).iconTheme.color!),
+                      border: Border.all(color: Theme.of(context).iconTheme.color!),
                       borderRadius: const BorderRadius.all(
                         Radius.circular(10.0),
                       ),
@@ -119,9 +144,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                             builder: (context, state) {
                               return Icon(
                                 Icons.send,
-                                color: UserCubit.get(context).isDark
-                                    ? Colors.grey[300]
-                                    : defaultColor,
+                                color: UserCubit.get(context).isDark ? Colors.grey[300] : defaultColor,
                               );
                             },
                           ),
@@ -144,8 +167,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
           CircleAvatar(
             radius: 25.0,
             backgroundImage: CachedNetworkImageProvider(comment.userImage),
-            onBackgroundImageError: (_, __) =>
-                const NetworkImage(AppConstants.defaultImageUrl),
+            onBackgroundImageError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
           ),
           const SizedBox(
             width: 10.0,
@@ -164,9 +186,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                         horizontal: 10.0,
                       ),
                       decoration: BoxDecoration(
-                        color: UserCubit.get(context).isDark
-                            ? Colors.grey[700]
-                            : defaultColor.withOpacity(.2),
+                        color: UserCubit.get(context).isDark ? Colors.grey[700] : defaultColor.withOpacity(.2),
                         borderRadius: const BorderRadiusDirectional.only(
                           bottomStart: Radius.circular(15.0),
                           bottomEnd: Radius.circular(15.0),
@@ -178,17 +198,15 @@ class _CommentsScreenState extends State<CommentsScreen> {
                         children: [
                           Text(
                             '${comment.userName} ',
-                            style:
-                                Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                      fontSize: 14.0,
-                                    ),
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                  fontSize: 14.0,
+                                ),
                           ),
                           Text(
                             '${comment.text} ',
-                            style:
-                                Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                      fontSize: 16.0,
-                                    ),
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                  fontSize: 16.0,
+                                ),
                           ),
                         ],
                       ),
@@ -221,9 +239,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                     ),
                   );
                 } else if (value == 'Delete') {
-                  PostCubit.get(context).deleteComment(
-                      commentId: comment.commentId,
-                      postModel: widget.postModel);
+                  PostCubit.get(context).deleteComment(commentId: comment.commentId, postModel: widget.postModel);
                 }
               },
               itemBuilder: (context) => [

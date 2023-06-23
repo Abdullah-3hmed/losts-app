@@ -16,12 +16,7 @@ class ChatCubit extends Cubit<ChatStates> {
   MessageModel? message;
 
   void getChats() {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(uId)
-        .collection('chats')
-        .snapshots()
-        .listen((value) {
+    FirebaseFirestore.instance.collection('users').doc(uId).collection('chats').snapshots().listen((value) {
       chats = [];
       debugPrint('chats docs length: ${value.docs.length}');
       for (var element in value.docs) {
@@ -48,30 +43,16 @@ class ChatCubit extends Cubit<ChatStates> {
       text: text,
     );
     var firestoreRef = FirebaseFirestore.instance;
-    var myMessageRef = firestoreRef
-        .collection('users')
-        .doc(uId)
-        .collection('chats')
-        .doc(receiverId);
-    var otherMessageRef = firestoreRef
-        .collection('users')
-        .doc(receiverId)
-        .collection('chats')
-        .doc(uId);
-    firestoreRef.runTransaction(
-      (transaction) async {
-        return transaction.set(myMessageRef, {'exist': true});
-      },
-    );
-    firestoreRef.runTransaction(
-      (transaction) async {
-        return transaction.set(otherMessageRef, {'exist': true});
-      },
-    );
-    myMessageRef
-        .collection('messages')
-        .add(messageModel.toJson())
-        .then((value) {
+    var myMessageRef = firestoreRef.collection('users').doc(uId).collection('chats').doc(receiverId);
+    var otherMessageRef = firestoreRef.collection('users').doc(receiverId).collection('chats').doc(uId);
+    if (!chats.contains(receiverId)) {
+      firestoreRef.runTransaction(
+        (transaction) async {
+          return transaction.set(myMessageRef, {'exist': true});
+        },
+      );
+    }
+    myMessageRef.collection('messages').add(messageModel.toJson()).then((value) {
       emit(ChatSendMessageSuccessState());
     }).catchError((error) {
       emit(ChatSendMessageErrorState());
@@ -81,10 +62,14 @@ class ChatCubit extends Cubit<ChatStates> {
         return transaction.set(myMessageRef, {'exist': true});
       },
     );
-    otherMessageRef
-        .collection('messages')
-        .add(messageModel.toJson())
-        .then((value) {
+    if (!chats.contains(receiverId)) {
+      firestoreRef.runTransaction(
+        (transaction) async {
+          return transaction.set(otherMessageRef, {'exist': true});
+        },
+      );
+    }
+    otherMessageRef.collection('messages').add(messageModel.toJson()).then((value) {
       emit(ChatSendMessageSuccessState());
     }).catchError((error) {
       emit(ChatSendMessageErrorState());
@@ -100,7 +85,9 @@ class ChatCubit extends Cubit<ChatStates> {
       userId: uId!,
       receiverId: receiverId,
       userToken: userToken,
-    );
+    ).then((_) {
+      debugPrint('push notification successfully');
+    });
     // /// my message
     //      FirebaseFirestore.instance
     //     .collection('users')
@@ -152,6 +139,8 @@ class ChatCubit extends Cubit<ChatStates> {
   void getMessages({
     required String receiverId,
   }) {
+    emit(ChatGetMessageSuccessState());
+
     FirebaseFirestore.instance
         .collection('users')
         .doc(uId)
@@ -174,26 +163,34 @@ class ChatCubit extends Cubit<ChatStates> {
     });
   }
 
-  MessageModel? getLastMessage({
+  Future<MessageModel?> getLastMessage({
     required String receiverId,
-  }) {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(uId)
-        .collection('chats')
-        .doc(receiverId)
-        .collection('messages')
-        .orderBy(
-          'dateTime',
-        )
-        .get()
-        .then((value) {
-      message = MessageModel.fromJson(value.docs.last.data());
-      emit(ChatGetMessageSuccessState());
-    }).catchError((error) {
-      debugPrint('Error when get last message : $error');
+  }) async {
+    MessageModel? messageModel;
+
+    try {
+      final QuerySnapshot<Map<String, dynamic>> value = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uId)
+          .collection('chats')
+          .doc(receiverId)
+          .collection('messages')
+          .orderBy(
+            'dateTime',
+            descending: true,
+          )
+          .limit(1)
+          .get();
+
+      messageModel = MessageModel.fromJson(value.docs.last.data());
+      debugPrint('- chat GOT last message for "$receiverId" - "${messageModel.text}"');
+      debugPrint('- chat data length ${value.docs.length}');
+      // emit(ChatGetMessageSuccessState());
+    } catch (e) {
+      debugPrint('Error when get last message : $e');
       emit(ChatGetMessageErrorState());
-    });
-    return message;
+    }
+
+    return messageModel;
   }
 }

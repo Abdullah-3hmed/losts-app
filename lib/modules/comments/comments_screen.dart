@@ -120,6 +120,9 @@ class _CommentsScreenState extends State<CommentsScreen> {
                         Expanded(
                           child: TextFormField(
                             controller: commentController,
+                            minLines: 1,
+                            maxLines: 4,
+                            keyboardType: TextInputType.multiline,
                             decoration: InputDecoration(
                               hintText: LocaleKeys.write_a_comment.tr(),
                               hintStyle: Theme.of(context).textTheme.bodyLarge,
@@ -130,13 +133,15 @@ class _CommentsScreenState extends State<CommentsScreen> {
                         IconButton(
                           onPressed: () {
                             DateTime now = DateTime.now();
-                            PostCubit.get(context).commentOnPost(
-                              type: 'comment',
-                              context: context,
-                              comment: commentController.text,
-                              post: widget.postModel,
-                              dateTime: now,
-                            );
+                            if (commentController.text.isNotEmpty) {
+                              PostCubit.get(context).commentOnPost(
+                                type: 'comment',
+                                context: context,
+                                comment: commentController.text,
+                                post: widget.postModel,
+                                dateTime: now,
+                              );
+                            }
                             commentController.clear();
                           },
                           icon: BlocConsumer<UserCubit, UserStates>(

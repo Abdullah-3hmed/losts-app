@@ -56,8 +56,7 @@ class NewPostScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
-                    if (state is PostCreatePostLoadingState)
-                      const LinearProgressIndicator(),
+                    if (state is PostCreatePostLoadingState) const LinearProgressIndicator(),
                     if (state is PostCreatePostLoadingState)
                       const SizedBox(
                         height: 10.0,
@@ -65,10 +64,8 @@ class NewPostScreen extends StatelessWidget {
                     Row(
                       children: [
                         CircleAvatar(
-                          backgroundImage:
-                              CachedNetworkImageProvider('${model!.image}'),
-                          onBackgroundImageError: (_, __) => CachedNetworkImage(
-                              imageUrl: AppConstants.defaultImageUrl),
+                          backgroundImage: CachedNetworkImageProvider('${model!.image}'),
+                          onBackgroundImageError: (_, __) => CachedNetworkImage(imageUrl: AppConstants.defaultImageUrl),
                           radius: 25.0,
                         ),
                         const SizedBox(
@@ -82,6 +79,8 @@ class NewPostScreen extends StatelessWidget {
                     ),
                     Expanded(
                       child: TextFormField(
+                        minLines: 1,
+                        maxLines: 3,
                         controller: textController,
                         decoration: InputDecoration(
                           hintText: LocaleKeys.what_is_in_your_mind.tr(),
@@ -95,7 +94,7 @@ class NewPostScreen extends StatelessWidget {
                     ),
                     if (PostCubit.get(context).pickedPostImage != null)
                       Expanded(
-                        flex: 4,
+                        flex: 2,
                         child: Stack(
                           alignment: AlignmentDirectional.topEnd,
                           children: [
@@ -104,8 +103,7 @@ class NewPostScreen extends StatelessWidget {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(4.0),
                                 image: DecorationImage(
-                                  image: FileImage(
-                                      PostCubit.get(context).pickedPostImage!),
+                                  image: FileImage(PostCubit.get(context).pickedPostImage!),
                                   fit: BoxFit.cover,
                                 ),
                               ),

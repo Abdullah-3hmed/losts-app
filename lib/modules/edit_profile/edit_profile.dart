@@ -53,8 +53,7 @@ class EditProfile extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  if (state is UserUpdateUserLoadingState)
-                    const LinearProgressIndicator(),
+                  if (state is UserUpdateUserLoadingState) const LinearProgressIndicator(),
                   if (state is UserUpdateUserLoadingState)
                     const SizedBox(
                       height: 20.0,
@@ -78,23 +77,21 @@ class EditProfile extends StatelessWidget {
                                     topRight: Radius.circular(4.0),
                                   ),
                                   image: DecorationImage(
-                                    image: UserCubit.get(context).coverImage ==
-                                            null
+                                    image: UserCubit.get(context).coverImage == null
                                         ? Image.network('${model.cover}').image
-                                        : FileImage(
-                                            UserCubit.get(context).coverImage!),
+                                        : FileImage(UserCubit.get(context).coverImage!),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
                               CircleAvatar(
                                 radius: 20.0,
+                                backgroundColor: defaultColor,
                                 child: PopupMenuButton(
                                   icon: const Icon(Icons.camera_alt_outlined),
                                   onSelected: (String value) {
                                     if (value == 'Camera') {
-                                      UserCubit.get(context)
-                                          .getCoverImageByCamera();
+                                      UserCubit.get(context).getCoverImageByCamera();
                                     } else if (value == 'Gallery') {
                                       UserCubit.get(context).getCoverImage();
                                     }
@@ -118,16 +115,12 @@ class EditProfile extends StatelessWidget {
                           alignment: AlignmentDirectional.bottomEnd,
                           children: [
                             CircleAvatar(
-                              backgroundColor:
-                                  Theme.of(context).scaffoldBackgroundColor,
+                              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                               radius: 64.0,
                               child: CircleAvatar(
-                                backgroundImage: UserCubit.get(context)
-                                            .profileImage ==
-                                        null
+                                backgroundImage: UserCubit.get(context).profileImage == null
                                     ? Image.network('${model.image}').image
-                                    : FileImage(
-                                        UserCubit.get(context).profileImage!),
+                                    : FileImage(UserCubit.get(context).profileImage!),
                                 radius: 60.0,
                               ),
                             ),
@@ -141,8 +134,7 @@ class EditProfile extends StatelessWidget {
                                 ),
                                 onSelected: (String value) {
                                   if (value == 'Camera') {
-                                    UserCubit.get(context)
-                                        .getProfileImageByCamera();
+                                    UserCubit.get(context).getProfileImageByCamera();
                                   } else if (value == 'Gallery') {
                                     UserCubit.get(context).getProfileImage();
                                   }
@@ -167,8 +159,7 @@ class EditProfile extends StatelessWidget {
                   const SizedBox(
                     height: 30.0,
                   ),
-                  if (UserCubit.get(context).profileImage != null ||
-                      UserCubit.get(context).coverImage != null)
+                  if (UserCubit.get(context).profileImage != null || UserCubit.get(context).coverImage != null)
                     Row(
                       children: [
                         if (UserCubit.get(context).profileImage != null)
@@ -176,6 +167,7 @@ class EditProfile extends StatelessWidget {
                             child: Column(
                               children: [
                                 defaultMaterialButton(
+                                  color: defaultColor,
                                   function: () {
                                     UserCubit.get(context).updateProfileImage(
                                       name: nameController.text,
@@ -189,8 +181,7 @@ class EditProfile extends StatelessWidget {
                                   const SizedBox(
                                     height: 5.0,
                                   ),
-                                if (state is UserUpdateUserLoadingState)
-                                  const LinearProgressIndicator(),
+                                if (state is UserUpdateUserLoadingState) const LinearProgressIndicator(),
                               ],
                             ),
                           ),
@@ -202,6 +193,7 @@ class EditProfile extends StatelessWidget {
                             child: Column(
                               children: [
                                 defaultMaterialButton(
+                                  color: defaultColor,
                                   function: () {
                                     UserCubit.get(context).updateCoverImage(
                                       name: nameController.text,
@@ -215,19 +207,18 @@ class EditProfile extends StatelessWidget {
                                   const SizedBox(
                                     height: 5.0,
                                   ),
-                                if (state is UserUpdateUserLoadingState)
-                                  const LinearProgressIndicator(),
+                                if (state is UserUpdateUserLoadingState) const LinearProgressIndicator(),
                               ],
                             ),
                           ),
                       ],
                     ),
-                  if (UserCubit.get(context).profileImage != null ||
-                      UserCubit.get(context).coverImage != null)
+                  if (UserCubit.get(context).profileImage != null || UserCubit.get(context).coverImage != null)
                     const SizedBox(
                       height: 20.0,
                     ),
                   defaultTextFormField(
+                    maxLength: 24,
                     context: context,
                     controller: nameController,
                     type: TextInputType.name,
@@ -240,6 +231,7 @@ class EditProfile extends StatelessWidget {
                     height: 15.0,
                   ),
                   defaultTextFormField(
+                    maxLength: 40,
                     context: context,
                     controller: bioController,
                     type: TextInputType.text,
@@ -252,6 +244,7 @@ class EditProfile extends StatelessWidget {
                     height: 15.0,
                   ),
                   defaultTextFormField(
+                    maxLength: 11,
                     context: context,
                     controller: phoneController,
                     type: TextInputType.number,

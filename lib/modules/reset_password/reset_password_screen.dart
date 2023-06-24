@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/cubit/user_cubit/user_cubit.dart';
 import 'package:social_app/cubit/user_cubit/user_states.dart';
 import 'package:social_app/shared/components/components.dart';
+import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/translations/locale_keys.g.dart';
 
 class ResetPassword extends StatelessWidget {
@@ -21,10 +22,7 @@ class ResetPassword extends StatelessWidget {
             centerTitle: true,
             title: Text(
               LocaleKeys.reset_password.tr(),
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge!
-                  .copyWith(color: Colors.white),
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white),
             ),
           ),
           body: Padding(
@@ -45,7 +43,8 @@ class ResetPassword extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  ElevatedButton(
+                  MaterialButton(
+                    color: defaultColor,
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         UserCubit.get(context).resetPassword(

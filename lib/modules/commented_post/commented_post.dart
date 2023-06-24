@@ -17,30 +17,26 @@ class CommentedPost extends StatefulWidget {
 
 class _CommentedPostState extends State<CommentedPost> {
   @override
-  void initState() {
+  Future<void> initState() async {
     super.initState();
-    PostCubit.get(context).getPosts();
+    await PostCubit.get(context).getPosts();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (context) {
+    return BlocConsumer<PostCubit, PostStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
         final postModel = PostCubit.get(context).posts.firstWhere(
               (element) => element.id == widget.postId,
             );
-        return BlocConsumer<PostCubit, PostStates>(
-          listener: (context, state) {},
-          builder: (context, state) {
-            return Scaffold(
-              appBar: AppBar(),
-              body: buildPostItem(
-                context,
-                postModel,
-                isUserProfile: false,
-              ),
-            );
-          },
+        return Scaffold(
+          appBar: AppBar(),
+          body: buildPostItem(
+            context,
+            postModel,
+            isUserProfile: false,
+          ),
         );
       },
     );

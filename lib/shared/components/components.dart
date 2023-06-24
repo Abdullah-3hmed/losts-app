@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:social_app/cubit/post_cubit/post_cubit.dart';
 import 'package:social_app/cubit/user_cubit/user_cubit.dart';
+import 'package:social_app/cubit/user_cubit/user_states.dart';
 import 'package:social_app/helper/date_time_converter.dart';
 import 'package:social_app/models/post_model/post.dart';
 import 'package:social_app/modules/comments/comments_screen.dart';
@@ -57,6 +59,7 @@ Widget defaultTextFormField({
   required IconData prefixIcon,
   required BuildContext context,
   IconData? suffixIcon,
+  int? maxLength,
   required bool obscureText,
   required String label,
   Function(String)? onSubmit,
@@ -68,7 +71,11 @@ Widget defaultTextFormField({
       keyboardType: type,
       obscureText: obscureText,
       onFieldSubmitted: onSubmit,
+      maxLength: maxLength,
       decoration: InputDecoration(
+        counterStyle: TextStyle(
+          color: Theme.of(context).iconTheme.color!,
+        ),
         hintText: hintText,
         hintStyle: Theme.of(context).textTheme.titleMedium,
         prefixIcon: Icon(
@@ -92,7 +99,7 @@ Widget defaultTextFormField({
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
           borderSide: BorderSide(
-            color: defaultColor,
+            color: UserCubit.get(context).isDark ? Colors.white : defaultColor,
           ),
         ),
         prefixIconColor: Theme.of(context).iconTheme.color,
@@ -173,16 +180,12 @@ PreferredSizeWidget? defaultAppBar({
       ),
       title: Text(
         title,
-        style: Theme.of(context)
-            .textTheme
-            .bodyLarge!
-            .copyWith(color: Colors.white),
+        style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white),
       ),
       actions: actions,
     );
 
-Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
-    Card(
+Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) => Card(
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 5.0,
       margin: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -193,13 +196,17 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
           children: [
             Row(
               children: [
-                CircleAvatar(
-                  radius: 25.0,
-                  backgroundImage:
-                      CachedNetworkImageProvider(postModel.userImage),
-                  onBackgroundImageError: (_, __) => CachedNetworkImage(
-                    imageUrl: AppConstants.defaultImageUrl,
-                  ),
+                BlocConsumer<UserCubit, UserStates>(
+                  listener: (context, state) {},
+                  builder: (context, state) {
+                    return CircleAvatar(
+                      radius: 25.0,
+                      backgroundImage: CachedNetworkImageProvider(postModel.userImage),
+                      onBackgroundImageError: (_, __) => CachedNetworkImage(
+                        imageUrl: AppConstants.defaultImageUrl,
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(
                   width: 10.0,
@@ -231,8 +238,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                       ),
                     ),
                     Text(
-                      DateTimeConverter.getDateTime(
-                          startDate: postModel.dateTime),
+                      DateTimeConverter.getDateTime(startDate: postModel.dateTime),
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
                             fontSize: 14.0,
                             height: 1.4,
@@ -301,8 +307,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                       image: CachedNetworkImageProvider(
                         postModel.image!,
                       ),
-                      onError: (_, __) =>
-                          const NetworkImage(AppConstants.defaultImageUrl),
+                      onError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -326,9 +331,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                         width: 5.0,
                       ),
                       Icon(
-                        postModel.likes.contains(uId)
-                            ? Icons.favorite
-                            : Icons.favorite_border_outlined,
+                        postModel.likes.contains(uId) ? Icons.favorite : Icons.favorite_border_outlined,
                         color: Colors.red,
                       ),
                     ],
@@ -347,9 +350,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                       ),
                       Icon(
                         Icons.comment_sharp,
-                        color: UserCubit.get(context).isDark
-                            ? Colors.white
-                            : defaultColor.withOpacity(0.8),
+                        color: UserCubit.get(context).isDark ? Colors.white : defaultColor.withOpacity(0.8),
                       ),
                     ],
                   ),
@@ -382,9 +383,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                         Icon(
                           Icons.favorite_border_outlined,
                           size: 26.0,
-                          color: postModel.likes.contains(uId)
-                              ? Colors.red
-                              : Colors.grey[400],
+                          color: postModel.likes.contains(uId) ? Colors.red : Colors.grey[400],
                         ),
                       ],
                     ),
@@ -410,10 +409,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) =>
                         ),
                         Icon(
                           Icons.comment_rounded,
-                          color: Theme.of(context)
-                              .iconTheme
-                              .color!
-                              .withOpacity(.3),
+                          color: Theme.of(context).iconTheme.color!.withOpacity(.3),
                           size: 24.0,
                         ),
                       ],

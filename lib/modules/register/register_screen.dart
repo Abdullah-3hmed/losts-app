@@ -91,19 +91,19 @@ class AppRegister extends StatelessWidget {
                         ),
                         Text(
                           LocaleKeys.register.tr(),
-                          style:
-                              Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                    fontSize: 32.0,
-                                  ),
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                fontSize: 32.0,
+                              ),
                         ),
                         Text(
                           LocaleKeys.hi_register.tr(),
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                         const SizedBox(
-                          height: 30.0,
+                          height: 20.0,
                         ),
                         defaultTextFormField(
+                          maxLength: 24,
                           context: context,
                           label: LocaleKeys.user_name.tr(),
                           prefixIcon: Icons.person,
@@ -112,9 +112,10 @@ class AppRegister extends StatelessWidget {
                           obscureText: false,
                         ),
                         const SizedBox(
-                          height: 30.0,
+                          height: 10.0,
                         ),
                         defaultTextFormField(
+                          maxLength: 30,
                           context: context,
                           label: LocaleKeys.email_address.tr(),
                           prefixIcon: Icons.email_outlined,
@@ -123,20 +124,19 @@ class AppRegister extends StatelessWidget {
                           obscureText: false,
                         ),
                         const SizedBox(
-                          height: 30.0,
+                          height: 10.0,
                         ),
                         defaultTextFormField(
+                            maxLength: 30,
                             context: context,
                             label: LocaleKeys.password.tr(),
                             prefixIcon: Icons.lock_outline,
                             type: TextInputType.visiblePassword,
                             controller: passwordController,
-                            obscureText:
-                                AppRegisterCubit.get(context).isPassword,
+                            obscureText: AppRegisterCubit.get(context).isPassword,
                             suffixIcon: AppRegisterCubit.get(context).suffix,
                             function: () {
-                              AppRegisterCubit.get(context)
-                                  .changePasswordVisibility();
+                              AppRegisterCubit.get(context).changePasswordVisibility();
                             },
                             onSubmit: (value) {
                               if (formKey.currentState!.validate()) {
@@ -149,9 +149,10 @@ class AppRegister extends StatelessWidget {
                               }
                             }),
                         const SizedBox(
-                          height: 30.0,
+                          height: 10.0,
                         ),
                         defaultTextFormField(
+                          maxLength: 11,
                           context: context,
                           label: LocaleKeys.phone.tr(),
                           prefixIcon: Icons.phone,
@@ -184,10 +185,7 @@ class AppRegister extends StatelessWidget {
                               },
                               child: Text(
                                 LocaleKeys.register.tr(),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .copyWith(
+                                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                                       color: Colors.white,
                                     ),
                               ),

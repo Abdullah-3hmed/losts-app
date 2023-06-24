@@ -79,6 +79,7 @@ class _ChatDetailsState extends State<ChatDetails> {
                       itemCount: ChatCubit.get(context).messages.length,
                     ),
                     fallback: (context) => Center(
+                      // todo : add this to localization
                       child: Text(
                         'Not Messages Yet',
                         style: Theme.of(context).textTheme.bodyLarge,

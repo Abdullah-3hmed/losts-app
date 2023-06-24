@@ -34,13 +34,13 @@ class _AppLayoutState extends State<AppLayout> {
   @override
   void initState() {
     super.initState();
-    PostCubit.get(context).getPosts();
-    UserCubit.get(context).getUserData();
-    UserCubit.get(context).getAllUsers();
+    PostCubit.get(context).getPosts().then((_){});
+    UserCubit.get(context).getUserData().then((_){});
+    UserCubit.get(context).getAllUsers().then((_){});
     ChatCubit.get(context).getChats();
     NotificationCubit.get(context).getNotifications();
 
-    FCMInitHelper(context: context).initListeners();
+    FCMInitHelper(context: context).initListeners().then((_){});
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
       if (!isAllowed) {
         LocalNotificationService.requestPermissions();
@@ -112,9 +112,7 @@ class _AppLayoutState extends State<AppLayout> {
                         BlocConsumer<NotificationCubit, NotificationStates>(
                           listener: (context, state) {},
                           builder: (context, state) {
-                            if (NotificationCubit.get(context)
-                                .notifications
-                                .isNotEmpty) {
+                            if (NotificationCubit.get(context).notifications.isNotEmpty) {
                               return Positioned(
                                 left: 15.0,
                                 top: 12.0,
@@ -128,8 +126,7 @@ class _AppLayoutState extends State<AppLayout> {
                                     color: Colors.red,
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  child: Text(
-                                      '${NotificationCubit.get(context).notifications.length}'),
+                                  child: Text('${NotificationCubit.get(context).notifications.length}'),
                                 ),
                               );
                             }
@@ -192,8 +189,7 @@ class _AppLayoutState extends State<AppLayout> {
     );
   }
 
-  static Future<void> onActionReceivedHandlerMethod(
-      ReceivedAction action) async {
+  static Future<void> onActionReceivedHandlerMethod(ReceivedAction action) async {
     if (action.payload!['type'] == 'message') {
       debugPrint('payload >>>>>>>>>>>>>>>> ${action.payload!['userId']}');
       debugPrint('payload >>>>>>>>>>>>>>>> ${action.payload!['userName']}');

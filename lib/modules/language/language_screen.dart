@@ -49,8 +49,7 @@ class LanguageScreen extends StatelessWidget {
                     child: Row(
                       children: [
                         CachedNetworkImage(
-                          imageUrl:
-                              'https://as1.ftcdn.net/v2/jpg/02/70/24/98/1000_F_270249859_mf1Kyad7MO3Gb1BGvBahbB9SNttnVZO7.jpg',
+                          imageUrl: 'https://as1.ftcdn.net/v2/jpg/02/70/24/98/1000_F_270249859_mf1Kyad7MO3Gb1BGvBahbB9SNttnVZO7.jpg',
                           height: 40.0,
                           width: 40.0,
                         ),
@@ -94,10 +93,9 @@ class LanguageScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         CachedNetworkImage(
-                          imageUrl:
-                              'https://as2.ftcdn.net/v2/jpg/04/85/06/45/1000_F_485064580_nAzxr60edcRlLgEVwGp5gDdBexZhdp38.jpg',
-                          height: 40.0,
-                          width: 40.0,
+                          imageUrl: 'https://as2.ftcdn.net/v2/jpg/04/85/06/45/1000_F_485064580_nAzxr60edcRlLgEVwGp5gDdBexZhdp38.jpg',
+                          height: 35.0,
+                          width: 35.0,
                         ),
                         const SizedBox(
                           width: 10.0,

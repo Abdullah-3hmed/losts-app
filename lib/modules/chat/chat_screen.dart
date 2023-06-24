@@ -41,6 +41,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
           ),
           fallback: (context) => Center(
             child: Text(
+              //todo : add this also
               'No Chats Yet',
               style: Theme.of(context).textTheme.bodyLarge,
             ),

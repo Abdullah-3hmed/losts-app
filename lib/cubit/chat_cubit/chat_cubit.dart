@@ -186,11 +186,10 @@ class ChatCubit extends Cubit<ChatStates> {
       debugPrint('- chat GOT last message for "$receiverId" - "${messageModel.text}"');
       debugPrint('- chat data length ${value.docs.length}');
       // emit(ChatGetMessageSuccessState());
-    } catch (e) {
-      debugPrint('Error when get last message : $e');
+    } catch (error) {
+      debugPrint('Error when get last message : $error');
       emit(ChatGetMessageErrorState());
     }
-
     return messageModel;
   }
 }

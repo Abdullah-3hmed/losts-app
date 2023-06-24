@@ -41,10 +41,6 @@ class FCMInitHelper {
           ),
         );
       }
-      showToast(
-        message: 'onMessage',
-        state: ToastStates.success,
-      );
     });
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
       if (event.data['type'] == 'comment') {
@@ -68,10 +64,6 @@ class FCMInitHelper {
           ),
         );
       }
-      showToast(
-        message: 'on Message opened app',
-        state: ToastStates.success,
-      );
     });
 
     FirebaseMessaging.instance.getInitialMessage().then((event) async {
@@ -98,10 +90,6 @@ class FCMInitHelper {
           ),
         );
       }
-      showToast(
-        message: 'terminated state',
-        state: ToastStates.success,
-      );
     });
   }
 }

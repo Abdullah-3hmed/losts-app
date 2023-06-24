@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/cubit/chat_cubit/chat_cubit.dart';
 import 'package:social_app/cubit/chat_cubit/chat_states.dart';
 import 'package:social_app/cubit/user_cubit/user_cubit.dart';
+import 'package:social_app/models/user_model/user_model.dart';
 import 'package:social_app/modules/chat/widgets/chat_item_widget.dart';
 
 import '../../models/message_model/message_model.dart';
@@ -29,7 +30,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
             physics: const BouncingScrollPhysics(),
             itemCount: ChatCubit.get(context).chats.length,
             itemBuilder: (context, index) {
-              var userModel = UserCubit.get(context).users.firstWhere(
+              AppUserModel userModel = UserCubit.get(context).users.firstWhere(
                     (user) => user.uId == ChatCubit.get(context).chats[index],
                   );
 

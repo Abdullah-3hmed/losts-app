@@ -15,6 +15,10 @@ class ChatCubit extends Cubit<ChatStates> {
   List<MessageModel> messages = [];
   MessageModel? message;
 
+  // List<ChatModel> chatModels = [];
+  /* uid -> last message */
+  Map<String, MessageModel> lastMessages = {};
+
   void getChats() {
     FirebaseFirestore.instance.collection('users').doc(uId).collection('chats').snapshots().listen((value) {
       chats = [];
@@ -163,33 +167,32 @@ class ChatCubit extends Cubit<ChatStates> {
     });
   }
 
-  Future<MessageModel?> getLastMessage({
+  void getLastMessage({
     required String receiverId,
-  }) async {
+  }) {
     MessageModel? messageModel;
-
-    try {
-      final QuerySnapshot<Map<String, dynamic>> value = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uId)
-          .collection('chats')
-          .doc(receiverId)
-          .collection('messages')
-          .orderBy(
-            'dateTime',
-            descending: true,
-          )
-          .limit(1)
-          .get();
-
-      messageModel = MessageModel.fromJson(value.docs.last.data());
-      debugPrint('- chat GOT last message for "$receiverId" - "${messageModel.text}"');
-      debugPrint('- chat data length ${value.docs.length}');
-      // emit(ChatGetMessageSuccessState());
-    } catch (error) {
-      debugPrint('Error when get last message : $error');
-      emit(ChatGetMessageErrorState());
-    }
-    return messageModel;
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(uId)
+        .collection('chats')
+        .doc(receiverId)
+        .collection('messages')
+        .orderBy(
+          'dateTime',
+          descending: true,
+        )
+        .limit(1)
+        .snapshots()
+        .listen((event) {
+      messageModel = MessageModel.fromJson(event.docs.last.data());
+      debugPrint('- chat GOT last message for "$receiverId" - "${messageModel?.text}"');
+      debugPrint('- chat data length ${event.docs.length}');
+      lastMessages.update(
+        receiverId,
+        (value) => messageModel!,
+        ifAbsent: () => messageModel!,
+      );
+      emit(ChatGetMessageSuccessState());
+    });
   }
 }

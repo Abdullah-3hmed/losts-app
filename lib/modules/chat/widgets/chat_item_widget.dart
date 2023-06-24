@@ -2,10 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/cubit/chat_cubit/chat_cubit.dart';
+import 'package:social_app/cubit/chat_cubit/chat_states.dart';
 import 'package:social_app/cubit/user_cubit/user_cubit.dart';
 import 'package:social_app/cubit/user_cubit/user_states.dart';
 import 'package:social_app/helper/date_time_converter.dart';
-import 'package:social_app/models/message_model/message_model.dart';
 import 'package:social_app/models/user_model/user_model.dart';
 import 'package:social_app/modules/chat_details/chat_details.dart';
 import 'package:social_app/shared/components/components.dart';
@@ -24,16 +24,16 @@ class ChatItemBuilder extends StatefulWidget {
 }
 
 class _ChatItemBuilderState extends State<ChatItemBuilder> {
-  MessageModel? message;
-
-  Future<void> _getLastMessage() async {
-    message = await ChatCubit.get(context).getLastMessage(receiverId: widget.userModel.uId);
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ChatCubit.get(context).getLastMessage(receiverId: widget.userModel.uId);
+    });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('- chatItem message (${widget.userModel.name}): "${message?.text}"');
-
     return InkWell(
       onTap: () {
         navigateTo(
@@ -63,11 +63,10 @@ class _ChatItemBuilderState extends State<ChatItemBuilder> {
               width: 15.0,
             ),
             Expanded(
-              child: StatefulBuilder(
-                builder: (context, stState) {
-                  if (message == null) {
-                    _getLastMessage().then((value) => stState(() {}));
-                  }
+              child: BlocBuilder<ChatCubit, ChatStates>(
+                builder: (context, state) {
+                  final cubit = ChatCubit.get(context);
+                  final lastMessage = cubit.lastMessages[widget.userModel.uId];
 
                   return Row(
                     children: [
@@ -85,7 +84,7 @@ class _ChatItemBuilderState extends State<ChatItemBuilder> {
                               listener: (context, state) {},
                               builder: (context, state) {
                                 return Text(
-                                  message != null ? message!.text : '',
+                                  lastMessage != null ? lastMessage.text : '',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
@@ -97,10 +96,10 @@ class _ChatItemBuilderState extends State<ChatItemBuilder> {
                           ],
                         ),
                       ),
-                      if (message != null)
+                      if (lastMessage != null)
                         Text(
                           DateTimeConverter.getDateTime(
-                            startDate: message!.dateTime,
+                            startDate: lastMessage.dateTime,
                           ),
                           style: Theme.of(context).textTheme.bodySmall,
                         ),

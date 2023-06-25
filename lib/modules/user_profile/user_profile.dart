@@ -71,23 +71,20 @@ class UserProfile extends StatelessWidget {
                                     image: CachedNetworkImageProvider(
                                       '${userModel.cover}',
                                     ),
-                                    onError: (_, __) => const NetworkImage(
-                                        AppConstants.defaultImageUrl),
+                                    onError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
                             ),
                             CircleAvatar(
-                              backgroundColor:
-                                  Theme.of(context).scaffoldBackgroundColor,
+                              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                               radius: 64.0,
                               child: CircleAvatar(
                                 backgroundImage: CachedNetworkImageProvider(
                                   '${userModel.image}',
                                 ),
-                                onBackgroundImageError: (_, __) =>
-                                    CachedNetworkImage(
+                                onBackgroundImageError: (_, __) => CachedNetworkImage(
                                   imageUrl: AppConstants.defaultImageUrl,
                                 ),
                                 radius: 60.0,
@@ -106,7 +103,7 @@ class UserProfile extends StatelessWidget {
                             ),
                       ),
                       Text(
-                        '${userModel.bio}',
+                        '${userModel.bio == 'write your bio ...' ? '' : userModel.bio}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodySmall!.copyWith(
@@ -130,6 +127,7 @@ class UserProfile extends StatelessWidget {
                                 userName: userModel.name,
                                 userImage: userModel.image!,
                                 userToken: userModel.token,
+                                isChat: false,
                               ),
                             );
                           },
@@ -143,10 +141,7 @@ class UserProfile extends StatelessWidget {
                               ),
                               Text(
                                 LocaleKeys.chat.tr(),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .copyWith(
+                                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                                       color: Colors.white,
                                       fontSize: 22.0,
                                     ),
@@ -175,14 +170,12 @@ class UserProfile extends StatelessWidget {
                               userPosts[index],
                               isUserProfile: true,
                             ),
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(
+                            separatorBuilder: (context, index) => const SizedBox(
                               height: 10.0,
                             ),
                             itemCount: userPosts.length,
                           ),
-                          fallback: (context) =>
-                              const Center(child: CircularProgressIndicator()),
+                          fallback: (context) => const Center(child: CircularProgressIndicator()),
                         ),
                       ),
                     ],

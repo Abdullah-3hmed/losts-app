@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/cubit/notification_cubit/notification_cubit.dart';
@@ -9,6 +10,7 @@ import 'package:social_app/models/notification_model/main_notification.dart';
 import 'package:social_app/modules/chat_details/chat_details.dart';
 import 'package:social_app/modules/commented_post/commented_post.dart';
 import 'package:social_app/shared/components/components.dart';
+import 'package:social_app/translations/locale_keys.g.dart';
 
 class NotificationsDisplayScreen extends StatelessWidget {
   const NotificationsDisplayScreen({Key? key}) : super(key: key);
@@ -22,7 +24,7 @@ class NotificationsDisplayScreen extends StatelessWidget {
           appBar: AppBar(
             centerTitle: true,
             title: Text(
-              'Notifications',
+              LocaleKeys.notifications.tr(),
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     color: Colors.white,
                   ),
@@ -32,8 +34,7 @@ class NotificationsDisplayScreen extends StatelessWidget {
             condition: NotificationCubit.get(context).notifications.isNotEmpty,
             builder: (context) => ListView.separated(
               physics: const BouncingScrollPhysics(),
-              itemBuilder: (context, index) => buildNotificationItem(
-                  context, NotificationCubit.get(context).notifications[index]),
+              itemBuilder: (context, index) => buildNotificationItem(context, NotificationCubit.get(context).notifications[index]),
               separatorBuilder: (context, index) => Divider(
                 thickness: .5,
                 indent: 20.0,
@@ -44,7 +45,7 @@ class NotificationsDisplayScreen extends StatelessWidget {
             ),
             fallback: (context) => Center(
               child: Text(
-                'No Notifications yet',
+                LocaleKeys.no_notifications.tr(),
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
@@ -54,8 +55,7 @@ class NotificationsDisplayScreen extends StatelessWidget {
     );
   }
 
-  Widget buildNotificationItem(BuildContext context, MainNotification model) =>
-      InkWell(
+  Widget buildNotificationItem(BuildContext context, MainNotification model) => InkWell(
         onTap: () {
           if (model.type == 'comment') {
             navigateTo(
@@ -69,11 +69,11 @@ class NotificationsDisplayScreen extends StatelessWidget {
                 userId: model.userId,
                 userName: model.userName,
                 userImage: model.userImage,
+                isChat: true,
               ),
             );
           }
-          NotificationCubit.get(context)
-              .deleteNotification(notificationId: model.id);
+          NotificationCubit.get(context).deleteNotification(notificationId: model.id);
         },
         child: Padding(
           padding: const EdgeInsets.all(20.0),

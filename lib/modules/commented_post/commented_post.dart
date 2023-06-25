@@ -17,9 +17,9 @@ class CommentedPost extends StatefulWidget {
 
 class _CommentedPostState extends State<CommentedPost> {
   @override
-  Future<void> initState() async {
+  void initState() {
     super.initState();
-    await PostCubit.get(context).getPosts();
+    PostCubit.get(context).getPosts();
   }
 
   @override

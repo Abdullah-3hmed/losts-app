@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/cubit/chat_cubit/chat_cubit.dart';
@@ -8,6 +9,7 @@ import 'package:social_app/cubit/user_cubit/user_cubit.dart';
 import 'package:social_app/cubit/user_cubit/user_states.dart';
 import 'package:social_app/models/message_model/message_model.dart';
 import 'package:social_app/shared/components/constants.dart';
+import 'package:social_app/translations/locale_keys.g.dart';
 
 class ChatDetails extends StatefulWidget {
   const ChatDetails({
@@ -16,11 +18,13 @@ class ChatDetails extends StatefulWidget {
     required this.userName,
     required this.userImage,
     this.userToken,
+    required this.isChat,
   }) : super(key: key);
   final String userId;
   final String userName;
   final String userImage;
   final String? userToken;
+  final bool isChat;
 
   @override
   State<ChatDetails> createState() => _ChatDetailsState();
@@ -31,6 +35,7 @@ class _ChatDetailsState extends State<ChatDetails> {
 
   @override
   void initState() {
+    ChatCubit.get(context).messages = [];
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ChatCubit.get(context).getMessages(
         receiverId: widget.userId,
@@ -78,13 +83,17 @@ class _ChatDetailsState extends State<ChatDetails> {
                       ),
                       itemCount: ChatCubit.get(context).messages.length,
                     ),
-                    fallback: (context) => Center(
-                      // todo : add this to localization
-                      child: Text(
-                        'Not Messages Yet',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                    ),
+                    fallback: (context) => widget.isChat == true
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : Center(
+                            // todo : add this to localization
+                            child: Text(
+                              LocaleKeys.not_messages_yet.tr(),
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                          ),
                   ),
                 ),
                 const SizedBox(height: 5.0),
@@ -107,7 +116,7 @@ class _ChatDetailsState extends State<ChatDetails> {
                           decoration: InputDecoration(
                             contentPadding: const EdgeInsets.all(10.0),
                             border: InputBorder.none,
-                            hintText: 'Write your message here...',
+                            hintText: LocaleKeys.write_your_message_here.tr(),
                             hintStyle: Theme.of(context).textTheme.titleMedium,
                           ),
                         ),

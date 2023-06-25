@@ -26,7 +26,7 @@ class ChatItemBuilder extends StatefulWidget {
 class _ChatItemBuilderState extends State<ChatItemBuilder> {
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       ChatCubit.get(context).getLastMessage(receiverId: widget.userModel.uId);
     });
     super.initState();
@@ -43,6 +43,7 @@ class _ChatItemBuilderState extends State<ChatItemBuilder> {
             userName: widget.userModel.name,
             userImage: widget.userModel.image!,
             userToken: widget.userModel.token,
+            isChat: true,
           ),
         );
       },

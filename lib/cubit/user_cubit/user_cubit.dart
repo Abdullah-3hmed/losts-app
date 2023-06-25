@@ -26,11 +26,7 @@ class UserCubit extends Cubit<UserStates> {
   Future<void> getUserData() async {
     if (userModel == null) {
       emit(UserGetUserLoadingState());
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uId)
-          .get()
-          .then((value) async {
+      await FirebaseFirestore.instance.collection('users').doc(uId).get().then((value) async {
         userModel = AppUserModel.fromJson(value.data());
         emit(UserGetUserSuccessState());
       }).catchError((error) {
@@ -99,11 +95,7 @@ class UserCubit extends Cubit<UserStates> {
     required String bio,
   }) {
     emit(UserUpdateUserLoadingState());
-    firebase_storage.FirebaseStorage.instance
-        .ref()
-        .child('users/$uId/profile')
-        .putFile(profileImage!)
-        .then(((value) {
+    firebase_storage.FirebaseStorage.instance.ref().child('users/$uId/profile').putFile(profileImage!).then(((value) {
       value.ref.getDownloadURL().then((value) {
         //emit(PostUploadProfileImageSuccessState());
         updateUser(
@@ -127,11 +119,7 @@ class UserCubit extends Cubit<UserStates> {
     required String bio,
   }) {
     emit(UserUpdateUserLoadingState());
-    firebase_storage.FirebaseStorage.instance
-        .ref()
-        .child('users/$uId/cover')
-        .putFile(coverImage!)
-        .then(((value) {
+    firebase_storage.FirebaseStorage.instance.ref().child('users/$uId/cover').putFile(coverImage!).then(((value) {
       value.ref.getDownloadURL().then((value) {
         //emit(PostUploadCoverImageSuccessState());
         updateUser(
@@ -166,11 +154,7 @@ class UserCubit extends Cubit<UserStates> {
       bio: bio,
     );
     userModel = model;
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userModel!.uId)
-        .update(model.toMap())
-        .then((value) {
+    await FirebaseFirestore.instance.collection('users').doc(userModel!.uId).update(model.toMap()).then((value) {
       emit(ChatUpdateUserSuccessState());
     }).catchError((error) {
       emit(ChatUpdateUserErrorState());
@@ -180,10 +164,7 @@ class UserCubit extends Cubit<UserStates> {
   Future<void> getAllUsers() async {
     if (users.isEmpty) {
       emit(ChatGetAllUsersLoadingState());
-      await FirebaseFirestore.instance
-          .collection('users')
-          .get()
-          .then((value) async {
+      await FirebaseFirestore.instance.collection('users').get().then((value) async {
         for (var element in value.docs) {
           if (element.data()['uId'] != uId) {
             users.add(
@@ -226,9 +207,13 @@ class UserCubit extends Cubit<UserStates> {
   Future<void> setEnglish({
     required BuildContext context,
   }) async {
-    await context.setLocale(const Locale('en'));
+    context.setLocale(const Locale('en')).then((value) {});
     isEnglish = true;
     emit(UserChangeLanguageState());
+    await CacheHelper.saveData(
+      key: 'isEnglish',
+      value: true,
+    );
   }
 
   Future<void> setArabic({
@@ -237,6 +222,10 @@ class UserCubit extends Cubit<UserStates> {
     await context.setLocale(const Locale('ar'));
     isEnglish = false;
     emit(UserChangeLanguageState());
+    await CacheHelper.saveData(
+      key: 'isEnglish',
+      value: false,
+    );
   }
 
   void resetPassword({required String email}) {

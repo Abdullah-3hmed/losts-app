@@ -127,10 +127,7 @@ class PostCubit extends Cubit<PostStates> {
       postText: postText,
       dateTime: dateTime,
     );
-    FirebaseFirestore.instance
-        .collection('posts')
-        .add(model.toJson())
-        .then((value) {
+    FirebaseFirestore.instance.collection('posts').add(model.toJson()).then((value) {
       // add post to posts
       posts.insert(
         0,
@@ -173,30 +170,21 @@ class PostCubit extends Cubit<PostStates> {
         // get posts with likes
         for (var postDoc in postDocs.docs) {
           // get post likes
-          await postDoc.reference
-              .collection('likes')
-              .where('like', isEqualTo: true)
-              .get()
-              .then((likeDoc) {
+          await postDoc.reference.collection('likes').where('like', isEqualTo: true).get().then((likeDoc) {
             posts.add(
               Post.fromJson(
                 json: postDoc.data(),
                 id: postDoc.id,
                 likes: likeDoc.docs.map((e) => e.id).toList(),
+                comments: [],
               ),
             );
           });
 
           // get post comments
           posts.last.comments = [];
-          await postDoc.reference
-              .collection('comments')
-              .orderBy('date_time')
-              .get()
-              .then((commentDocs) {
+          await postDoc.reference.collection('comments').orderBy('date_time').get().then((commentDocs) {
             for (var commentDoc in commentDocs.docs) {
-              // var post = posts.firstWhere((element) => element.id == commentDoc.data()['postId']);
-              // post.comments =[];
               posts.last.comments!.add(
                 MainComment.fromJson(
                   commentId: commentDoc.id,
@@ -214,18 +202,11 @@ class PostCubit extends Cubit<PostStates> {
   }
 
   void streamComments(Post post) {
-    FirebaseFirestore.instance
-        .collection('posts')
-        .doc(post.id)
-        .collection('comments')
-        .orderBy('date_time')
-        .snapshots()
-        .listen((event) {
+    FirebaseFirestore.instance.collection('posts').doc(post.id).collection('comments').orderBy('date_time').snapshots().listen((event) {
       post.comments = [];
       for (var comment in event.docs) {
         debugPrint('stream comments ');
-        post.comments?.add(
-            MainComment.fromJson(json: comment.data(), commentId: comment.id));
+        post.comments?.add(MainComment.fromJson(json: comment.data(), commentId: comment.id));
       }
       debugPrint(post.comments!.length.toString());
       emit(PostGetCommentSuccessState());
@@ -320,12 +301,7 @@ class PostCubit extends Cubit<PostStates> {
     //   userId: commentModel.userId,
     // );
     // commentModel = model;
-    await FirebaseFirestore.instance
-        .collection('posts')
-        .doc(postId)
-        .collection('comments')
-        .doc(commentId)
-        .update({
+    await FirebaseFirestore.instance.collection('posts').doc(postId).collection('comments').doc(commentId).update({
       'text': text,
     }).then((value) {
       commentModel.text = text;
@@ -342,11 +318,7 @@ class PostCubit extends Cubit<PostStates> {
   }) async {
     emit(PostDeletePostLoadingState());
 
-    FirebaseFirestore.instance
-        .collection('posts')
-        .doc(postModel.id)
-        .delete()
-        .then((value) {
+    FirebaseFirestore.instance.collection('posts').doc(postModel.id).delete().then((value) {
       posts.remove(postModel);
       emit(PostDeletePostSuccessState());
     }).catchError((error) {
@@ -358,13 +330,7 @@ class PostCubit extends Cubit<PostStates> {
     required String commentId,
     required Post postModel,
   }) async {
-    await FirebaseFirestore.instance
-        .collection('posts')
-        .doc(postModel.id)
-        .collection('comments')
-        .doc(commentId)
-        .delete()
-        .then((value) {
+    await FirebaseFirestore.instance.collection('posts').doc(postModel.id).collection('comments').doc(commentId).delete().then((value) {
       emit(PostDeleteCommentSuccessState());
     }).catchError((error) {
       emit(PostDeleteCommentErrorState(error.toString()));
@@ -376,12 +342,7 @@ class PostCubit extends Cubit<PostStates> {
   }) async {
     bool isLiked = post.likes.contains(uId);
 
-    await FirebaseFirestore.instance
-        .collection('posts')
-        .doc(post.id)
-        .collection('likes')
-        .doc(uId)
-        .set({
+    await FirebaseFirestore.instance.collection('posts').doc(post.id).collection('likes').doc(uId).set({
       'like': !isLiked,
     }).then((_) {
       if (isLiked) {
@@ -413,22 +374,14 @@ class PostCubit extends Cubit<PostStates> {
     );
 
     // upload comment in Firebase
-    FirebaseFirestore.instance
-        .collection('posts')
-        .doc(post.id)
-        .collection('comments')
-        .add(model.toJson())
-        .then((value) {
+    FirebaseFirestore.instance.collection('posts').doc(post.id).collection('comments').add(model.toJson()).then((value) {
       emit(PostCommentOnPostSuccessState());
     }).catchError((error) {
       debugPrint('error when commentPost: ${error.toString()}');
       emit(PostCommentOnPostErrorState(error.toString()));
     });
     if (uId != post.uId) {
-      final userToken = UserCubit.get(context)
-          .users
-          .firstWhere((user) => user.uId == post.uId)
-          .token;
+      final userToken = UserCubit.get(context).users.firstWhere((user) => user.uId == post.uId).token;
 
       FCMHelper.pushCommentFCM(
         title: '${model.userName} commented on your post',

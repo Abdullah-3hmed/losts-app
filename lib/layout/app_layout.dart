@@ -17,6 +17,7 @@ import 'package:social_app/modules/chat_details/chat_details.dart';
 import 'package:social_app/modules/commented_post/commented_post.dart';
 import 'package:social_app/modules/notifications_display/notification_display_screen.dart';
 import 'package:social_app/modules/search/search_screen.dart';
+import 'package:social_app/network/local/cache_helper.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/styles/icon_broken.dart';
 import 'package:social_app/translations/locale_keys.g.dart';
@@ -34,13 +35,14 @@ class _AppLayoutState extends State<AppLayout> {
   @override
   void initState() {
     super.initState();
-    PostCubit.get(context).getPosts().then((_){});
-    UserCubit.get(context).getUserData().then((_){});
-    UserCubit.get(context).getAllUsers().then((_){});
+    PostCubit.get(context).getPosts().then((_) {});
+    UserCubit.get(context).getUserData().then((_) {});
+    UserCubit.get(context).getAllUsers().then((_) {});
+    UserCubit.get(context).isEnglish = CacheHelper.getData(key: 'isEnglish') ?? true;
     ChatCubit.get(context).getChats();
     NotificationCubit.get(context).getNotifications();
 
-    FCMInitHelper(context: context).initListeners().then((_){});
+    FCMInitHelper(context: context).initListeners().then((_) {});
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
       if (!isAllowed) {
         LocalNotificationService.requestPermissions();
@@ -200,6 +202,7 @@ class _AppLayoutState extends State<AppLayout> {
             userId: action.payload!['userId']!,
             userName: action.payload!['userName']!,
             userImage: action.payload!['userImage']!,
+            isChat: true,
           ),
         ),
       );

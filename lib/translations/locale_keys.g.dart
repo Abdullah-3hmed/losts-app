@@ -56,5 +56,9 @@ abstract class  LocaleKeys {
   static const reset_now = 'reset_now';
   static const reset_password = 'reset_password';
   static const confirm = 'confirm';
+  static const not_messages_yet = 'not_messages_yet';
+  static const write_your_message_here = 'write_your_message_here';
+  static const notifications = 'notifications';
+  static const no_notifications = 'no_notifications';
 
 }

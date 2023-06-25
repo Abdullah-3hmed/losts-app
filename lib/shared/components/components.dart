@@ -395,6 +395,7 @@ Widget buildPostItem(context, Post postModel, {required bool isUserProfile}) => 
                         context: context,
                         screen: CommentsScreen(
                           postModel: postModel,
+                          isCommented: postModel.comments!.isNotEmpty ? true : false,
                         ),
                       );
                     },

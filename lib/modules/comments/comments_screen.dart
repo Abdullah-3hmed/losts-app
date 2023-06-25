@@ -19,9 +19,11 @@ class CommentsScreen extends StatefulWidget {
   const CommentsScreen({
     Key? key,
     required this.postModel,
+    required this.isCommented,
   }) : super(key: key);
 
   final Post postModel;
+  final bool isCommented;
 
   @override
   State<CommentsScreen> createState() => _CommentsScreenState();
@@ -38,6 +40,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
   @override
   Widget build(BuildContext context) {
     var commentController = TextEditingController();
+    // bool isRtl = false;
     return Builder(builder: (context) {
       return BlocConsumer<PostCubit, PostStates>(
         listener: (context, state) {},
@@ -57,32 +60,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
               child: Column(
                 children: [
                   Expanded(
-                    // child: Builder(
-                    //   builder: (context){
-                    //     if (cubit.isLoading){
-                    //       return CircularProgressIndicator();
-                    //     } else if(widget.postModel.comments?.isNotEmpty != true){
-                    //       return Center(
-                    //         child: Text(
-                    //           LocaleKeys.no_commens_yet.tr(),
-                    //           style: Theme.of(context).textTheme.bodyLarge,
-                    //         ),
-                    //       );
-                    //     }
-                    //
-                    //     return ListView.separated(
-                    //       physics: const BouncingScrollPhysics(),
-                    //       itemBuilder: (context, index) {
-                    //         final comment = widget.postModel.comments![index];
-                    //         return buildCommentItem(comment, context);
-                    //       },
-                    //       separatorBuilder: (context, index) => const SizedBox(
-                    //         height: 20.0,
-                    //       ),
-                    //       itemCount: widget.postModel.comments?.length ?? 0,
-                    //     );
-                    //   },
-                    // ),
                     child: ConditionalBuilder(
                       condition: widget.postModel.comments?.isNotEmpty ?? false,
                       builder: (context) => ListView.separated(
@@ -96,12 +73,16 @@ class _CommentsScreenState extends State<CommentsScreen> {
                         ),
                         itemCount: widget.postModel.comments?.length ?? 0,
                       ),
-                      fallback: (context) => Center(
-                        child: Text(
-                          LocaleKeys.no_commens_yet.tr(),
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ),
+                      fallback: (context) => widget.isCommented
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : Center(
+                              child: Text(
+                                LocaleKeys.no_commens_yet.tr(),
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                            ),
                     ),
                   ),
                   const SizedBox(
@@ -122,6 +103,12 @@ class _CommentsScreenState extends State<CommentsScreen> {
                             controller: commentController,
                             minLines: 1,
                             maxLines: 4,
+                            // onChanged: (String value) {
+                            //   setState(() {
+                            //     isRtl = value.startsWith(RegExp(r'[\u0600-\u06FF]'));
+                            //   });
+                            // },
+                            // textDirection: isRtl ? TextDirection.RTL : TextDirection.LTR,
                             keyboardType: TextInputType.multiline,
                             decoration: InputDecoration(
                               hintText: LocaleKeys.write_a_comment.tr(),

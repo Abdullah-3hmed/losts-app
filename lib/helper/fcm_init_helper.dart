@@ -61,6 +61,7 @@ class FCMInitHelper {
             userId: event.data['user_id'],
             userName: event.data['user_name'],
             userImage: event.data['user_image'],
+            isChat: true,
           ),
         );
       }
@@ -87,6 +88,7 @@ class FCMInitHelper {
             userId: event.data['user_id'],
             userName: event.data['user_name'],
             userImage: event.data['user_image'],
+            isChat: true,
           ),
         );
       }

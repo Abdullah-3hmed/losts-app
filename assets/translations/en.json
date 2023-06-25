@@ -53,5 +53,9 @@
   "forget_password": "Forget Password ?",
   "reset_now": "Reset Now",
   "reset_password": "Reset Password",
-  "confirm": "Confirm"
+  "confirm": "Confirm",
+  "not_messages_yet": "Not Messages Yet",
+  "write_your_message_here": "Write Your Message Here",
+  "notifications": "Notifications",
+  "no_notifications": "No Notifications"
 }

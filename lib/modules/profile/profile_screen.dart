@@ -58,16 +58,13 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
                         CircleAvatar(
-                          backgroundColor:
-                              Theme.of(context).scaffoldBackgroundColor,
+                          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                           radius: 64.0,
                           child: CircleAvatar(
                             backgroundImage: CachedNetworkImageProvider(
                               '${model.image}',
                             ),
-                            onBackgroundImageError: (_, __) =>
-                                const NetworkImage(
-                                    AppConstants.defaultImageUrl),
+                            onBackgroundImageError: (_, __) => const NetworkImage(AppConstants.defaultImageUrl),
                             radius: 60.0,
                           ),
                         ),
@@ -84,7 +81,7 @@ class ProfileScreen extends StatelessWidget {
                         ),
                   ),
                   Text(
-                    '${model.bio == 'write your bio ...' ? '' : model.bio}',
+                    '${model.bio}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
@@ -117,12 +114,11 @@ class ProfileScreen extends StatelessWidget {
                           ),
                           Text(
                             LocaleKeys.settings.tr(),
-                            style:
-                                Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18.0,
-                                    ),
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18.0,
+                                ),
                           ),
                           const CircleAvatar(
                             backgroundColor: Colors.white,
@@ -153,12 +149,11 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         Text(
                           LocaleKeys.theme.tr(),
-                          style:
-                              Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18.0,
-                                  ),
+                          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0,
+                              ),
                         ),
                         Switch(
                           value: UserCubit.get(context).isDark,
@@ -198,21 +193,19 @@ class ProfileScreen extends StatelessWidget {
                           ),
                           Text(
                             LocaleKeys.language.tr(),
-                            style:
-                                Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18.0,
-                                    ),
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18.0,
+                                ),
                           ),
                           Text(
                             LocaleKeys.selected_language.tr(),
-                            style:
-                                Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16.0,
-                                    ),
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.0,
+                                ),
                           ),
                         ],
                       ),
@@ -246,12 +239,11 @@ class ProfileScreen extends StatelessWidget {
                           ),
                           Text(
                             LocaleKeys.log_out.tr(),
-                            style:
-                                Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18.0,
-                                    ),
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18.0,
+                                ),
                           ),
                           const CircleAvatar(
                             backgroundColor: Colors.white,

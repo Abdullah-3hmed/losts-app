@@ -29,7 +29,7 @@ class CodegenLoader extends AssetLoader {
     "home": "الرئيسية",
     "chats": "المحادثات",
     "post": "نشر",
-    "profile": "ملفي الشخصي",
+    "profile": "ملفي",
     "like": "إعجاب",
     "comment": "تعليق",
     "edit": "تعديل",
@@ -70,6 +70,10 @@ class CodegenLoader extends AssetLoader {
     "reset_now": "إعادة تعيين الآن",
     "reset_password": "إعادة تعيين كلمة المرور",
     "confirm": "تأكيد",
+    "not_messages_yet": "لا رسائل حتي الأن",
+    "write_your_message_here": "أكتب رسالتك هنا",
+    "notifications": "إشعارات",
+    "no_notifications": "لا يوجد إشعارات",
   };
   static const Map<String, dynamic> en = {
     "hi_login": "login now to to Communicate with others",
@@ -127,10 +131,10 @@ class CodegenLoader extends AssetLoader {
     "reset_now": "Reset Now",
     "reset_password": "Reset Password",
     "confirm": "Confirm",
-
+    "not_messages_yet": "Not Messages Yet",
+    "write_your_message_here": "Write Your Message Here",
+    "notifications": "Notifications",
+    "no_notifications": "No Notifications",
   };
-  static const Map<String, Map<String, dynamic>> mapLocales = {
-    "ar": ar,
-    "en": en
-  };
+  static const Map<String, Map<String, dynamic>> mapLocales = {"ar": ar, "en": en};
 }
